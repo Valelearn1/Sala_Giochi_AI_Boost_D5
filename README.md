@@ -114,6 +114,7 @@ Scelte di fisica, per chi vuole capirle:
 ├── .nojekyll           dice a GitHub Pages di pubblicare i file così come sono
 ├── README.md
 ├── PRODUCT.md          contesto del progetto (usato dagli strumenti di design)
+├── docs/               progettazione.md (come è fatto) e decisioni.md (perché è fatto così)
 ├── assets/
 │   ├── tema.js         versione della sala (classica / anime) e pulsanti per cambiarla
 │   ├── sala-giochi.css stile comune 8-bit: colori, font, cielo, terreno, pulsanti
