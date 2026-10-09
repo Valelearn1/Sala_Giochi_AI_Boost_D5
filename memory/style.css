@@ -1228,6 +1228,7 @@
 
 .name-pencil {
   grid-area: pencil;
+  align-self: stretch; /* alta quanto il campo: la scheda classica centra in verticale */
   display: grid;
   place-items: center;
   padding: 0 4px 0 14px;
