@@ -85,17 +85,17 @@
   color: #c8d4ff;
 }
 
-.sound-toggle[aria-pressed='true'] {
+.sound-toggle[data-on='true'] {
   border-color: #f8b800;
 }
 
-.sound-toggle[aria-pressed='true'] .sound-state::before {
+.sound-toggle[data-on='true'] .sound-state::before {
   content: 'on';
   color: #f8b800;
 }
 
-.sound-toggle[aria-pressed='true'] .sound-mute,
-.sound-toggle[aria-pressed='false'] .sound-waves {
+.sound-toggle[data-on='true'] .sound-mute,
+.sound-toggle[data-on='false'] .sound-waves {
   display: none;
 }
 
@@ -273,8 +273,8 @@
   color: var(--g-muted);
 }
 
-[data-theme='anime'] .sound-toggle[aria-pressed='true'],
-[data-theme='anime'] .sound-toggle[aria-pressed='true'] .sound-state::before {
+[data-theme='anime'] .sound-toggle[data-on='true'],
+[data-theme='anime'] .sound-toggle[data-on='true'] .sound-state::before {
   color: var(--g-emerald);
 }
 
@@ -530,13 +530,13 @@
   box-shadow: 0 0 0 1px #ffc3c2;
 }
 
-[data-theme='anime'] .topbar .sound-toggle[aria-pressed='true']::after {
+[data-theme='anime'] .topbar .sound-toggle[data-on='true']::after {
   background: var(--g-emerald);
   box-shadow: 0 0 6px rgb(78 223 145 / 0.8);
 }
 
-[data-theme='anime'] .sound-toggle[aria-pressed='true'] .icona-muto,
-[data-theme='anime'] .sound-toggle[aria-pressed='false'] .icona-audio {
+[data-theme='anime'] .sound-toggle[data-on='true'] .icona-muto,
+[data-theme='anime'] .sound-toggle[data-on='false'] .icona-audio {
   display: none;
 }
 
@@ -663,6 +663,139 @@
 
 .icona {
   flex: none;
+}
+
+/* ---------- Pannello Audio (assets/pannello-audio.js) ----------
+   Si apre sotto il pulsante Audio: interruttore acceso/spento e volume. */
+
+.topbar-actions {
+  position: relative; /* il pannello si posiziona rispetto ai pulsanti */
+}
+
+.audio-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 60;
+  display: grid;
+  gap: 14px;
+  width: min(260px, calc(100vw - 32px));
+  padding: 14px;
+  border: 3px solid #ffffff;
+  background: #000000;
+  color: #ffffff;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.4);
+}
+
+.audio-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* Interruttore: binario e pallino, a destra quando è acceso */
+.audio-switch-track {
+  position: relative;
+  flex: none;
+  width: 46px;
+  height: 26px;
+  border-radius: 13px;
+  background: #5a5a6e;
+  transition: background-color 150ms ease;
+}
+
+.audio-switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: translate 150ms ease;
+}
+
+.audio-switch[aria-checked='true'] .audio-switch-track {
+  background: #12a838;
+}
+
+.audio-switch[aria-checked='true'] .audio-switch-thumb {
+  translate: 20px 0;
+}
+
+.audio-switch:focus-visible,
+.audio-volume-slider:focus-visible {
+  outline: 3px dashed #ffffff;
+  outline-offset: 3px;
+}
+
+.audio-volume {
+  display: grid;
+  gap: 8px;
+}
+
+.audio-volume-label {
+  display: flex;
+  justify-content: space-between;
+}
+
+.audio-volume-value {
+  color: #f8b800;
+  font-variant-numeric: tabular-nums;
+}
+
+.audio-volume-slider {
+  width: 100%;
+  height: 28px;
+  margin: 0;
+  accent-color: #f8b800;
+  cursor: pointer;
+}
+
+/* Versione anime: scheda scura con angoli piccoli e ombra netta, come le schermate Stitch */
+[data-theme='anime'] .audio-panel {
+  top: calc(100% + 8px);
+  border: 0;
+  border-radius: var(--g-radius);
+  background: var(--g-surface-high);
+  color: var(--g-text);
+  font-family: var(--g-body);
+  box-shadow: var(--g-shadow), 0 12px 30px rgb(0 0 0 / 0.45);
+}
+
+[data-theme='anime'] .audio-switch-track {
+  background: var(--g-surface-highest);
+}
+
+[data-theme='anime'] .audio-switch[aria-checked='true'] .audio-switch-track {
+  background: var(--g-emerald);
+}
+
+[data-theme='anime'] .audio-volume-value {
+  color: var(--g-gold);
+}
+
+[data-theme='anime'] .audio-volume-slider {
+  accent-color: var(--g-gold);
+}
+
+[data-theme='anime'] .audio-switch:focus-visible,
+[data-theme='anime'] .audio-volume-slider:focus-visible {
+  outline-color: var(--g-gold);
+  outline-style: solid;
 }
 
 /* ---------- Passaggio fra le schermate dei giochi (View Transitions API) ----------

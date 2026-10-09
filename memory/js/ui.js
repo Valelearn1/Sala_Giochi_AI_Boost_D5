@@ -9,6 +9,7 @@
 import { DIFFICULTIES } from './cards.js';
 import { getRanking, getWinners } from './game.js';
 import { icona } from '../../assets/icone.js';
+import { createAudioPanel } from '../../assets/pannello-audio.js';
 
 /** Punteggi mostrati l'ultima volta: servono per animare quello che sale. */
 let previousScores = [];
@@ -435,13 +436,17 @@ export function onPlayerCountChange(handler) {
   });
 }
 
-/** Mostra se l'audio è acceso o spento sul pulsante. */
+// Pulsante Audio → pannello con interruttore e volume. L'interruttore chiama soundHandler.
+let soundHandler = () => {};
+const audioPanel = createAudioPanel({ button: elements.soundToggle, onToggle: () => soundHandler() });
+
+/** Mostra se l'audio è acceso o spento (pulsante e interruttore). */
 export function renderSoundToggle(isOn) {
-  elements.soundToggle.setAttribute('aria-pressed', String(isOn));
+  audioPanel.render(isOn);
 }
 
 export function onSoundToggle(handler) {
-  elements.soundToggle.addEventListener('click', handler);
+  soundHandler = handler;
 }
 
 export function onQuit(handler) {

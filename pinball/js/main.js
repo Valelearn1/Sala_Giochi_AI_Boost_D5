@@ -21,6 +21,7 @@ import { createBallState, applyHit, endOfBallBonus } from './rules.js';
 import { createMatch, getCurrentPlayer, addPoints, endBall, getWinners } from './turns.js';
 import { createRenderer } from './render.js';
 import { createInput } from './input.js';
+import { createAudioPanel } from '../../assets/pannello-audio.js';
 import { loadRecord, saveRecord, updateRecord } from './records.js';
 import * as hud from './hud.js';
 import * as sound from '../../assets/suoni.js';
@@ -275,20 +276,19 @@ document.addEventListener('visibilitychange', () => {
 
 // --- Audio -----------------------------------------------------------------------
 
-/** Mostra sul pulsante se l'audio è acceso. */
-function renderSoundToggle() {
-  elements.soundToggle.setAttribute('aria-pressed', String(sound.isSoundOn()));
-}
-
-elements.soundToggle.addEventListener('click', () => {
-  sound.setSoundOn(!sound.isSoundOn());
-  renderSoundToggle();
-  if (sound.isSoundOn()) {
-    sound.play('toggleOn');
-    if (phase === 'playing') sound.startMusic();
-  }
+// Il pulsante Audio apre il pannello con l'interruttore e il volume (assets/pannello-audio.js)
+const audioPanel = createAudioPanel({
+  button: elements.soundToggle,
+  onToggle: () => {
+    sound.setSoundOn(!sound.isSoundOn());
+    audioPanel.render(sound.isSoundOn());
+    if (sound.isSoundOn()) {
+      sound.play('toggleOn');
+      if (phase === 'playing') sound.startMusic();
+    }
+  },
 });
-renderSoundToggle();
+audioPanel.render(sound.isSoundOn());
 
 // --- Collegamento dei pulsanti ---------------------------------------------------
 

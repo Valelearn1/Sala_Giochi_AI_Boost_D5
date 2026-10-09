@@ -49,8 +49,8 @@
           <span class="icona-anime" data-icona="scintilla" data-misura="18"></span>
           <span data-theme-label>Anime</span>
         </button>
-        <!-- Audio: spento all'avvio. aria-pressed dice agli screen reader se è acceso -->
-        <button type="button" id="sound-toggle" class="sound-toggle" aria-pressed="false">
+        <!-- Audio: apre il pannello con l'interruttore e il volume (assets/pannello-audio.js) -->
+        <button type="button" id="sound-toggle" class="sound-toggle" data-on="false">
           <svg viewBox="0 0 12 10" width="24" height="20" aria-hidden="true" shape-rendering="crispEdges">
             <path fill="currentColor" d="M0 3h2V3h1V2h1V1h1V0h1v10H5V9H4V8H3V7H0z" />
             <path class="sound-waves" fill="currentColor" d="M8 3h1v4H8zM10 1h1v8h-1z" />
@@ -197,8 +197,10 @@
           </div>
           <!-- Versione anime: punteggio grande di chi gioca e sfere rimaste -->
           <div class="hud-arcane only-anime" aria-hidden="true">
-            <span class="hud-arcane-label">Punteggio arcano</span>
-            <strong id="hud-score" class="hud-arcane-score">0</strong>
+            <span class="hud-arcane-main">
+              <span class="hud-arcane-label">Punteggio arcano</span>
+              <strong id="hud-score" class="hud-arcane-score">0</strong>
+            </span>
             <span class="hud-mana">
               <span class="hud-arcane-label hud-arcane-label--emerald">Sfere rimaste</span>
               <span id="hud-mana" class="hud-mana-dots"></span>

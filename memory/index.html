@@ -29,7 +29,7 @@
         Tutti i giochi
       </a>
 
-      <!-- Audio: spento all'avvio. aria-pressed dice agli screen reader se è acceso -->
+      <!-- Audio: apre il pannello con l'interruttore e il volume (assets/pannello-audio.js) -->
       <div class="topbar-actions">
       <!-- Modalità chiara / scura: l'icona mostra dove si va (luna = passa allo scuro) -->
       <button type="button" class="theme-toggle mode-toggle" data-mode-toggle>
@@ -51,7 +51,7 @@
         <span class="icona-anime" data-icona="scintilla" data-misura="18"></span>
           <span data-theme-label>Anime</span>
       </button>
-      <button type="button" id="sound-toggle" class="sound-toggle" aria-pressed="false">
+      <button type="button" id="sound-toggle" class="sound-toggle" data-on="false">
         <svg class="pixel-icon" viewBox="0 0 12 10" width="24" height="20" aria-hidden="true">
           <path fill="currentColor" d="M0 3h2V3h1V2h1V1h1V0h1v10H5V9H4V8H3V7H0z" />
           <path class="sound-waves" fill="currentColor" d="M8 3h1v4H8zM10 1h1v8h-1z" />

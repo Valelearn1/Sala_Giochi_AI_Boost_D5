@@ -22,6 +22,7 @@ const STORAGE_KEY = 'sala-audio';
 const OLD_STORAGE_KEY = 'memory-audio'; // chiave usata in passato dal solo Memory
 const SFX_VOLUME = 0.12;
 const MUSIC_VOLUME = 0.05;
+const VOLUME_KEY = 'sala-volume'; // volume generale scelto con lo slider, da 0 a 1
 
 /*
  * File audio facoltativi, per versione e per nome del suono.
@@ -40,6 +41,8 @@ let soundOn = readSavedPreference();
 let musicTimer = null;
 let musicGain = null;
 const decodedFiles = new Map(); // percorso → AudioBuffer già caricato
+let masterGain = null; // tutti i suoni passano da qui: è la manopola del volume
+let volume = readSavedVolume();
 
 // --- Preferenza salvata ----------------------------------------------------
 
@@ -49,6 +52,31 @@ function readSavedPreference() {
     return saved === 'on';
   } catch {
     return false; // navigazione privata o archivio bloccato: audio spento
+  }
+}
+
+function readSavedVolume() {
+  try {
+    const saved = Number(localStorage.getItem(VOLUME_KEY));
+    return localStorage.getItem(VOLUME_KEY) !== null && saved >= 0 && saved <= 1 ? saved : 1;
+  } catch {
+    return 1;
+  }
+}
+
+/** Volume generale, da 0 (muto) a 1 (pieno). */
+export function getVolume() {
+  return volume;
+}
+
+export function setVolume(value) {
+  volume = Math.min(1, Math.max(0, value));
+  // Una rampa brevissima: senza, cambiando volume si sentirebbe un "clic"
+  if (masterGain) masterGain.gain.setTargetAtTime(volume, masterGain.context.currentTime, 0.02);
+  try {
+    localStorage.setItem(VOLUME_KEY, String(volume));
+  } catch {
+    // Se non si può salvare, il volume vale solo per questa visita
   }
 }
 
@@ -74,7 +102,12 @@ function currentVersion() {
 // --- Strumenti di base -----------------------------------------------------
 
 function getContext() {
-  if (!context) context = new AudioContext();
+  if (!context) {
+    context = new AudioContext();
+    masterGain = context.createGain();
+    masterGain.gain.value = volume;
+    masterGain.connect(context.destination);
+  }
   if (context.state === 'suspended') context.resume();
   return context;
 }
@@ -105,7 +138,7 @@ function tone({ frequency, start, duration, wave = 'square', volume = SFX_VOLUME
   gain.gain.setValueAtTime(volume, start + duration * 0.6);
   gain.gain.linearRampToValueAtTime(0, start + duration);
 
-  oscillator.connect(gain).connect(output ?? ctx.destination);
+  oscillator.connect(gain).connect(output ?? masterGain);
   oscillator.start(start);
   oscillator.stop(start + duration + 0.02);
 }
@@ -146,7 +179,7 @@ function noise({ start, duration, from = 2000, to = from, volume = SFX_VOLUME, t
   gain.gain.setValueAtTime(volume, start);
   gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
 
-  source.connect(filter).connect(gain).connect(output ?? ctx.destination);
+  source.connect(filter).connect(gain).connect(output ?? masterGain);
   source.start(start);
 }
 
@@ -160,10 +193,10 @@ function withEcho() {
   const feedback = ctx.createGain();
   delay.delayTime.value = 0.13;
   feedback.gain.value = 0.3;
-  echoInput.connect(ctx.destination);
+  echoInput.connect(masterGain);
   echoInput.connect(delay);
   delay.connect(feedback).connect(delay);
-  delay.connect(ctx.destination);
+  delay.connect(masterGain);
   return echoInput;
 }
 
@@ -276,7 +309,7 @@ async function playFile(path, start) {
     source.buffer = decodedFiles.get(path);
     const gain = ctx.createGain();
     gain.gain.value = 0.6;
-    source.connect(gain).connect(ctx.destination);
+    source.connect(gain).connect(masterGain);
     source.start(Math.max(start, ctx.currentTime));
   } catch {
     // File mancante o non valido: nessun suono, il gioco continua
@@ -338,7 +371,7 @@ export function startMusic() {
   musicVersion = currentVersion();
   musicGain = ctx.createGain();
   musicGain.gain.value = 1;
-  musicGain.connect(ctx.destination);
+  musicGain.connect(masterGain);
   scheduleMusicLoop(ctx.currentTime + 0.1);
 }
 

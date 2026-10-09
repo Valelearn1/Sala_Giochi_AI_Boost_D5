@@ -85,7 +85,7 @@ Il contatore **Mosse** conta quante volte sono state girate due carte, per tutti
 - 🧱 **Classica**: cielo con le nuvole, terreno di mattoni, carte come blocchi "?", tubi verdi per i livelli.
 - 📖 **Anime**: carte come grimori con il trifoglio d'oro, livelli come "tomi".
 - 👾 **Personaggi**: 18 per versione (`memory/js/characters.js`), con nome ed emoji. Le immagini si possono aggiungere in locale, vedi [`assets/personaggi/LEGGIMI.md`](assets/personaggi/LEGGIMI.md).
-- 🔊 **Audio**: effetti e musichetta originali, generati dal browser (`assets/suoni.js`). Nella classica sono suoni 8-bit. Nell'anime sono pagine di grimorio, fendenti, rintocchi e un tema epico in Re minore. L'audio parte spento: si accende con **AUDIO** in alto.
+- 🔊 **Audio**: effetti e musichetta originali, generati dal browser (`assets/suoni.js`). Nella classica sono suoni 8-bit. Nell'anime sono pagine di grimorio, fendenti, rintocchi e un tema epico in Re minore. L'audio parte spento: il pulsante **AUDIO** in alto apre un pannello con l'interruttore e lo **slider del volume** (`assets/pannello-audio.js`), che resta salvato nel browser e vale per tutti i giochi.
 - ✨ **Effetti**: a ogni coppia trovata le carte sprizzano scintille, un "+1" vola fino al punteggio e il telefono vibra un attimo. Nell'anime il cambio turno entra con un colpo di spada. Fra impostazioni, partita e classifica c'è una dissolvenza.
 - 🏆 **Record**: il miglior tempo di ogni livello resta salvato nel browser (`memory/js/records.js`); in classifica compare "Nuovo record del dispositivo!" e la pagina iniziale lo mostra sulla scheda del gioco.
 - 🧘 Con **"riduci movimento"** attivo nel sistema, scintille, colpo di spada e dissolvenze non partono.
