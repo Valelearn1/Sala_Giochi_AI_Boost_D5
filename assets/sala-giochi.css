@@ -1,0 +1,285 @@
+/* =====================================================================
+   SALA GIOCHI — stile comune a tutte le pagine
+   Mondo: un livello di un videogioco a piattaforme a 8 bit.
+   Di giorno cielo azzurro e terreno di mattoni; con il tema scuro del
+   sistema si passa al "livello sotterraneo" (nero e mattoni blu).
+
+   Ogni gioco carica questo file e poi il proprio style.css.
+   I disegni (nuvole, mattoni, moneta) sono SVG scritti a mano qui sotto:
+   nessuna immagine da scaricare.
+   ===================================================================== */
+
+/* Font pixel "Press Start 2P" (licenza SIL OFL, vedi fonts/OFL.txt) */
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('fonts/PressStart2P-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+/* ---------- Colori e misure ---------- */
+
+:root {
+  --sky: #5c94fc;
+  --ink: #0b1238; /* testo scuro sul cielo */
+  --ink-soft: #1d2a66;
+  --white: #ffffff;
+  --black: #000000;
+
+  --panel: #000000; /* riquadri dei messaggi */
+  --panel-text: #ffffff;
+  --panel-muted: #c8d4ff;
+
+  --brick: #c84c0c;
+  --brick-light: #fc9838;
+  --brick-dark: #6e2600;
+
+  --gold: #f8b800;
+  --gold-light: #ffe08a;
+  --gold-dark: #b05800;
+
+  --pipe: #00a800;
+  --pipe-light: #8ce048;
+  --pipe-dark: #004a00;
+
+  /* Un colore per ogni giocatore, come il colore di un cappello */
+  --player-0: #e4202a;
+  --player-1: #12a838;
+  --player-2: #8a3ffc;
+  --player-3: #ff7a00;
+
+  --pixel: 'Press Start 2P', ui-monospace, monospace;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --ground-height: 48px;
+  --ceiling-height: 0px; /* fila di mattoni in alto, solo nel tema sotterraneo */
+  --border: 3px;
+
+  /* Disegni pixel in SVG */
+  --cloud: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 8' shape-rendering='crispEdges'%3E%3Cpath fill='%23fff' d='M6 0h4v1h2v1h1v1h1v1h2v3h-1v1H1V7H0V4h2V3h1V2h1V1h2z'/%3E%3Cpath fill='%23a4c8ff' d='M0 6h16v1h-1v1H1V7H0z'/%3E%3C/svg%3E");
+  --bricks: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect width='32' height='32' fill='%23c84c0c'/%3E%3Cg fill='%23fc9838'%3E%3Crect width='32' height='1'/%3E%3Crect y='16' width='32' height='1'/%3E%3C/g%3E%3Cg fill='%232a0e00'%3E%3Crect y='14' width='32' height='2'/%3E%3Crect y='30' width='32' height='2'/%3E%3Crect x='14' width='2' height='14'/%3E%3Crect x='30' width='2' height='14'/%3E%3Crect x='6' y='16' width='2' height='14'/%3E%3Crect x='22' y='16' width='2' height='14'/%3E%3C/g%3E%3C/svg%3E");
+  --coin: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 14' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' d='M2 0h4v1h1v1h1v10h-1v1h-1v1H2v-1H1v-1H0V2h1V1h1z'/%3E%3Cpath fill='%23f8b800' d='M2 1h4v1h1v10h-1v1H2v-1H1V2h1z'/%3E%3Cpath fill='%23fff3b0' d='M2 2h1v8H2z'/%3E%3Cpath fill='%23b05800' d='M4 3h1v8H4z'/%3E%3C/svg%3E");
+}
+
+/* Tema scuro: il livello sotterraneo */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sky: #000000;
+    --ceiling-height: 27px;
+    --ink: #ffffff;
+    --ink-soft: #c8d4ff;
+    --panel: #10183c;
+
+    --brick: #1c6cb4;
+    --brick-light: #6cc4ff;
+    --brick-dark: #062a50;
+
+    --bricks: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect width='32' height='32' fill='%231c6cb4'/%3E%3Cg fill='%236cc4ff'%3E%3Crect width='32' height='1'/%3E%3Crect y='16' width='32' height='1'/%3E%3C/g%3E%3Cg fill='%23000814'%3E%3Crect y='14' width='32' height='2'/%3E%3Crect y='30' width='32' height='2'/%3E%3Crect x='14' width='2' height='14'/%3E%3Crect x='30' width='2' height='14'/%3E%3Crect x='6' y='16' width='2' height='14'/%3E%3Crect x='22' y='16' width='2' height='14'/%3E%3C/g%3E%3C/svg%3E");
+  }
+}
+
+/* Chi porta data-player="N" riceve il colore del giocatore N */
+[data-player='0'] { --player: var(--player-0); }
+[data-player='1'] { --player: var(--player-1); }
+[data-player='2'] { --player: var(--player-2); }
+[data-player='3'] { --player: var(--player-3); }
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scrollbar-color: var(--brick) var(--sky);
+}
+
+body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  margin: 0;
+  background-color: var(--sky);
+  color: var(--ink);
+  font-family: var(--font);
+  line-height: 1.45;
+  caret-color: var(--gold);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Nuvole sullo sfondo, solo negli spazi vuoti ai lati del contenuto
+   (su schermi stretti non c'è posto: finirebbero sotto i testi) */
+@media (min-width: 1100px) and (prefers-color-scheme: light) {
+  body {
+    background-image: var(--cloud), var(--cloud), var(--cloud);
+    background-repeat: no-repeat;
+    background-size: 128px 64px, 96px 48px, 160px 80px;
+    background-position: 3% 96px, 97% 64px, 95% 340px;
+  }
+}
+
+/* Sottoterra il soffitto è una fila di mattoni */
+@media (prefers-color-scheme: dark) {
+  body::before {
+    content: '';
+    flex: none;
+    height: 24px;
+    background: var(--bricks) 0 100% / 24px 24px repeat-x;
+    border-bottom: var(--border) solid var(--black);
+    image-rendering: pixelated;
+  }
+}
+
+/* Su telefono il soffitto è più sottile, per lasciare spazio alle carte */
+@media (prefers-color-scheme: dark) and (max-width: 480px) {
+  :root {
+    --ceiling-height: 15px;
+  }
+
+  body::before {
+    height: 12px;
+    background-size: 12px 12px;
+  }
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--black);
+}
+
+:focus-visible {
+  outline: var(--border) dashed var(--white);
+  outline-offset: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :focus-visible {
+    outline-color: var(--gold);
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Testo pixel bianco con contorno nero, come nei titoli dei vecchi giochi */
+.pixel-text {
+  font-family: var(--pixel);
+  font-weight: 400;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 0;
+  text-shadow:
+    2px 0 0 var(--black),
+    -2px 0 0 var(--black),
+    0 2px 0 var(--black),
+    0 -2px 0 var(--black),
+    3px 3px 0 var(--black);
+}
+
+/* Terreno di mattoni in fondo a ogni pagina */
+.ground {
+  flex: none;
+  height: var(--ground-height);
+  margin-top: auto;
+  background: var(--bricks) 0 0 / 32px 32px repeat;
+  border-top: var(--border) solid var(--black);
+  image-rendering: pixelated;
+}
+
+/* Icone pixel */
+.coin-icon {
+  display: inline-block;
+  flex: none;
+  width: 12px;
+  height: 21px;
+  background: var(--coin) center / contain no-repeat;
+  image-rendering: pixelated;
+  vertical-align: middle;
+}
+
+.pixel-icon {
+  flex: none;
+  shape-rendering: crispEdges;
+}
+
+/* ---------- Pulsanti a blocco ---------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 22px;
+  border: var(--border) solid var(--black);
+  border-radius: 0;
+  font-family: var(--pixel);
+  font-size: 0.875rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  /* Smusso pixel: luce in alto a sinistra, ombra in basso a destra */
+  box-shadow:
+    inset 3px 3px 0 rgb(255 255 255 / 0.45),
+    inset -3px -3px 0 rgb(0 0 0 / 0.35);
+  transition: transform 80ms steps(2);
+}
+
+.button:active {
+  transform: translateY(3px);
+  box-shadow:
+    inset 3px 3px 0 rgb(0 0 0 / 0.35),
+    inset -3px -3px 0 rgb(255 255 255 / 0.2);
+}
+
+.button--primary {
+  background: var(--player-0);
+  color: var(--white);
+  text-shadow: 2px 2px 0 rgb(0 0 0 / 0.5);
+}
+
+.button--primary:hover {
+  background: #c8141e;
+}
+
+.button--secondary {
+  background: var(--panel);
+  color: var(--panel-text);
+  border-color: var(--white);
+  box-shadow: none;
+}
+
+.button--secondary:hover {
+  background: #1b1b1b;
+}
+
+.button--large {
+  min-height: 60px;
+  padding: 16px 32px;
+  font-size: 1rem;
+}
+
+.button--small {
+  min-height: 40px;
+  padding: 8px 14px;
+  font-size: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+}
