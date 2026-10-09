@@ -149,44 +149,6 @@ export const THEME_ANIME = {
   },
 };
 
-/** Tavolo di prova "Missione Spazio" (gioco 1-3): spazio profondo, binari rossi, metallo. */
-export const THEME_SPAZIO = {
-  tableName: 'Missione Spazio',
-  bumperStyle: 'mushroom', // dischi bianchi e blu, come i bumper di Space Cadet
-  decor: 'space', // nebulose, stelle, rosa di luci (posizioni in DECOR del tavolo)
-  particleColor: '200, 215, 255', // stelle che brillano
-  colors: {
-    abyssTop: '#141a4a',
-    abyssBottom: '#070920',
-    light: '120, 140, 255',
-    wall: '#4a4f6b',
-    wallEdge: '#e0443a', // binari rossi
-    flipperLeft: '#e8e8f2',
-    flipperRight: '#e8e8f2',
-    flipperEdge: '#e0443a',
-    ball: '#c9cede',
-    ballCore: '#ffffff',
-    ballRim: '#5d6378',
-    ballGlow: 'rgba(255, 255, 255, 0.45)',
-    plunger: '#8a8fa8',
-    gate: '#e0443a',
-    bumper: '#1e40c8',
-    bumperLight: '#ffffff',
-    bumperDark: '#0a1a5c',
-    bumperGlow: 'rgba(120, 160, 255, 0.5)',
-    slingshot: '#7fd7ff', // fulmini azzurri
-    slingshotFillA: '#2a1458',
-    slingshotFillB: '#4b2a8c',
-    target: '#ffe14d',
-    targetDown: '#2a3270',
-    laneOff: '#2a3270',
-    laneOn: '#ffe14d',
-    outlane: '#ff6b5a',
-    post: '#ffe14d',
-    paint: 'rgba(255, 255, 255, 0.1)',
-  },
-};
-
 /** Il tema del tavolo per ogni versione della sala. */
 export const THEMES = {
   classica: THEME_PLATFORM,

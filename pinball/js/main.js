@@ -12,12 +12,10 @@
  *                └──── between ◄───┘ → results (quando le palline sono finite)
  */
 
-// Quale tavolo: quello principale, oppure il tavolo di prova "Missione Spazio" (pinball/?tavolo=spazio)
-const TAVOLO_SPAZIO = new URLSearchParams(location.search).get('tavolo') === 'spazio';
-const layout = TAVOLO_SPAZIO ? await import('./config/table-layout-spazio.js') : await import('./config/table-layout.js');
+import * as layout from './config/table-layout.js';
 import { PHYSICS } from './config/physics-config.js';
 import { RULES } from './config/rules-config.js';
-import { getTheme, THEME_SPAZIO } from './config/theme.js';
+import { getTheme } from './config/theme.js';
 import { createPhysics } from './physics.js';
 import { createBallState, applyHit, endOfBallBonus } from './rules.js';
 import { createMatch, getCurrentPlayer, addPoints, endBall } from './turns.js';
@@ -48,19 +46,8 @@ let ballSaveUsed = false; // il salvataggio vale una volta per pallina
 
 const physics = createPhysics({ layout, config: PHYSICS, onEvent: handlePhysicsEvent });
 // Il tema del tavolo segue la versione della sala (classica = abissi, anime = grimori)
-// Il tavolo spaziale ha sempre il suo tema; quello principale segue versione e modalità
-const currentTableTheme = () => (TAVOLO_SPAZIO ? THEME_SPAZIO : getTheme(window.SalaTema?.get(), window.SalaTema?.getMode()));
-
-// Nel tavolo spaziale i titoli della pagina cambiano (in entrambe le versioni)
-if (TAVOLO_SPAZIO) {
-  document.title = 'Missione Spazio (prova) · Sala giochi';
-  document.querySelectorAll('.topbar-name span, #setup-title span').forEach((element) => {
-    element.textContent = 'Missione Spazio';
-  });
-  document.querySelectorAll('.tagline span').forEach((element) => {
-    element.textContent = 'Tavolo di prova ispirato a 3D Pinball Space Cadet: tre palline a testa, il punteggio più alto vince.';
-  });
-}
+// Il tema del tavolo segue versione (classica/anime) e modalità (chiara/scura)
+const currentTableTheme = () => getTheme(window.SalaTema?.get(), window.SalaTema?.getMode());
 const renderer = createRenderer({ canvas: elements.canvas, layout, theme: currentTableTheme() });
 // Cambiando versione o modalità chiara/scura, il tavolo si ridisegna con il tema giusto
 window.addEventListener('sala-tema', () => renderer.setTheme(currentTableTheme()));
