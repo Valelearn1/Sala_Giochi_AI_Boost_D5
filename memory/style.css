@@ -858,9 +858,51 @@
   }
 
   /* Con 3 o 4 giocatori i punteggi occupano due righe: il tavolo deve stringersi */
+  /* Con 3 o 4 giocatori i punteggi stanno su una riga sola, compatti: resta più spazio alle carte */
   .screen--game[data-players='3'],
   .screen--game[data-players='4'] {
-    --board-offset: 380px;
+    --board-offset: 340px;
+  }
+
+  .screen--game[data-players='3'] .scoreboard {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .screen--game[data-players='4'] .scoreboard {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .screen--game[data-players='3'] .score,
+  .screen--game[data-players='4'] .score {
+    gap: 4px 6px;
+    padding: 5px 6px;
+  }
+
+  .screen--game[data-players='3'] .score-name,
+  .screen--game[data-players='4'] .score-name {
+    font-size: 0.8125rem;
+  }
+
+  .screen--game[data-players='3'] .score-coins,
+  .screen--game[data-players='4'] .score-coins {
+    gap: 4px;
+    font-size: 0.75rem;
+  }
+
+  .screen--game[data-players='3'] .coin-icon,
+  .screen--game[data-players='4'] .coin-icon {
+    width: 9px;
+    height: 16px;
+  }
+
+  [data-theme='anime'] .screen--game[data-players='3'] .score-coins::before,
+  [data-theme='anime'] .screen--game[data-players='4'] .score-coins::before {
+    content: none; /* niente scritta "Punti": non c'è posto */
+  }
+
+  [data-theme='anime'] .screen--game[data-players='3'] .score-points,
+  [data-theme='anime'] .screen--game[data-players='4'] .score-points {
+    font-size: 1.125rem;
   }
 
   .game-title {
@@ -970,6 +1012,59 @@
 
   .results-actions .button {
     flex: 1 1 100%;
+  }
+}
+
+/* Telefono in orizzontale: punteggi a sinistra, carte a destra alte quanto lo schermo */
+@media (orientation: landscape) and (max-height: 520px) {
+  :root {
+    --ground-height: 0px;
+    --board-offset: 76px;
+  }
+
+  .ground {
+    display: none;
+  }
+
+  .topbar {
+    padding-top: 6px;
+  }
+
+  .page {
+    max-width: none;
+    padding: 6px 16px 10px;
+  }
+
+  .screen--game {
+    display: grid;
+    grid-template-columns: minmax(200px, 1fr) auto;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .screen--game[data-players] {
+    --board-offset: 76px;
+  }
+
+  .hud {
+    margin: 0;
+  }
+
+  /* Riquadri stretti: il giocatore di turno si riconosce dal colore */
+  .score-turn {
+    display: none;
+  }
+
+  .scoreboard,
+  .screen--game[data-players] .scoreboard {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Larghezza esplicita: in una colonna "auto" una percentuale non avrebbe un riferimento */
+  .board {
+    width: min(60vw, calc((100dvh - var(--board-offset)) * var(--columns) / var(--rows)));
+    min-width: 0;
+    margin: 0;
   }
 }
 

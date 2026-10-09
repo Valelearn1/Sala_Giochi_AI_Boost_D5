@@ -182,6 +182,23 @@ a.level:hover .level-block--mushroom svg {
   padding-bottom: 96px;
 }
 
+/* Su telefono il pulsante resta su una riga sola */
+@media (max-width: 480px) {
+  .version-fab {
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+    gap: 8px;
+    min-height: 48px;
+    padding: 10px 14px;
+    font-size: 0.6875rem;
+    white-space: nowrap;
+  }
+
+  [data-theme='anime'] .version-fab {
+    font-size: 0.8125rem;
+  }
+}
+
 /* =====================================================================
    TEMA GRIMORIO della pagina iniziale (segue le schermate di Stitch)
    ===================================================================== */

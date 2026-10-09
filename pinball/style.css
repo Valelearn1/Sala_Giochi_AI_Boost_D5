@@ -1,9 +1,14 @@
 /* =====================================================================
-   PROFONDITÀ ZERO — stile della pagina
+   FLIPPER — stile della pagina
    (il tavolo è disegnato nel canvas da js/render.js con i colori di js/config/theme.js)
+
+   La base è la versione CLASSICA (Super Mario, stile 8-bit della sala).
+   In fondo, la versione ANIME ridefinisce le variabili e aggiunge pochi ritocchi.
+
    1. Variabili          4. Partita: tavolo e pannello
    2. Base               5. Sovrapposizioni e classifica
    3. Impostazioni       6. Telefono e movimento ridotto
+                         7. Versione anime
    ===================================================================== */
 
 /* Font pixel della Sala giochi, per titoli e numeri "da display" */
@@ -16,26 +21,27 @@
 /* ---------- 1. Variabili ---------- */
 
 :root {
-  --abyss: #020a1c;
-  --abyss-2: #04163a;
-  --panel: #071d3d;
-  --panel-edge: #12406b;
-  --text: #d8f6ff;
-  --muted: #8fb7cc;
-  --glow: #2fe3d3; /* turchese luminoso */
-  --glow-2: #7cf9ff;
-  --pink: #ff5fa2;
-  --gold: #ffd166;
+  --page-bg: #5c94fc; /* cielo */
+  --ink: #0b1238; /* testo direttamente sul fondo della pagina */
+  --panel: #000000; /* riquadri */
+  --panel-edge: #ffffff;
+  --text: #ffffff; /* testo dentro i riquadri */
+  --muted: #c8d4ff;
+  --accent: #f8b800; /* oro delle monete */
+  --accent-ink: #b05800;
+  --red: #e4202a;
+  --brick: #c84c0c;
 
-  /* Un colore per ogni giocatore, come le luci delle creature degli abissi */
-  --player-0: #2fe3d3;
-  --player-1: #ff5fa2;
-  --player-2: #ffd166;
-  --player-3: #a68bff;
+  /* Un colore per ogni giocatore, come il colore di un cappello */
+  --player-0: #e4202a;
+  --player-1: #12a838;
+  --player-2: #8a3ffc;
+  --player-3: #ff7a00;
 
   --pixel: 'Press Start 2P', ui-monospace, monospace;
   --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --radius: 14px;
+  --radius: 0;
+  --border: 3px;
   --topbar-height: 48px;
 }
 
@@ -57,30 +63,27 @@
 }
 
 html {
-  scrollbar-color: var(--panel-edge) var(--abyss);
+  scrollbar-color: var(--brick) var(--page-bg);
 }
 
 body {
   margin: 0;
   min-height: 100dvh;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, #0a2f5c 0%, transparent 70%),
-    linear-gradient(var(--abyss-2), var(--abyss));
-  background-attachment: fixed;
+  background: var(--page-bg);
   color: var(--text);
   font-family: var(--font);
   line-height: 1.45;
-  caret-color: var(--glow);
+  caret-color: var(--accent);
   -webkit-tap-highlight-color: transparent;
 }
 
 ::selection {
-  background: var(--glow);
-  color: var(--abyss);
+  background: var(--accent);
+  color: #000000;
 }
 
 :focus-visible {
-  outline: 3px solid var(--glow-2);
+  outline: var(--border) dashed #ffffff;
   outline-offset: 3px;
 }
 
@@ -103,13 +106,13 @@ body {
 }
 
 .back-link {
-  color: var(--muted);
+  color: var(--ink);
   font-weight: 600;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .back-link:hover {
-  color: var(--text);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
@@ -117,67 +120,70 @@ body {
 .topbar-name {
   font-family: var(--pixel);
   font-size: 0.75rem;
-  color: var(--glow);
+  color: #ffffff;
   text-transform: uppercase;
+  text-shadow: 2px 2px 0 #000000;
 }
 
 .player-dot {
   flex: none;
   width: 10px;
   height: 10px;
-  border-radius: 50%;
-  background: var(--player, var(--glow));
-  box-shadow: 0 0 8px var(--player, var(--glow));
+  background: var(--player, var(--accent));
 }
 
-/* Pulsanti */
+/* Pulsanti a blocco, come nel resto della sala */
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 46px;
   padding: 12px 22px;
-  border: 2px solid transparent;
-  border-radius: 999px;
-  font: inherit;
-  font-weight: 700;
+  border: var(--border) solid #000000;
+  border-radius: var(--radius);
+  font-family: var(--pixel);
+  font-size: 0.75rem;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: transform 100ms ease, box-shadow 160ms ease, background-color 160ms ease;
+  transition: transform 100ms ease, background-color 150ms ease;
 }
 
 .button:active {
-  transform: scale(0.97);
+  transform: translateY(2px);
 }
 
 .button--primary {
-  background: var(--glow);
-  color: var(--abyss);
+  background: var(--red);
+  color: #ffffff;
+  box-shadow:
+    inset 3px 3px 0 rgb(255 255 255 / 0.45),
+    inset -3px -3px 0 rgb(0 0 0 / 0.35);
 }
 
 .button--primary:hover {
-  background: var(--glow-2);
+  background: #c8141e;
 }
 
 .button--ghost {
-  background: transparent;
-  color: var(--text);
+  background: var(--panel);
   border-color: var(--panel-edge);
+  color: var(--text);
 }
 
 .button--ghost:hover {
-  border-color: var(--glow);
+  background: #1b1b1b;
 }
 
 .button--large {
   min-height: 56px;
-  padding: 14px 30px;
-  font-size: 1.05rem;
+  padding: 14px 26px;
+  font-size: 0.875rem;
 }
 
 .button--small {
   min-height: 38px;
-  padding: 6px 14px;
-  font-size: 0.875rem;
+  padding: 6px 12px;
+  font-size: 0.6875rem;
 }
 
 /* ---------- 3. Impostazioni ---------- */
@@ -203,14 +209,20 @@ body {
   font-weight: 400;
   line-height: 1.25;
   text-transform: uppercase;
-  color: var(--text);
-  text-shadow: 0 0 18px rgb(47 227 211 / 0.6), 0 0 2px var(--glow);
+  color: #ffffff;
+  text-shadow:
+    3px 0 0 #000,
+    -3px 0 0 #000,
+    0 3px 0 #000,
+    0 -3px 0 #000,
+    6px 6px 0 var(--brick);
 }
 
 .tagline {
   max-width: 36ch;
   margin: 0 0 26px;
-  color: var(--muted);
+  color: var(--ink);
+  font-weight: 600;
 }
 
 .setup-form {
@@ -231,11 +243,13 @@ body {
   font-family: var(--pixel);
   font-size: 0.75rem;
   text-transform: uppercase;
-  color: var(--glow);
+  color: #ffffff;
+  text-shadow: 2px 2px 0 #000000;
 }
 
 .field-hint {
-  color: var(--muted);
+  color: var(--ink);
+  text-shadow: none;
 }
 
 .count-choices {
@@ -250,28 +264,32 @@ body {
   pointer-events: none;
 }
 
+/* Numero di giocatori: blocchi di mattoni, quello scelto diventa d'oro */
 .choice span {
   display: grid;
   place-items: center;
   width: 56px;
   height: 56px;
-  border: 2px solid var(--panel-edge);
-  border-radius: 50%;
-  background: var(--panel);
+  border: var(--border) solid #000000;
+  border-radius: var(--radius);
+  background: var(--brick);
+  color: #ffffff;
   font-family: var(--pixel);
   font-size: 1rem;
+  text-shadow: 2px 2px 0 #000000;
   cursor: pointer;
-  transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
 .choice input:checked + span {
-  border-color: var(--glow);
-  color: var(--glow);
-  box-shadow: 0 0 18px rgb(47 227 211 / 0.45), inset 0 0 12px rgb(47 227 211 / 0.25);
+  background: var(--accent);
+  text-shadow: 2px 2px 0 var(--accent-ink);
+  box-shadow:
+    inset 4px 4px 0 #ffe08a,
+    inset -4px -4px 0 var(--accent-ink);
 }
 
 .choice input:focus-visible + span {
-  outline: 3px solid var(--glow-2);
+  outline: var(--border) dashed #ffffff;
   outline-offset: 3px;
 }
 
@@ -287,7 +305,7 @@ body {
   gap: 10px;
   padding: 0 14px;
   background: var(--panel);
-  border: 2px solid var(--panel-edge);
+  border: var(--border) solid var(--panel-edge);
   border-radius: var(--radius);
 }
 
@@ -307,7 +325,7 @@ body {
 }
 
 .name-field input::placeholder {
-  color: #7b9db3;
+  color: #a8a8b8;
 }
 
 .setup-form .button--primary {
@@ -321,7 +339,8 @@ body {
   width: 100%;
   margin: 32px 0 0;
   padding: 16px;
-  border: 1px solid var(--panel-edge);
+  background: var(--panel);
+  border: var(--border) solid var(--panel-edge);
   border-radius: var(--radius);
   text-align: left;
   font-size: 0.9rem;
@@ -335,7 +354,7 @@ body {
 
 .controls-help dt {
   font-weight: 700;
-  color: var(--glow);
+  color: var(--accent);
 }
 
 .controls-help dd {
@@ -377,10 +396,11 @@ body {
 
 canvas {
   display: block;
-  border-radius: 18px;
-  box-shadow: 0 0 0 2px var(--panel-edge), 0 18px 60px rgb(0 0 0 / 0.55);
+  border-radius: var(--radius);
+  box-shadow: 0 0 0 var(--border) #000000, 0 12px 30px rgb(0 0 0 / 0.3);
 }
 
+/* Pulsante Lancia: un blocco d'oro sopra la corsia di lancio */
 .launch-button {
   position: absolute;
   right: 6px;
@@ -389,13 +409,17 @@ canvas {
   min-width: 76px;
   min-height: 48px;
   padding: 8px 12px;
-  border: 2px solid var(--gold);
-  border-radius: 999px;
-  background: rgb(4 22 58 / 0.85);
-  color: var(--gold);
+  border: var(--border) solid #000000;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #ffffff;
   font-family: var(--pixel);
   font-size: 0.75rem;
   text-transform: uppercase;
+  text-shadow: 2px 2px 0 var(--accent-ink);
+  box-shadow:
+    inset 3px 3px 0 #ffe08a,
+    inset -3px -3px 0 var(--accent-ink);
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
@@ -403,8 +427,7 @@ canvas {
 }
 
 .launch-button:active {
-  background: var(--gold);
-  color: var(--abyss);
+  background: #ffe08a;
 }
 
 /* Pannello a destra (desktop) */
@@ -415,7 +438,7 @@ canvas {
   align-self: start;
   padding: 16px;
   background: var(--panel);
-  border: 2px solid var(--panel-edge);
+  border: var(--border) solid var(--panel-edge);
   border-radius: var(--radius);
 }
 
@@ -435,7 +458,8 @@ canvas {
 
 .hud-player {
   font-size: 1.25rem;
-  color: var(--player);
+  color: #ffffff;
+  text-shadow: 2px 2px 0 var(--player);
   overflow-wrap: anywhere;
 }
 
@@ -448,8 +472,8 @@ canvas {
   font-family: var(--pixel);
   font-size: 1.5rem;
   font-weight: 400;
-  color: var(--gold);
-  text-shadow: 0 0 12px rgb(255 209 102 / 0.5);
+  color: var(--accent);
+  text-shadow: 2px 2px 0 #000000;
 }
 
 .hud-scores {
@@ -465,13 +489,14 @@ canvas {
   align-items: center;
   gap: 8px;
   padding: 8px 10px;
-  border: 1px solid transparent;
-  border-radius: 10px;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
 }
 
+/* Il giocatore di turno: riquadro del suo colore con bordo bianco */
 .hud-score.is-current {
-  border-color: var(--player);
-  background: rgb(255 255 255 / 0.04);
+  border-color: #ffffff;
+  background: var(--player);
 }
 
 .hud-score-name {
@@ -493,9 +518,9 @@ canvas {
   min-height: 2.9em;
   margin: 0;
   padding: 10px 12px;
-  border-radius: 10px;
-  background: rgb(0 0 0 / 0.25);
-  color: var(--glow-2);
+  border-radius: var(--radius);
+  background: rgb(255 255 255 / 0.08);
+  color: #ffffff;
   font-weight: 700;
 }
 
@@ -512,7 +537,7 @@ canvas {
   display: grid;
   place-items: center;
   padding: 16px;
-  background: rgb(1 6 20 / 0.72);
+  background: rgb(0 0 0 / 0.55);
   cursor: pointer;
 }
 
@@ -523,9 +548,9 @@ canvas {
   width: min(100%, 380px);
   padding: 28px 24px;
   background: var(--panel);
-  border: 2px solid var(--player, var(--glow));
-  border-radius: 20px;
-  box-shadow: 0 0 40px rgb(0 0 0 / 0.5);
+  border: var(--border) solid var(--panel-edge);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.5);
   text-align: center;
   cursor: default;
 }
@@ -536,7 +561,8 @@ canvas {
   font-size: clamp(1rem, 5vw, 1.375rem);
   font-weight: 400;
   line-height: 1.4;
-  color: var(--player, var(--glow));
+  color: #ffffff;
+  text-shadow: 3px 3px 0 var(--player, var(--red));
   overflow-wrap: anywhere;
 }
 
@@ -562,15 +588,16 @@ canvas {
   font-size: clamp(1.25rem, 6vw, 2rem);
   font-weight: 400;
   line-height: 1.35;
-  color: var(--text);
-  text-shadow: 0 0 16px rgb(47 227 211 / 0.5);
+  color: #ffffff;
+  text-shadow: 3px 3px 0 #000000, 6px 6px 0 var(--brick);
   outline: none;
   overflow-wrap: anywhere;
 }
 
 .results-summary {
   margin: 0 0 24px;
-  color: var(--muted);
+  color: var(--ink);
+  font-weight: 600;
 }
 
 .ranking {
@@ -588,14 +615,16 @@ canvas {
   gap: 12px;
   padding: 12px 16px;
   background: var(--panel);
-  border: 2px solid var(--panel-edge);
+  border: var(--border) solid var(--panel-edge);
   border-radius: var(--radius);
   text-align: left;
 }
 
+/* Chi vince sta su un blocco d'oro */
 .ranking-item.is-winner {
-  border-color: var(--player);
-  background: color-mix(in srgb, var(--player) 12%, var(--panel));
+  border-color: #000000;
+  background: var(--accent);
+  color: #000000;
 }
 
 .ranking-rank {
@@ -652,14 +681,25 @@ canvas {
     padding: 8px 10px;
   }
 
-  .hud-current { grid-area: current; gap: 0; }
+  .hud-current {
+    grid-area: current;
+    gap: 0;
+  }
 
   /* Su telefono le etichette "Di turno" / "Molt." si capiscono dal contesto */
   .hud .hud-label {
     display: none;
   }
-  .hud-multiplier { grid-area: multiplier; text-align: right; }
-  .pause-button { grid-area: pause; align-self: center; }
+
+  .hud-multiplier {
+    grid-area: multiplier;
+    text-align: right;
+  }
+
+  .pause-button {
+    grid-area: pause;
+    align-self: center;
+  }
 
   .hud-scores {
     grid-area: scores;
@@ -710,6 +750,62 @@ canvas {
   }
 }
 
+/* Su telefono la barra in alto non ha spazio per il nome del tavolo (c'è già nel titolo) */
+@media (max-width: 480px) {
+  .topbar-name {
+    display: none;
+  }
+}
+
+/* Suggerimento visibile solo con il telefono in orizzontale */
+.rotate-hint {
+  display: none;
+}
+
+/* Telefono in orizzontale: poco spazio in altezza, quindi pannello DI LATO e tavolo alto quanto lo schermo */
+@media (orientation: landscape) and (max-height: 520px) {
+  :root {
+    --topbar-height: 36px;
+  }
+
+  .screen--game {
+    grid-template-columns: minmax(0, 1fr) minmax(200px, 260px);
+    grid-template-rows: minmax(0, 1fr);
+    gap: 10px;
+    padding: 0 10px 8px;
+  }
+
+  .hud {
+    order: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 8px 10px;
+  }
+
+  .hud .hud-label {
+    display: none;
+  }
+
+  .hud-scores {
+    grid-template-columns: 1fr;
+  }
+
+  .message {
+    min-height: 0;
+    white-space: normal;
+  }
+
+  .rotate-hint {
+    display: block;
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .button {
     transition: none;
@@ -717,218 +813,30 @@ canvas {
 }
 
 /* =====================================================================
-   VERSIONI DELLA SALA (vedi ../assets/tema.js)
-   La pagina sopra è scritta con variabili (--panel, --text, --glow…):
-   ogni versione le ridefinisce e aggiunge pochi ritocchi.
+   7. VERSIONE ANIME: arena dei grimori (vedi ../assets/tema.js e ../assets/temi.css)
    ===================================================================== */
 
-/* ---------- Versione classica: Super Mario, stile 8-bit della sala ---------- */
-
-:root[data-theme='classica'] {
-  --abyss: #5c94fc;
-  --abyss-2: #5c94fc;
-  --panel: #000000;
-  --panel-edge: #ffffff;
-  --text: #ffffff;
-  --muted: #c8d4ff;
-  --glow: #f8b800;
-  --glow-2: #ffffff;
-  --gold: #f8b800;
-  --pink: #e4202a;
-  --radius: 0;
-
-  --player-0: #e4202a;
-  --player-1: #12a838;
-  --player-2: #8a3ffc;
-  --player-3: #ff7a00;
-}
-
-[data-theme='classica'] body {
-  background: #5c94fc;
-}
-
-[data-theme='classica'] .back-link,
-[data-theme='classica'] .tagline {
-  color: #0b1238;
-  font-weight: 600;
-}
-
-[data-theme='classica'] .topbar-name {
-  color: #ffffff;
-  text-shadow: 2px 2px 0 #000000;
-}
-
-[data-theme='classica'] .title {
-  color: #ffffff;
-  text-shadow:
-    3px 0 0 #000,
-    -3px 0 0 #000,
-    0 3px 0 #000,
-    0 -3px 0 #000,
-    6px 6px 0 #c84c0c;
-}
-
-[data-theme='classica'] .field-label {
-  color: #ffffff;
-  text-shadow: 2px 2px 0 #000000;
-}
-
-[data-theme='classica'] .field-hint {
-  color: #0b1238;
-  text-shadow: none;
-}
-
-[data-theme='classica'] .choice span {
-  border: 3px solid #000000;
-  border-radius: 0;
-  background: #c84c0c;
-  color: #ffffff;
-  text-shadow: 2px 2px 0 #000000;
-}
-
-[data-theme='classica'] .choice input:checked + span {
-  border-color: #000000;
-  background: #f8b800;
-  color: #ffffff;
-  text-shadow: 2px 2px 0 #b05800;
-  box-shadow: inset 4px 4px 0 #ffe08a, inset -4px -4px 0 #b05800;
-}
-
-[data-theme='classica'] .name-field {
-  border: 3px solid #ffffff;
-  background: #000000;
-}
-
-[data-theme='classica'] .player-dot {
-  border-radius: 0;
-  box-shadow: none;
-}
-
-[data-theme='classica'] .button {
-  border: 3px solid #000000;
-  border-radius: 0;
-  font-family: var(--pixel);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-}
-
-[data-theme='classica'] .button--primary {
-  background: #e4202a;
-  color: #ffffff;
-  box-shadow: inset 3px 3px 0 rgb(255 255 255 / 0.45), inset -3px -3px 0 rgb(0 0 0 / 0.35);
-}
-
-[data-theme='classica'] .button--primary:hover {
-  background: #c8141e;
-}
-
-[data-theme='classica'] .button--ghost {
-  background: #000000;
-  border-color: #ffffff;
-  color: #ffffff;
-}
-
-[data-theme='classica'] .controls-help {
-  border: 3px solid #ffffff;
-  background: #000000;
-}
-
-[data-theme='classica'] canvas {
-  border-radius: 0;
-  box-shadow: 0 0 0 3px #000000, 0 12px 30px rgb(0 0 0 / 0.3);
-}
-
-[data-theme='classica'] .launch-button {
-  border: 3px solid #000000;
-  border-radius: 0;
-  background: #f8b800;
-  color: #ffffff;
-  text-shadow: 2px 2px 0 #b05800;
-  box-shadow: inset 3px 3px 0 #ffe08a, inset -3px -3px 0 #b05800;
-}
-
-[data-theme='classica'] .launch-button:active {
-  background: #ffe08a;
-}
-
-[data-theme='classica'] .hud,
-[data-theme='classica'] .overlay-card,
-[data-theme='classica'] .ranking-item {
-  border: 3px solid #ffffff;
-  border-radius: 0;
-}
-
-[data-theme='classica'] .hud-score,
-[data-theme='classica'] .message {
-  border-radius: 0;
-}
-
-[data-theme='classica'] .hud-score.is-current {
-  background: var(--player);
-  border-color: #ffffff;
-}
-
-[data-theme='classica'] .hud-player {
-  color: #ffffff;
-  text-shadow: 2px 2px 0 var(--player);
-}
-
-[data-theme='classica'] .hud-multiplier strong {
-  color: #f8b800;
-  text-shadow: 2px 2px 0 #000000;
-}
-
-[data-theme='classica'] .message {
-  color: #ffffff;
-}
-
-[data-theme='classica'] .overlay {
-  background: rgb(0 0 0 / 0.55);
-}
-
-[data-theme='classica'] .overlay-title {
-  color: #ffffff;
-  text-shadow: 3px 3px 0 var(--player, #e4202a);
-}
-
-[data-theme='classica'] .results-title {
-  color: #ffffff;
-  text-shadow: 3px 3px 0 #000000, 6px 6px 0 #c84c0c;
-}
-
-[data-theme='classica'] .results-summary {
-  color: #0b1238;
-  font-weight: 600;
-}
-
-[data-theme='classica'] .ranking-item.is-winner {
-  background: #f8b800;
-  border-color: #000000;
-  color: #000000;
-}
-
-/* ---------- Versione anime: arena dei grimori ---------- */
-
 :root[data-theme='anime'] {
-  --abyss: var(--g-bg);
-  --abyss-2: var(--g-bg);
+  --page-bg: var(--g-bg);
+  --ink: var(--g-text-soft);
   --panel: var(--g-surface);
   --panel-edge: var(--g-surface-highest);
   --text: var(--g-text);
   --muted: var(--g-text-soft);
-  --glow: var(--g-gold);
-  --glow-2: var(--g-gold);
-  --gold: var(--g-gold);
-  --pink: var(--g-crimson);
+  --accent: var(--g-gold);
+  --red: var(--g-crimson);
+  --brick: var(--g-line);
   --pixel: var(--g-display); /* i titoli "da display" usano Syne */
   --radius: 16px;
 }
 
+/* Titoli e numeri: Syne pesante, niente ombre squadrate */
 [data-theme='anime'] .title,
 [data-theme='anime'] .overlay-title,
 [data-theme='anime'] .results-title,
 [data-theme='anime'] .topbar-name,
 [data-theme='anime'] .field-label,
+[data-theme='anime'] .hud-player,
 [data-theme='anime'] .hud-score-points,
 [data-theme='anime'] .ranking-score,
 [data-theme='anime'] .ranking-rank,
@@ -936,16 +844,32 @@ canvas {
 [data-theme='anime'] .launch-button {
   font-weight: 800;
   text-shadow: none;
+  box-shadow: none;
 }
 
 [data-theme='anime'] .title {
   font-size: clamp(2.25rem, 10vw, 3.75rem);
   line-height: 1;
+  color: var(--g-text);
+}
+
+[data-theme='anime'] .tagline,
+[data-theme='anime'] .results-summary {
+  font-weight: 500;
+}
+
+[data-theme='anime'] .topbar-name {
+  color: var(--g-gold);
 }
 
 [data-theme='anime'] .field-label {
   font-size: 1.125rem;
+  color: var(--g-text);
   text-transform: none;
+}
+
+[data-theme='anime'] .field-hint {
+  color: var(--g-muted);
 }
 
 [data-theme='anime'] .choice span {
@@ -967,12 +891,19 @@ canvas {
   background: var(--g-surface-lowest);
 }
 
+[data-theme='anime'] .name-field input::placeholder {
+  color: var(--g-muted);
+}
+
 [data-theme='anime'] .player-dot {
-  box-shadow: none;
+  border-radius: 50%;
+}
+
+[data-theme='anime'] .controls-help {
+  border: 0;
 }
 
 [data-theme='anime'] canvas {
-  border-radius: 16px;
   box-shadow: 0 0 0 1px var(--g-line), 0 18px 50px rgb(0 0 0 / 0.6);
 }
 
@@ -988,18 +919,18 @@ canvas {
   background: #ffd45e;
 }
 
-[data-theme='anime'] .hud {
+[data-theme='anime'] .hud,
+[data-theme='anime'] .overlay-card {
   border: 0;
+}
+
+[data-theme='anime'] .hud-player {
+  color: var(--player);
 }
 
 [data-theme='anime'] .hud-score.is-current {
   border-color: var(--g-gold);
   background: var(--g-surface-highest);
-}
-
-[data-theme='anime'] .hud-player {
-  font-family: var(--g-display);
-  font-weight: 800;
 }
 
 [data-theme='anime'] .hud-multiplier strong {
@@ -1022,13 +953,16 @@ canvas {
 }
 
 [data-theme='anime'] .overlay-card {
-  border: 0;
   background: linear-gradient(100deg, #3a0711, var(--g-surface) 65%);
 }
 
 [data-theme='anime'] .overlay-title {
   font-size: clamp(1.5rem, 7vw, 2.25rem);
   color: var(--g-gold);
+}
+
+[data-theme='anime'] .results-title {
+  color: var(--g-text);
 }
 
 [data-theme='anime'] .ranking-item {
@@ -1038,11 +972,9 @@ canvas {
 [data-theme='anime'] .ranking-item.is-winner {
   border-color: var(--g-gold);
   background: var(--g-surface-highest);
+  color: var(--g-text);
 }
 
-/* Su telefono la barra in alto non ha spazio per il nome del tavolo (c'è già nel titolo) */
-@media (max-width: 480px) {
-  .topbar-name {
-    display: none;
-  }
+[data-theme='anime'] .button--primary {
+  box-shadow: none;
 }
