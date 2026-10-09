@@ -1,40 +1,47 @@
 /*
  * PUNTO DI INGRESSO
  *
- * Collega fisica, disegno e input, e fa girare il ciclo di gioco:
- * a ogni fotogramma la fisica avanza a passi fissi (sempre uguali,
- * qualunque sia la velocità dello schermo), poi si ridisegna il tavolo.
+ * Collega fisica, regole, turni, disegno, pannello e input, e fa girare
+ * il ciclo di gioco: a ogni fotogramma la fisica avanza a passi fissi
+ * (sempre uguali, qualunque sia la velocità dello schermo), poi si ridisegna.
+ *
+ * La partita passa da una fase all'altra così:
+ *
+ *   setup → turn ("Tocca a…") → playing ⇄ paused
+ *                ↑                 │ pallina persa
+ *                └──── between ◄───┘ → results (quando le palline sono finite)
  */
 
 import * as layout from './config/table-layout.js';
 import { PHYSICS } from './config/physics-config.js';
-import { THEME } from './config/theme.js';
 import { RULES } from './config/rules-config.js';
-import { createBallState, applyHit, endOfBallBonus } from './rules.js';
+import { THEME } from './config/theme.js';
 import { createPhysics } from './physics.js';
+import { createBallState, applyHit, endOfBallBonus } from './rules.js';
+import { createMatch, getCurrentPlayer, addPoints, endBall } from './turns.js';
 import { createRenderer } from './render.js';
 import { createInput } from './input.js';
+import * as hud from './hud.js';
+
+/** Pausa dopo la pallina persa, prima della schermata "Tocca a…". */
+const BETWEEN_BALLS_MS = 1400;
 
 const elements = {
   canvas: document.querySelector('#table'),
   tableWrap: document.querySelector('#table-wrap'),
   launchButton: document.querySelector('#launch-button'),
   pauseButton: document.querySelector('#pause-button'),
-  message: document.querySelector('#message'),
 };
+
+let phase = 'setup';
+let settings = null; // ultime impostazioni, per "Rigioca"
+let match = null; // giocatori e punteggi (turns.js)
+let ballState = null; // regole della pallina in gioco (rules.js)
+let chargeStartedAt = null; // inizio della carica del lanciatore
+let betweenTimer = null;
 
 const physics = createPhysics({ layout, config: PHYSICS, onEvent: handlePhysicsEvent });
 const renderer = createRenderer({ canvas: elements.canvas, layout, theme: THEME });
-
-let paused = false;
-let ballState = newBallState(); // regole della pallina in gioco
-let score = 0; // fase 2: un solo punteggio, i giocatori arrivano nella fase 3
-let chargeStartedAt = null; // momento in cui è iniziata la carica del lanciatore
-
-function newBallState() {
-  return createBallState({ laneCount: layout.TOP_LANES.length, targetCount: layout.TARGETS.length });
-}
-
 const input = createInput({
   touchArea: elements.tableWrap,
   launchButton: elements.launchButton,
@@ -43,47 +50,112 @@ const input = createInput({
     chargeStartedAt = performance.now();
   },
   onLaunchRelease: () => {
-    physics.launch(currentCharge());
+    if (phase === 'playing') physics.launch(currentCharge());
     chargeStartedAt = null;
   },
   onPause: togglePause,
 });
 
-/** Carica del lanciatore da 0 a 1, in base a quanto tempo è stato tenuto premuto. */
-function currentCharge() {
-  if (chargeStartedAt === null) return 0;
-  return Math.min(1, (performance.now() - chargeStartedAt) / PHYSICS.plungerChargeMs);
+// --- Flusso della partita ------------------------------------------------------
+
+function startMatch(newSettings) {
+  clearTimeout(betweenTimer);
+  settings = newSettings;
+  match = createMatch({ playerNames: settings.playerNames, ballsPerPlayer: RULES.ballsPerPlayer });
+  hud.hidePauseOverlay();
+  hud.showScreen('game');
+  fitTable();
+  beginTurn(null);
+}
+
+/** Mostra "Tocca a [nome]" e prepara il tavolo per la pallina nuova. */
+function beginTurn(lastBall) {
+  phase = 'turn';
+  input.setEnabled(false);
+  physics.removeBall();
+  physics.resetTargets();
+  ballState = createBallState({ laneCount: layout.TOP_LANES.length, targetCount: layout.TARGETS.length });
+  hud.renderHud(match, ballState.multiplier);
+  hud.showMessage('', { sticky: true });
+  hud.showTurnOverlay({ match, lastBall });
+}
+
+/** Il giocatore ha premuto "Premi per lanciare": la pallina appare sul pistone. */
+function startBall() {
+  if (phase !== 'turn') return;
+  hud.hideTurnOverlay();
+  physics.spawnBall();
+  phase = 'playing';
+  input.setEnabled(true);
+  hud.showMessage('Tieni premuto Spazio (o Lancia) per caricare');
 }
 
 function handlePhysicsEvent(event) {
+  if (phase !== 'playing') return;
+
   if (event.type === 'drain') {
-    const { bonus } = endOfBallBonus(ballState, RULES);
-    score += bonus;
-    showMessage(`Pallina persa · bonus ${bonus} · totale ${score}`);
-    ballState = newBallState(); // il moltiplicatore si azzera
-    physics.resetTargets();
-    setTimeout(() => physics.spawnBall(), 800);
+    loseBall();
     return;
   }
 
-  // Un elemento colpito: punti, lampeggio ed eventuale messaggio
   const result = applyHit(ballState, event, RULES);
-  score += result.points;
+  addPoints(match, result.points);
   renderer.flash(event.type, event.id);
   if (result.resetTargets) {
     setTimeout(() => physics.resetTargets(), RULES.targetResetMs);
   }
-  showMessage(result.message ?? `${score} punti · ×${ballState.multiplier}`);
+  if (result.message) hud.showMessage(result.message);
+  hud.renderHud(match, ballState.multiplier);
 }
 
-function showMessage(text) {
-  elements.message.textContent = text;
+/** Pallina persa: bonus di fine pallina, poi tocca al prossimo (o fine partita). */
+function loseBall() {
+  phase = 'between';
+  input.setEnabled(false);
+
+  const player = getCurrentPlayer(match);
+  const { bonus } = endOfBallBonus(ballState, RULES);
+  addPoints(match, bonus);
+  const lastBall = { name: player.name, bonus };
+  hud.renderHud(match, 1); // il moltiplicatore si azzera con la pallina persa
+  hud.showMessage(`Pallina persa · bonus +${hud.formatScore(bonus)}`, { sticky: true });
+
+  const { finished } = endBall(match);
+  betweenTimer = setTimeout(() => (finished ? showResults() : beginTurn(lastBall)), BETWEEN_BALLS_MS);
+}
+
+function showResults() {
+  phase = 'results';
+  hud.showScreen('results');
+  hud.renderResults(match);
+}
+
+function goToSetup() {
+  clearTimeout(betweenTimer);
+  phase = 'setup';
+  input.setEnabled(false);
+  physics.removeBall();
+  hud.hidePauseOverlay();
+  hud.hideTurnOverlay();
+  hud.showScreen('setup');
 }
 
 function togglePause() {
-  paused = !paused;
-  elements.message.textContent = paused ? 'Pausa' : '';
-  input.setEnabled(!paused);
+  if (phase === 'playing') {
+    phase = 'paused';
+    input.setEnabled(false);
+    hud.showPauseOverlay();
+  } else if (phase === 'paused') {
+    hud.hidePauseOverlay();
+    phase = 'playing';
+    input.setEnabled(true);
+  }
+}
+
+/** Carica del lanciatore da 0 a 1, in base a quanto è stato tenuto premuto. */
+function currentCharge() {
+  if (chargeStartedAt === null) return 0;
+  return Math.min(1, (performance.now() - chargeStartedAt) / PHYSICS.plungerChargeMs);
 }
 
 // --- Ciclo di gioco a passo fisso -------------------------------------------
@@ -95,15 +167,23 @@ function frame(now) {
   const elapsed = Math.min(now - lastTime, PHYSICS.maxFrameMs);
   lastTime = now;
 
-  if (!paused) {
+  // La fisica avanza solo in partita (e subito dopo la pallina persa)
+  if (phase === 'playing' || phase === 'between') {
     accumulator += elapsed;
     while (accumulator >= PHYSICS.stepMs) {
       physics.step(input.controls);
       accumulator -= PHYSICS.stepMs;
     }
+  } else {
+    accumulator = 0;
   }
 
-  renderer.draw(physics.getSnapshot(), { charge: currentCharge(), lanesLit: ballState.lanesLit });
+  if (phase !== 'setup' && phase !== 'results') {
+    renderer.draw(physics.getSnapshot(), {
+      charge: currentCharge(),
+      lanesLit: ballState?.lanesLit ?? [],
+    });
+  }
   requestAnimationFrame(frame);
 }
 
@@ -111,22 +191,38 @@ function frame(now) {
 
 function fitTable() {
   const box = elements.tableWrap.getBoundingClientRect();
-  renderer.resize(window.innerWidth - 32 - 276, box.height);
+  if (box.width > 0 && box.height > 0) renderer.resize(box.width, box.height);
 }
 
 new ResizeObserver(fitTable).observe(elements.tableWrap);
-fitTable();
 
-// La pagina nascosta (altra scheda) mette in pausa da sola
+// Pagina nascosta (altra scheda, telefono bloccato): pausa automatica
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden && !paused) togglePause();
+  if (document.hidden && phase === 'playing') togglePause();
 });
 
-// Con "?debug" nell'indirizzo, fisica e comandi sono raggiungibili dalla console del browser
+// --- Collegamento dei pulsanti ---------------------------------------------------
+
+hud.updateNameFields(hud.readSettings().playerNames.length);
+hud.onPlayerCountChange(hud.updateNameFields);
+hud.onSetupSubmit(startMatch);
+hud.onTurnStart(startBall);
+hud.onResume(togglePause);
+hud.onExit(goToSetup);
+hud.onReplay(() => startMatch(settings));
+hud.onChangeSettings(goToSetup);
+
+// Con "?debug" nell'indirizzo, lo stato è raggiungibile dalla console del browser
 if (new URLSearchParams(location.search).has('debug')) {
-  window.pinballDebug = { physics, input, PHYSICS, layout, getScore: () => score, getBallState: () => ballState };
+  window.pinballDebug = {
+    physics,
+    input,
+    PHYSICS,
+    layout,
+    getMatch: () => match,
+    getPhase: () => phase,
+    getBallState: () => ballState,
+  };
 }
 
-physics.spawnBall();
-input.setEnabled(true);
 requestAnimationFrame(frame);

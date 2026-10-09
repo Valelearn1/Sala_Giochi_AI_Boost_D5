@@ -6,6 +6,11 @@
     <meta name="description" content="Profondità Zero: flipper a turni da 1 a 4 giocatori sullo stesso dispositivo." />
     <meta name="theme-color" content="#04163a" />
     <title>Profondità Zero · Sala giochi</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪼</text></svg>"
+    />
+    <link rel="preload" href="../assets/fonts/PressStart2P-Regular.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="stylesheet" href="style.css" />
     <!-- Matter.js (fisica) in locale: script classico, deve venire prima del modulo -->
     <script src="lib/matter.min.js"></script>
@@ -14,21 +19,115 @@
   <body>
     <header class="topbar">
       <a class="back-link" href="../">‹ Tutti i giochi</a>
-      <h1 class="table-name">Profondità Zero</h1>
+      <span class="topbar-name">Profondità Zero</span>
     </header>
 
-    <main class="game">
-      <div class="table-area">
-        <div id="table-wrap" class="table-wrap">
-          <canvas id="table" aria-label="Tavolo del flipper"></canvas>
-        </div>
-        <button type="button" id="launch-button" class="launch-button">Lancia</button>
-      </div>
+    <main class="page">
+      <!-- SCHERMATA 1: impostazioni -->
+      <section id="setup-screen" class="screen screen--setup" aria-labelledby="setup-title">
+        <h1 id="setup-title" class="title">Profondità<br />Zero</h1>
+        <p class="tagline">Flipper degli abissi: tre palline a testa, il punteggio più alto vince.</p>
 
-      <aside id="hud" class="hud" aria-label="Punteggi">
-        <p id="message" class="message" role="status" aria-live="polite"></p>
-        <button type="button" id="pause-button" class="pause-button">Pausa</button>
-      </aside>
+        <form id="setup-form" class="setup-form">
+          <fieldset class="field">
+            <legend class="field-label">Giocatori</legend>
+            <div class="count-choices">
+              <label class="choice"><input type="radio" name="player-count" value="1" checked /><span>1</span></label>
+              <label class="choice"><input type="radio" name="player-count" value="2" /><span>2</span></label>
+              <label class="choice"><input type="radio" name="player-count" value="3" /><span>3</span></label>
+              <label class="choice"><input type="radio" name="player-count" value="4" /><span>4</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend class="field-label">Nomi <span class="field-hint">facoltativi</span></legend>
+            <div class="names">
+              <label class="name-field" data-player="0">
+                <span class="player-dot" aria-hidden="true"></span>
+                <span class="visually-hidden">Nome del giocatore 1</span>
+                <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 1" autocomplete="off" />
+              </label>
+              <label class="name-field" data-player="1" hidden>
+                <span class="player-dot" aria-hidden="true"></span>
+                <span class="visually-hidden">Nome del giocatore 2</span>
+                <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 2" autocomplete="off" />
+              </label>
+              <label class="name-field" data-player="2" hidden>
+                <span class="player-dot" aria-hidden="true"></span>
+                <span class="visually-hidden">Nome del giocatore 3</span>
+                <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 3" autocomplete="off" />
+              </label>
+              <label class="name-field" data-player="3" hidden>
+                <span class="player-dot" aria-hidden="true"></span>
+                <span class="visually-hidden">Nome del giocatore 4</span>
+                <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 4" autocomplete="off" />
+              </label>
+            </div>
+          </fieldset>
+
+          <button type="submit" class="button button--primary button--large">Inizia la partita</button>
+        </form>
+
+        <dl class="controls-help">
+          <div><dt>Alette</dt><dd>Z / ← e M / → · su telefono tocca metà sinistra o destra del tavolo</dd></div>
+          <div><dt>Lancio</dt><dd>Tieni premuto Spazio o il pulsante Lancia, più a lungo = più forte</dd></div>
+          <div><dt>Pausa</dt><dd>P o il pulsante Pausa</dd></div>
+        </dl>
+      </section>
+
+      <!-- SCHERMATA 2: la partita -->
+      <section id="game-screen" class="screen screen--game" aria-label="Partita in corso" hidden>
+        <div class="table-area">
+          <div id="table-wrap" class="table-wrap">
+            <canvas id="table" role="img" aria-label="Tavolo del flipper Profondità Zero"></canvas>
+          </div>
+          <button type="button" id="launch-button" class="launch-button">Lancia</button>
+
+          <!-- Tra un turno e l'altro: si passa il dispositivo -->
+          <div id="turn-overlay" class="overlay" hidden>
+            <div class="overlay-card" role="dialog" aria-modal="true" aria-labelledby="turn-title">
+              <h2 id="turn-title" class="overlay-title"></h2>
+              <p id="turn-ball" class="overlay-text"></p>
+              <p id="turn-bonus" class="overlay-note"></p>
+              <button type="button" id="turn-start" class="button button--primary button--large">Premi per lanciare</button>
+            </div>
+          </div>
+
+          <div id="pause-overlay" class="overlay" hidden>
+            <div class="overlay-card" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+              <h2 id="pause-title" class="overlay-title">Pausa</h2>
+              <button type="button" id="resume-button" class="button button--primary button--large">Riprendi</button>
+              <button type="button" id="exit-button" class="button button--ghost">Esci dalla partita</button>
+            </div>
+          </div>
+        </div>
+
+        <aside id="hud" class="hud" aria-label="Pannello di gioco">
+          <div class="hud-current">
+            <span class="hud-label">Di turno</span>
+            <strong id="hud-player" class="hud-player"></strong>
+            <span id="hud-ball" class="hud-ball"></span>
+          </div>
+          <div class="hud-multiplier" aria-label="Moltiplicatore">
+            <span class="hud-label">Molt.</span>
+            <strong id="hud-multiplier">×1</strong>
+          </div>
+          <ol id="hud-scores" class="hud-scores" aria-label="Punteggi"></ol>
+          <p id="message" class="message" role="status" aria-live="polite"></p>
+          <button type="button" id="pause-button" class="button button--ghost button--small pause-button">Pausa</button>
+        </aside>
+      </section>
+
+      <!-- SCHERMATA 3: classifica -->
+      <section id="results-screen" class="screen screen--results" aria-labelledby="results-title" hidden>
+        <h2 id="results-title" class="results-title" tabindex="-1"></h2>
+        <p id="results-summary" class="results-summary"></p>
+        <ol id="ranking" class="ranking"></ol>
+        <div class="results-actions">
+          <button type="button" id="replay-button" class="button button--primary button--large">Rigioca</button>
+          <button type="button" id="settings-button" class="button button--ghost">Cambia impostazioni</button>
+        </div>
+      </section>
     </main>
   </body>
 </html>
