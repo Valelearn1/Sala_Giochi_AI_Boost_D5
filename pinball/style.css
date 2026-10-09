@@ -1,0 +1,64 @@
+/* Stile provvisorio della fase 1: la grafica definitiva arriva nella fase 4 */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: #020a1c;
+  color: #d8f6ff;
+  font-family: system-ui, sans-serif;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+}
+
+.back-link {
+  color: inherit;
+}
+
+.table-name {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.game {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  padding: 0 16px 16px;
+}
+
+.table-area {
+  position: relative;
+}
+
+.table-wrap {
+  height: calc(100dvh - 70px);
+  touch-action: none; /* i tocchi azionano le alette, non scorrono la pagina */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+canvas {
+  display: block;
+}
+
+.launch-button {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  touch-action: none;
+}
+
+.hud {
+  width: 260px;
+}
