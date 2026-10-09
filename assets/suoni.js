@@ -236,6 +236,10 @@ const CLASSICA = {
   launch: (t) => tone({ frequency: 200, slideTo: 1000, start: t, duration: 0.25, volume: 0.09 }),
   drain: (t) => notes(['G4', 'E4', 'C4', 'G3'], 0.14, t, { wave: 'triangle' }),
   ballSave: (t) => notes(['A5', 'C#6', 'E6', 'A6'], 0.07, t),
+  // Corsa
+  countdown: (t) => tone({ frequency: noteToFrequency('A4'), start: t, duration: 0.15 }),
+  go: (t) => tone({ frequency: noteToFrequency('A5'), start: t, duration: 0.45 }),
+  lap: (t) => notes(['E6', 'G6', 'E7'], 0.06, t),
 };
 
 // --- Ricette dei suoni: versione anime (magia) -------------------------------
@@ -278,6 +282,13 @@ const ANIME = {
   launch: (t) => noise({ start: t, duration: 0.35, from: 400, to: 3000, volume: 0.1 }), // la sfera parte
   drain: (t) => tone({ frequency: 110, slideTo: 45, start: t, duration: 0.5, wave: 'sine', volume: 0.16 }), // colpo cupo
   ballSave: (t) => bells(['D6', 'F#6', 'A6'], 0.07, t, 0.7), // scudo
+  // Corsa
+  countdown: (t) => bell({ frequency: noteToFrequency('A5'), start: t, duration: 0.4 }),
+  go: (t) => {
+    noise({ start: t, duration: 0.3, from: 600, to: 4000, volume: 0.1 }); // la scopa parte
+    bells(['A5', 'E6', 'A6'], 0.05, t, 0.8);
+  },
+  lap: (t) => bells(['E6', 'B6'], 0.08, t, 0.6),
 };
 
 // --- Ricette dei suoni: versione Simpson (cartone animato) -----------------
@@ -312,6 +323,13 @@ const SIMPSON = {
     tone({ frequency: noteToFrequency('C3'), start: t + 0.45, duration: 0.2, wave: 'triangle', volume: 0.14 });
   },
   ballSave: (t) => xylophone(['C6', 'E6', 'G6', 'E7'], 0.07, t),
+  // Corsa
+  countdown: (t) => tone({ frequency: noteToFrequency('G5'), start: t, duration: 0.14, wave: 'sine', volume: 0.14 }),
+  go: (t) => {
+    tone({ frequency: 200, slideTo: 520, start: t, duration: 0.35, wave: 'triangle', volume: 0.14 }); // brum!
+    xylophone(['C6', 'G6'], 0.08, t);
+  },
+  lap: (t) => xylophone(['G6', 'C7'], 0.07, t),
 };
 
 const RECIPES = { classica: CLASSICA, anime: ANIME, simpson: SIMPSON };

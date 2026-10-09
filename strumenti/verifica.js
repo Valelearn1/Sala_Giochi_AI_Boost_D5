@@ -26,7 +26,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 /** I giochi "di casa": possono usare i file comuni in assets/ (tema, font, suoni). */
-const GIOCHI_INTERNI = ['memory', 'pinball'];
+const GIOCHI_INTERNI = ['memory', 'pinball', 'corsa'];
 
 const ESTENSIONI_AMMESSE = new Set([
   '.html', '.css', '.js', '.mjs', '.json', '.md', '.txt',

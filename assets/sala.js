@@ -109,8 +109,8 @@ async function mostraGiochiImportati() {
 mostraGiochiImportati();
 
 // --- Record dei giochi di casa ----------------------------------------------
-// Memory e Flipper salvano il loro miglior risultato nel browser
-// (memory/js/records.js e pinball/js/records.js): qui lo mostriamo sulle schede.
+// Memory, Flipper e Corsa salvano il loro miglior risultato nel browser
+// (memory/js/records.js, pinball/js/records.js, corsa/js/records.js): qui lo mostriamo sulle schede.
 
 function leggiArchivio(chiave) {
   try {
@@ -127,16 +127,24 @@ function durata(millisecondi) {
   return minuti > 0 ? `${minuti}m ${secondi % 60}s` : `${secondi}s`;
 }
 
+/** 83456 → "1:23.4" (come nella corsa) */
+function tempoCorsa(millisecondi) {
+  const decimi = Math.floor(millisecondi / 100);
+  return `${Math.floor(decimi / 600)}:${String(Math.floor((decimi % 600) / 10)).padStart(2, '0')}.${decimi % 10}`;
+}
+
 function mostraRecord() {
   const memory = leggiArchivio('sala-record-memory') ?? {};
   const tempi = ['4x4', '4x5', '6x6']
     .filter((livello) => memory[livello]?.durationMs > 0)
     .map((livello) => `${livello.replace('x', '×')} in ${durata(memory[livello].durationMs)}`);
   const flipper = leggiArchivio('sala-record-flipper');
+  const corsa = leggiArchivio('sala-record-corsa');
 
   const testi = {
     memory: tempi.length ? `🏆 Record: ${tempi.join(' · ')}` : '',
     flipper: flipper?.score > 0 ? `🏆 Record: ${flipper.score.toLocaleString('it-IT')} punti · ${flipper.name}` : '',
+    corsa: corsa?.totalTime > 0 ? `🏆 Record: ${tempoCorsa(corsa.totalTime)} · ${corsa.name}` : '',
   };
   for (const riga of document.querySelectorAll('[data-record]')) {
     riga.textContent = testi[riga.dataset.record];

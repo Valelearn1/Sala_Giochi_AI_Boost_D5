@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Corsa a cronometro a turni, da 1 a 4 giocatori sullo stesso dispositivo." />
+    <meta name="theme-color" content="#5c94fc" />
+    <title>Corsa · Sala giochi</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏁</text></svg>"
+    />
+    <link rel="preload" href="../assets/fonts/PressStart2P-Regular.ttf" as="font" type="font/ttf" crossorigin />
+    <!-- La versione (classica, anime o Simpson) va applicata prima di tutto il resto -->
+    <script src="../assets/tema.js"></script>
+    <link rel="stylesheet" href="../assets/sala-giochi.css" />
+    <link rel="stylesheet" href="../assets/temi.css" />
+    <link rel="stylesheet" href="../assets/simpson.css" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Versione anime: barra in alto, barra di navigazione e icone (come le schermate di Stitch) -->
+    <script type="module" src="../assets/barre-anime.js"></script>
+    <script type="module" src="js/main.js"></script>
+  </head>
+  <body data-pagina="corsa" data-titolo-anime="Corsa dei Cavalieri" data-radice="../">
+    <header class="topbar">
+      <a class="back-link" href="../">
+        <svg class="pixel-icon" viewBox="0 0 6 8" width="9" height="12" aria-hidden="true">
+          <path fill="currentColor" d="M4 0h1v8h-1v-1h-1v-1h-1v-1h-1v-2h1v-1h1v-1h1z" />
+        </svg>
+        Tutti i giochi
+      </a>
+
+      <!-- Audio: apre il pannello con l'interruttore e il volume (assets/pannello-audio.js) -->
+      <div class="topbar-actions">
+      <!-- Modalità chiara / scura: l'icona mostra dove si va (luna = passa allo scuro) -->
+      <button type="button" class="theme-toggle mode-toggle" data-mode-toggle>
+        <svg class="mode-icon-moon" viewBox="0 0 10 10" width="16" height="16" aria-hidden="true" shape-rendering="crispEdges">
+          <path fill="currentColor" d="M4 0h4v1H6v1H5v1H4v4h1v1h1v1h2v1H4V9H3V8H2V7H1V3h1V2h1V1h1z" />
+        </svg>
+        <svg class="mode-icon-sun" viewBox="0 0 10 10" width="16" height="16" aria-hidden="true" shape-rendering="crispEdges">
+          <path fill="currentColor" d="M4 3h2v1h1v2H6v1H4V6H3V4h1zM4 0h2v2H4zM4 8h2v2H4zM0 4h2v2H0zM8 4h2v2H8zM1 1h1v1H1zM8 1h1v1H8zM1 8h1v1H1zM8 8h1v1H8z" />
+        </svg>
+        <span class="icona-anime icona-luna" data-icona="luna"></span>
+          <span class="icona-anime icona-sole" data-icona="sole"></span>
+          <span class="mode-word" data-mode-label>Scuro</span>
+      </button>
+      <!-- Cambia versione della sala: classica (platform 8-bit) o anime -->
+      <button type="button" class="theme-toggle" data-theme-toggle="short">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path fill="currentColor" d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9zM19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" />
+        </svg>
+        <span class="icona-anime" data-icona="scintilla" data-misura="18"></span>
+          <span data-theme-label>Anime</span>
+      </button>
+      <button type="button" id="sound-toggle" class="sound-toggle" data-on="false">
+        <svg class="pixel-icon" viewBox="0 0 12 10" width="24" height="20" aria-hidden="true">
+          <path fill="currentColor" d="M0 3h2V3h1V2h1V1h1V0h1v10H5V9H4V8H3V7H0z" />
+          <path class="sound-waves" fill="currentColor" d="M8 3h1v4H8zM10 1h1v8h-1z" />
+          <path class="sound-mute" fill="currentColor" d="M8 3h1v1H8zM10 3h1v1h-1zM9 4h1v2H9zM8 6h1v1H8zM10 6h1v1h-1z" />
+        </svg>
+        <span class="icona-anime icona-audio" data-icona="audio"></span>
+          <span class="icona-anime icona-muto" data-icona="muto"></span>
+          <span class="sound-word">Audio</span>
+        <span class="sound-state" aria-hidden="true"></span>
+      </button>
+      </div>
+    </header>
+
+    <main class="page">
+      <!-- SCHERMATA 1: impostazioni -->
+      <section id="setup-screen" class="screen screen--setup" aria-labelledby="setup-title">
+        <h1 id="setup-title" class="game-title pixel-text">
+          <span class="only-classica">Circuito dei<br />Funghi</span>
+          <span class="only-anime">Corsa dei<br />Cavalieri Magici</span>
+          <span class="only-simpson">Gran Premio di<br />Springfield</span>
+        </h1>
+        <p class="game-tagline">
+          <span class="only-classica">Corsa a cronometro sui kart: tre giri a testa, vince il tempo più basso.</span>
+          <span class="only-anime">I maghi volano sulle scope lungo il sentiero di rune: tre giri a testa, vince il più veloce.</span>
+          <span class="only-simpson">Sfreccia per le strade di Springfield con l'auto di famiglia: tre giri a testa, vince il tempo più basso.</span>
+        </p>
+
+        <!-- Versione anime: scheda d'apertura nello stile delle schermate di Stitch -->
+        <div class="setup-hero only-anime">
+          <span class="anime-chip"><span data-icona="fulmine" data-misura="14"></span> Prova di velocità</span>
+          <p class="setup-hero-title" aria-hidden="true">Corsa dei Cavalieri Magici</p>
+          <p class="setup-hero-text">Volate sulle scope lungo il sentiero di rune, uno alla volta: tre giri, vince il tempo più basso.</p>
+        </div>
+
+        <form id="setup-form" class="setup-form">
+          <fieldset class="field">
+            <legend class="field-label pixel-text">
+              <span class="not-anime">Giocatori</span>
+              <span class="field-head only-anime"><span data-icona="gruppo"></span> Numero di maghi</span>
+            </legend>
+            <div class="count-choices">
+              <label class="choice"><input type="radio" name="player-count" value="1" checked /><span class="choice-body">1</span></label>
+              <label class="choice"><input type="radio" name="player-count" value="2" /><span class="choice-body">2</span></label>
+              <label class="choice"><input type="radio" name="player-count" value="3" /><span class="choice-body">3</span></label>
+              <label class="choice"><input type="radio" name="player-count" value="4" /><span class="choice-body">4</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend class="field-label pixel-text">
+              <span class="not-anime">Nomi <span class="field-hint">facoltativi</span></span>
+              <span class="field-head only-anime"><span data-icona="scudo"></span> Nomi dei maghi</span>
+            </legend>
+            <div class="names">
+              <label class="name-field" data-player="0">
+                <span class="player-dot" aria-hidden="true"></span>
+                <span class="visually-hidden">Nome del giocatore 1</span>
+                <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 1" autocomplete="off" />
+              </label>
+              <label class="name-field" data-player="1" hidden>
+                <span class="player-dot" aria-hidden="true"></span>
+                <span class="visually-hidden">Nome del giocatore 2</span>
+                <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 2" autocomplete="off" />
+              </label>
+              <label class="name-field" data-player="2" hidden>
+                <span class="player-dot" aria-hidden="true"></span>
+                <span class="visually-hidden">Nome del giocatore 3</span>
+                <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 3" autocomplete="off" />
+              </label>
+              <label class="name-field" data-player="3" hidden>
+                <span class="player-dot" aria-hidden="true"></span>
+                <span class="visually-hidden">Nome del giocatore 4</span>
+                <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 4" autocomplete="off" />
+              </label>
+            </div>
+          </fieldset>
+
+          <button type="submit" class="button button--primary button--large start-button">Inizia la corsa</button>
+        </form>
+
+        <dl class="controls-help">
+          <div><dt>Gas</dt><dd>↑ o W · su telefono il pulsante Gas</dd></div>
+          <div><dt>Freno</dt><dd>↓ o S (da fermi fa retromarcia)</dd></div>
+          <div><dt>Sterzo</dt><dd>← → o A D · su telefono i pulsanti ◀ ▶</dd></div>
+          <div><dt>Pausa</dt><dd>P o il pulsante Pausa</dd></div>
+        </dl>
+      </section>
+
+      <!-- SCHERMATA 2: la corsa -->
+      <section id="game-screen" class="screen screen--game" aria-label="Corsa in corso" hidden>
+        <div id="hud" class="hud" aria-label="Pannello della corsa">
+          <span class="hud-player-block">
+            <span class="hud-label">Pilota</span>
+            <strong id="hud-player" class="hud-player"></strong>
+          </span>
+          <span class="hud-stat">
+            <span class="hud-label">Giro</span>
+            <strong id="hud-lap" class="hud-value">1/3</strong>
+          </span>
+          <span class="hud-stat">
+            <span class="hud-label">Tempo</span>
+            <strong id="hud-time" class="hud-value hud-value--time">0:00.0</strong>
+          </span>
+          <span class="hud-stat">
+            <span class="hud-label">Migliore</span>
+            <strong id="hud-best" class="hud-value">–</strong>
+          </span>
+          <button type="button" id="pause-button" class="button button--secondary button--small pause-button">Pausa</button>
+          <p id="message" class="message" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="track-area">
+          <div id="track-wrap" class="track-wrap">
+            <canvas id="track" role="img" aria-label="Pista vista dall'alto"></canvas>
+          </div>
+
+          <!-- Il numero grande del conto alla rovescia: solo visivo, il messaggio arriva anche da #message -->
+          <p id="countdown" class="countdown" aria-hidden="true" hidden></p>
+
+          <!-- Tra un turno e l'altro: si passa il dispositivo -->
+          <div id="turn-overlay" class="overlay" hidden>
+            <div class="overlay-card" role="dialog" aria-modal="true" aria-labelledby="turn-title">
+              <h2 id="turn-title" class="overlay-title"></h2>
+              <p id="turn-note" class="overlay-note"></p>
+              <button type="button" id="turn-start" class="button button--primary button--large">Pronti? Parti!</button>
+            </div>
+          </div>
+
+          <div id="pause-overlay" class="overlay" hidden>
+            <div class="overlay-card" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+              <h2 id="pause-title" class="overlay-title">Pausa</h2>
+              <button type="button" id="resume-button" class="button button--primary button--large">Riprendi</button>
+              <button type="button" id="exit-button" class="button button--secondary">Esci dalla corsa</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comandi touch: da tenere premuti (con la tastiera si usano le frecce) -->
+        <div class="drive-controls">
+          <div class="drive-group">
+            <button type="button" class="drive-button drive-button--steer" data-control="left" aria-label="Sterza a sinistra">◀</button>
+            <button type="button" class="drive-button drive-button--steer" data-control="right" aria-label="Sterza a destra">▶</button>
+          </div>
+          <div class="drive-group">
+            <button type="button" class="drive-button drive-button--brake" data-control="brake">Freno</button>
+            <button type="button" class="drive-button drive-button--gas" data-control="gas">Gas</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCHERMATA 3: classifica -->
+      <section id="results-screen" class="screen screen--results" aria-labelledby="results-title" hidden>
+        <span class="anime-chip results-pill only-anime"><span data-icona="trofeo" data-misura="14"></span> Fine della corsa • Cavalieri Magici</span>
+        <h2 id="results-title" class="results-title pixel-text" tabindex="-1"></h2>
+        <p id="results-summary" class="results-summary"></p>
+        <p id="results-record" class="results-record" hidden></p>
+        <ol id="ranking" class="ranking"></ol>
+        <div class="results-actions">
+          <button type="button" id="replay-button" class="button button--primary button--large">Rigioca</button>
+          <button type="button" id="settings-button" class="button button--secondary">Cambia impostazioni</button>
+        </div>
+        <a class="results-home only-anime" href="../"><span data-icona="gamepad" data-misura="18"></span> Torna alla sala giochi</a>
+      </section>
+    </main>
+
+    <div class="ground" aria-hidden="true"></div>
+  </body>
+</html>

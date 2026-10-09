@@ -7,7 +7,7 @@
  * Riempie anche le icone [data-icona] scritte nell'HTML.
  *
  * Ogni pagina dice chi è con due attributi sul <body>:
- *   data-pagina="hub|memory|flipper"   e   data-titolo-anime="Grimoire Memory"
+ *   data-pagina="hub|memory|flipper|corsa"   e   data-titolo-anime="Grimoire Memory"
  */
 
 import { icona, riempiIcone } from './icone.js';
@@ -19,6 +19,7 @@ const VOCI = [
   { id: 'hub', testo: 'Hub', icona: 'libro', href: '' },
   { id: 'memory', testo: 'Memory', icona: 'carte', href: 'memory/' },
   { id: 'flipper', testo: 'Flipper', icona: 'gamepad', href: 'pinball/' },
+  { id: 'corsa', testo: 'Corsa', icona: 'fulmine', href: 'corsa/' },
 ];
 
 /** Logo e titolo, come la parte sinistra della barra in alto di Stitch. */
