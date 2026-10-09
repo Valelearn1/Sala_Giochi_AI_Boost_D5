@@ -94,6 +94,7 @@ export const THEME_PLATFORM = {
 export const THEME_ANIME = {
   tableName: 'Sfera Anti-Magia',
   bumperStyle: 'sigil', // cerchi magici
+  paintFont: { family: '"Syne", sans-serif', weight: 800 }, // font del nome dipinto sul tavolo
   decor: 'clover', // un grande trifoglio inciso sul tavolo
   particleColor: '236, 194, 70', // scintille di mana dorate
 

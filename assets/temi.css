@@ -1,9 +1,9 @@
 /* =====================================================================
    TEMI DELLA SALA GIOCHI — parti comuni a tutte le pagine
-   Il tema attivo è scritto su <html data-theme="8bit|grimorio"> da assets/tema.js.
+   La versione attiva è scritta su <html data-theme="classica|anime"> da assets/tema.js.
    Qui ci sono: il pulsante per cambiare tema, i testi che cambiano col tema,
    il pulsante audio, e font, colori e componenti di base della versione anime.
-   (Il tema 8-bit è in sala-giochi.css; il flipper ha il suo tema "abissi".)
+   (La versione classica 8-bit è in sala-giochi.css; il flipper ha in più il suo style.css.)
    ===================================================================== */
 
 /* Font del tema Grimorio (licenza SIL OFL, vedi fonts/OFL-*.txt) */
@@ -120,7 +120,7 @@
   --g-surface-highest: #373439;
   --g-text: #e7e0e8;
   --g-text-soft: #e3bebd;
-  --g-muted: #aa8988;
+  --g-muted: #b99a99; /* almeno 4,5:1 anche sulle superfici più chiare */
   --g-line: #5b4040;
   --g-crimson: #b3122e;
   --g-crimson-soft: #ffb3b3;

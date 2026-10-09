@@ -11,6 +11,7 @@
  */
 
 const FLASH_MS = 280;
+const DEFAULT_PAINT_FONT = { family: '"Press Start 2P", monospace', weight: 400 };
 const PLANKTON_COUNT = 42;
 
 export function createRenderer({ canvas, layout, theme: initialTheme }) {
@@ -50,6 +51,9 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
     theme = newTheme;
     colors = theme.colors;
     drawStaticLayer();
+    // Il font del nome dipinto potrebbe non essere ancora caricato: appena c'è, ridisegniamo
+    const { family, weight } = theme.paintFont ?? DEFAULT_PAINT_FONT;
+    document.fonts?.load(`${weight} 40px ${family}`).then(() => drawStaticLayer());
   }
 
   // --- Lampeggi -----------------------------------------------------------
@@ -229,9 +233,10 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
     c.save();
     c.textAlign = 'center';
     c.fillStyle = colors.paint;
-    c.font = '26px "Press Start 2P", monospace';
+    const { family, weight } = theme.paintFont ?? DEFAULT_PAINT_FONT;
+    c.font = `${weight} 26px ${family}`;
     c.fillText(first, 276, 690);
-    c.font = '40px "Press Start 2P", monospace';
+    c.font = `${weight} 40px ${family}`;
     c.fillText(rest.join(' '), 276, 740);
     c.restore();
   }

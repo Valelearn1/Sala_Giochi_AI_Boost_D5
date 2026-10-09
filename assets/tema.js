@@ -2,7 +2,7 @@
  * VERSIONE DELLA SALA GIOCHI
  *
  * Un solo sito con due "vesti":
- * - "classica" (predefinita): Memory a tema platform 8-bit, flipper a tema marino;
+ * - "classica" (predefinita): Memory e flipper a tema Super Mario (platform 8-bit);
  * - "anime": Memory e flipper a tema anime (grimori, sigilli, cremisi e oro).
  * Regole, turni e fisica sono gli stessi: cambia solo la grafica.
  *

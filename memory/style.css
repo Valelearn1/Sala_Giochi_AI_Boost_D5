@@ -169,8 +169,8 @@
 
 .choice--count input:checked + .choice-body {
   background: var(--gold-block);
-  color: var(--white);
-  text-shadow: 3px 3px 0 var(--gold-dark), -1px -1px 0 var(--gold-dark);
+  color: #1d0f00; /* scuro sull'oro: il bianco sarebbe poco leggibile */
+  text-shadow: 2px 2px 0 var(--gold-light);
   box-shadow:
     inset 4px 4px 0 var(--gold-light),
     inset -4px -4px 0 var(--gold-dark);
@@ -803,7 +803,6 @@
     --board-offset: 315px;
   }
 
-  /* Con 3 o 4 giocatori i punteggi occupano due righe: il tavolo deve stringersi */
   /* Con 3 o 4 giocatori i punteggi stanno su una riga sola, compatti: resta più spazio alle carte */
   .screen--game[data-players='3'],
   .screen--game[data-players='4'] {

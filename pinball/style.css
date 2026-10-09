@@ -288,7 +288,8 @@ body {
 
 .choice input:checked + span {
   background: var(--accent);
-  text-shadow: 2px 2px 0 var(--accent-ink);
+  color: #1d0f00; /* scuro sull'oro: il bianco sarebbe poco leggibile */
+  text-shadow: 2px 2px 0 #ffe08a;
   box-shadow:
     inset 4px 4px 0 #ffe08a,
     inset -4px -4px 0 var(--accent-ink);
@@ -418,11 +419,11 @@ canvas {
   border: var(--border) solid #000000;
   border-radius: var(--radius);
   background: var(--accent);
-  color: #ffffff;
+  color: #1d0f00;
   font-family: var(--pixel);
   font-size: 0.75rem;
   text-transform: uppercase;
-  text-shadow: 2px 2px 0 var(--accent-ink);
+  text-shadow: 2px 2px 0 #ffe08a;
   box-shadow:
     inset 3px 3px 0 #ffe08a,
     inset -3px -3px 0 var(--accent-ink);
