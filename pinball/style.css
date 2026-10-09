@@ -1151,23 +1151,27 @@ canvas {
   text-shadow: none;
 }
 
-/* Punteggio arcano: numero grande in oro, a destra le sfere rimaste */
+/* Punteggio arcano: numero grande in oro, a destra le sfere rimaste.
+   Se non c'è posto per entrambi (pannello stretto), le sfere vanno a capo sotto. */
 .hud-arcane {
   grid-area: arcane;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-areas:
-    'label mana'
-    'score mana';
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 2px 12px;
+  justify-content: space-between;
+  gap: 6px 12px;
   padding: 10px 12px;
   border-radius: var(--g-radius-sm);
   background: var(--g-surface-lowest);
 }
 
+.hud-arcane-main {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
 .hud-arcane-label {
-  grid-area: label;
   white-space: nowrap;
   color: var(--g-gold);
   font-size: 0.6875rem;
@@ -1181,8 +1185,8 @@ canvas {
 }
 
 .hud-arcane-score {
-  grid-area: score;
   overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--g-gold);
   font-family: var(--g-display);
   font-size: clamp(1.75rem, 8vw, 2.5rem);
@@ -1192,10 +1196,10 @@ canvas {
 }
 
 .hud-mana {
-  grid-area: mana;
   display: grid;
   justify-items: end;
   gap: 6px;
+  margin-left: auto;
 }
 
 .hud-mana-dots {
@@ -1644,11 +1648,6 @@ canvas {
   }
 
   .hud-arcane {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      'label'
-      'score'
-      'mana';
     padding: 6px 10px;
   }
 
