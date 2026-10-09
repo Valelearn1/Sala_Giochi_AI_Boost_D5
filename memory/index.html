@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Memory a turni da 2 a 4 giocatori sullo stesso dispositivo." />
+    <meta name="theme-color" content="#5c94fc" />
+    <title>Memory · Sala giochi</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍄</text></svg>"
+    />
+    <link rel="preload" href="../assets/fonts/PressStart2P-Regular.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="stylesheet" href="../assets/sala-giochi.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="js/main.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="back-link" href="../">
+        <svg class="pixel-icon" viewBox="0 0 6 8" width="9" height="12" aria-hidden="true">
+          <path fill="currentColor" d="M4 0h1v8h-1v-1h-1v-1h-1v-1h-1v-2h1v-1h1v-1h1z" />
+        </svg>
+        Tutti i giochi
+      </a>
+
+      <!-- Audio: spento all'avvio. aria-pressed dice agli screen reader se è acceso -->
+      <button type="button" id="sound-toggle" class="sound-toggle" aria-pressed="false">
+        <svg class="pixel-icon" viewBox="0 0 12 10" width="24" height="20" aria-hidden="true">
+          <path fill="currentColor" d="M0 3h2V3h1V2h1V1h1V0h1v10H5V9H4V8H3V7H0z" />
+          <path class="sound-waves" fill="currentColor" d="M8 3h1v4H8zM10 1h1v8h-1z" />
+          <path class="sound-mute" fill="currentColor" d="M8 3h1v1H8zM10 3h1v1h-1zM9 4h1v2H9zM8 6h1v1H8zM10 6h1v1h-1z" />
+        </svg>
+        <span>Audio</span>
+        <span class="sound-state" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <main class="page">
+      <!-- SCHERMATA 1: impostazioni della partita (la "schermata del titolo") -->
+      <section id="setup-screen" class="screen screen--setup" aria-labelledby="setup-title">
+        <h1 id="setup-title" class="game-title pixel-text">Memory</h1>
+        <p class="game-tagline">Trova le coppie a turno, passandovi lo stesso schermo.</p>
+
+        <form id="setup-form" class="setup-form">
+          <fieldset class="field">
+            <legend class="field-label pixel-text">Giocatori</legend>
+            <div class="count-choices">
+              <label class="choice choice--count">
+                <input type="radio" name="player-count" value="2" checked />
+                <span class="choice-body">2</span>
+              </label>
+              <label class="choice choice--count">
+                <input type="radio" name="player-count" value="3" />
+                <span class="choice-body">3</span>
+              </label>
+              <label class="choice choice--count">
+                <input type="radio" name="player-count" value="4" />
+                <span class="choice-body">4</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend class="field-label pixel-text">Nomi <span class="field-hint">facoltativi</span></legend>
+            <div class="names">
+              <label class="name-field" data-player="0">
+                <span class="player-cap" aria-hidden="true"></span>
+                <span class="visually-hidden">Nome del giocatore 1</span>
+                <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 1" autocomplete="off" />
+              </label>
+              <label class="name-field" data-player="1">
+                <span class="player-cap" aria-hidden="true"></span>
+                <span class="visually-hidden">Nome del giocatore 2</span>
+                <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 2" autocomplete="off" />
+              </label>
+              <label class="name-field" data-player="2" hidden>
+                <span class="player-cap" aria-hidden="true"></span>
+                <span class="visually-hidden">Nome del giocatore 3</span>
+                <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 3" autocomplete="off" />
+              </label>
+              <label class="name-field" data-player="3" hidden>
+                <span class="player-cap" aria-hidden="true"></span>
+                <span class="visually-hidden">Nome del giocatore 4</span>
+                <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 4" autocomplete="off" />
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend class="field-label pixel-text">Livello</legend>
+            <!-- Ogni livello è un tubo: più è alto, più è difficile -->
+            <div class="pipe-choices">
+              <label class="choice choice--pipe">
+                <input type="radio" name="difficulty" value="4x4" checked />
+                <span class="choice-body">
+                  <svg class="pipe-marker pixel-icon" viewBox="0 0 8 4" width="24" height="12" aria-hidden="true">
+                    <path fill="currentColor" d="M0 0h8v1h-1v1h-1v1h-1v1H3V3H2V2H1V1H0z" />
+                  </svg>
+                  <span class="pipe-label">
+                    <span class="pipe-size">4×4</span>
+                    <span class="pipe-sub">Facile · 8 coppie</span>
+                  </span>
+                  <span class="pipe pipe--short" aria-hidden="true"></span>
+                </span>
+              </label>
+              <label class="choice choice--pipe">
+                <input type="radio" name="difficulty" value="4x5" />
+                <span class="choice-body">
+                  <svg class="pipe-marker pixel-icon" viewBox="0 0 8 4" width="24" height="12" aria-hidden="true">
+                    <path fill="currentColor" d="M0 0h8v1h-1v1h-1v1h-1v1H3V3H2V2H1V1H0z" />
+                  </svg>
+                  <span class="pipe-label">
+                    <span class="pipe-size">4×5</span>
+                    <span class="pipe-sub">Medio · 10 coppie</span>
+                  </span>
+                  <span class="pipe pipe--medium" aria-hidden="true"></span>
+                </span>
+              </label>
+              <label class="choice choice--pipe">
+                <input type="radio" name="difficulty" value="6x6" />
+                <span class="choice-body">
+                  <svg class="pipe-marker pixel-icon" viewBox="0 0 8 4" width="24" height="12" aria-hidden="true">
+                    <path fill="currentColor" d="M0 0h8v1h-1v1h-1v1h-1v1H3V3H2V2H1V1H0z" />
+                  </svg>
+                  <span class="pipe-label">
+                    <span class="pipe-size">6×6</span>
+                    <span class="pipe-sub">Difficile · 18 coppie</span>
+                  </span>
+                  <span class="pipe pipe--tall" aria-hidden="true"></span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <button type="submit" class="button button--primary button--large start-button">Inizia la partita</button>
+        </form>
+      </section>
+
+      <!-- SCHERMATA 2: la partita -->
+      <section id="game-screen" class="screen screen--game" aria-label="Partita in corso" hidden>
+        <div class="hud">
+          <ul id="scoreboard" class="scoreboard" aria-label="Punteggi"></ul>
+          <div class="hud-row">
+            <p class="moves pixel-text">Mosse <span id="moves-count">0</span></p>
+            <button type="button" id="quit-button" class="button button--secondary button--small">Nuova partita</button>
+          </div>
+          <p id="status" class="status" role="status" aria-live="polite"></p>
+        </div>
+
+        <div id="board" class="board" role="group" aria-label="Carte sul tavolo"></div>
+
+        <!-- Banda "Tocca a …": solo visiva, il testo arriva anche da #status -->
+        <div id="turn-banner" class="turn-banner" aria-hidden="true"></div>
+      </section>
+
+      <!-- SCHERMATA 3: fine partita -->
+      <section id="results-screen" class="screen screen--results" aria-labelledby="results-title" hidden>
+        <h2 id="results-title" class="results-title pixel-text" tabindex="-1"></h2>
+        <p id="results-summary" class="results-summary"></p>
+        <ol id="ranking" class="ranking"></ol>
+        <div class="results-actions">
+          <button type="button" id="replay-button" class="button button--primary button--large">Rigioca</button>
+          <button type="button" id="settings-button" class="button button--secondary">Cambia impostazioni</button>
+        </div>
+      </section>
+    </main>
+
+    <div class="ground" aria-hidden="true"></div>
+  </body>
+</html>

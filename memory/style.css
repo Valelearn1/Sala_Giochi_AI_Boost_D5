@@ -1,0 +1,909 @@
+/* =====================================================================
+   MEMORY — stile del gioco
+   Colori, font, cielo, terreno e pulsanti arrivano da ../assets/sala-giochi.css.
+   1. Impaginazione                 5. Carte: blocchi "?" con rotazione 3D
+   2. Schermata del titolo          6. Banda "Tocca a …"
+   3. Scelta del livello (tubi)     7. Classifica
+   4. HUD: punteggi e mosse         8. Telefono e movimento ridotto
+   ===================================================================== */
+
+:root {
+  /* Blocco "?" dorato: quattro rivetti negli angoli sopra il colore oro */
+  --gold-block:
+    linear-gradient(var(--gold-dark) 0 0) 9% 9% / 10% 10% no-repeat,
+    linear-gradient(var(--gold-dark) 0 0) 91% 9% / 10% 10% no-repeat,
+    linear-gradient(var(--gold-dark) 0 0) 9% 91% / 10% 10% no-repeat,
+    linear-gradient(var(--gold-dark) 0 0) 91% 91% / 10% 10% no-repeat,
+    var(--gold);
+  /* Blocco "usato": marrone, come dopo averlo colpito */
+  --used-block:
+    linear-gradient(#4a1a00 0 0) 9% 9% / 10% 10% no-repeat,
+    linear-gradient(#4a1a00 0 0) 91% 9% / 10% 10% no-repeat,
+    linear-gradient(#4a1a00 0 0) 9% 91% / 10% 10% no-repeat,
+    linear-gradient(#4a1a00 0 0) 91% 91% / 10% 10% no-repeat,
+    #b4581e;
+  --score-border: var(--black);
+  --flip-duration: 420ms;
+  --board-offset: 300px; /* spazio occupato da HUD, intestazione e terreno */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --score-border: #34449a; /* sottoterra il nero non si stacca dallo sfondo */
+  }
+}
+
+/* ---------- 1. Impaginazione ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 14px 16px 0;
+}
+
+/* Pulsante audio: altoparlante pixel con onde (acceso) o con una X (spento) */
+.sound-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 6px 12px;
+  background: var(--black);
+  border: var(--border) solid var(--white);
+  color: var(--white);
+  font-family: var(--pixel);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.sound-toggle:hover {
+  background: #1b1b1b;
+}
+
+.sound-state::before {
+  content: 'off';
+  color: var(--panel-muted);
+}
+
+.sound-toggle[aria-pressed='true'] {
+  border-color: var(--gold);
+}
+
+.sound-toggle[aria-pressed='true'] .sound-state::before {
+  content: 'on';
+  color: var(--gold);
+}
+
+.sound-toggle[aria-pressed='true'] .sound-mute,
+.sound-toggle[aria-pressed='false'] .sound-waves {
+  display: none;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+}
+
+.page {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 12px 16px 28px;
+}
+
+/* ---------- 2. Schermata del titolo ---------- */
+
+.screen--setup {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.game-title {
+  margin: 4px 0 10px;
+  font-size: clamp(2.25rem, 10vw, 4rem);
+  line-height: 1;
+  text-shadow:
+    3px 0 0 var(--black),
+    -3px 0 0 var(--black),
+    0 3px 0 var(--black),
+    0 -3px 0 var(--black),
+    6px 6px 0 var(--brick);
+}
+
+.game-tagline {
+  margin: 0 0 20px;
+  max-width: 34ch;
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.setup-form {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+  max-width: 560px;
+}
+
+.field {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.field-label {
+  margin: 0 auto 12px;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.field-hint {
+  font-size: 0.75rem;
+  color: var(--panel-muted);
+}
+
+/* Il radio vero è invisibile ma resta raggiungibile da tastiera */
+.choice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.choice-body {
+  cursor: pointer;
+}
+
+.choice input:focus-visible + .choice-body {
+  outline: var(--border) dashed var(--white);
+  outline-offset: 4px;
+}
+
+/* Numero di giocatori: tre blocchi di mattoni, quello scelto diventa d'oro */
+.count-choices {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.choice--count .choice-body {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border: var(--border) solid var(--black);
+  background: var(--bricks) 0 0 / 32px 32px;
+  color: var(--white);
+  font-family: var(--pixel);
+  font-size: 1.5rem;
+  text-shadow: 3px 3px 0 var(--black);
+  image-rendering: pixelated;
+  transition: translate 120ms steps(3);
+}
+
+.choice--count input:checked + .choice-body {
+  background: var(--gold-block);
+  color: var(--white);
+  text-shadow: 3px 3px 0 var(--gold-dark), -1px -1px 0 var(--gold-dark);
+  box-shadow:
+    inset 4px 4px 0 var(--gold-light),
+    inset -4px -4px 0 var(--gold-dark);
+  translate: 0 -6px;
+}
+
+/* Nomi: campi neri come lo schermo di inserimento nome */
+.names {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.name-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  background: var(--black);
+  border: var(--border) solid var(--white);
+}
+
+.name-field:focus-within {
+  border-color: var(--player);
+  outline: var(--border) dashed var(--white);
+  outline-offset: 3px;
+}
+
+.player-cap {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  background: var(--player, var(--white));
+  box-shadow: inset -3px -3px 0 rgb(0 0 0 / 0.35);
+}
+
+.name-field input {
+  width: 100%;
+  min-width: 0;
+  padding: 13px 0;
+  border: 0;
+  background: none;
+  color: var(--white);
+  font: inherit;
+  font-weight: 600;
+  outline: none;
+}
+
+.name-field input::placeholder {
+  color: #a8a8b8;
+}
+
+.start-button {
+  justify-self: center;
+  min-width: min(100%, 320px);
+}
+
+/* ---------- 3. Scelta del livello: i tubi ---------- */
+
+.pipe-choices {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: end;
+  gap: 8px;
+  position: relative;
+  padding-bottom: 16px;
+}
+
+/* Una fila di mattoni su cui poggiano i tubi */
+.pipe-choices::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 16px;
+  background: var(--bricks) 0 0 / 16px 16px repeat-x;
+  image-rendering: pixelated;
+}
+
+.choice--pipe .choice-body {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.pipe-marker {
+  color: var(--gold);
+  filter: drop-shadow(2px 2px 0 var(--black));
+  visibility: hidden;
+}
+
+.choice--pipe input:checked + .choice-body .pipe-marker {
+  visibility: visible;
+  animation: marker-bob 900ms steps(2) infinite;
+}
+
+.pipe-label {
+  display: grid;
+  gap: 4px;
+}
+
+.pipe-size {
+  font-family: var(--pixel);
+  font-size: 1rem;
+  color: var(--white);
+  text-shadow:
+    2px 0 0 var(--black),
+    -2px 0 0 var(--black),
+    0 2px 0 var(--black),
+    0 -2px 0 var(--black);
+}
+
+.choice--pipe input:checked + .choice-body .pipe-size {
+  color: var(--gold);
+}
+
+.pipe-sub {
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Il tubo: corpo a strisce verticali + bordo superiore più largo (::before) */
+.pipe {
+  position: relative;
+  width: 56px;
+  height: var(--pipe-height);
+  margin-top: 26px;
+  border: var(--border) solid var(--black);
+  border-bottom: 0;
+  background: linear-gradient(
+    90deg,
+    var(--pipe-dark) 0 12%,
+    var(--pipe) 12% 28%,
+    var(--pipe-light) 28% 44%,
+    var(--pipe) 44% 78%,
+    var(--pipe-dark) 78%
+  );
+  transition: filter 150ms ease;
+}
+
+.pipe::before {
+  content: '';
+  position: absolute;
+  top: -26px;
+  left: -11px;
+  right: -11px;
+  height: 26px;
+  border: var(--border) solid var(--black);
+  background: inherit;
+}
+
+.pipe--short { --pipe-height: 26px; }
+.pipe--medium { --pipe-height: 52px; }
+.pipe--tall { --pipe-height: 78px; }
+
+.choice--pipe input:not(:checked) + .choice-body .pipe {
+  filter: saturate(0.55) brightness(0.9);
+}
+
+.choice--pipe .choice-body:hover .pipe {
+  filter: none;
+}
+
+@keyframes marker-bob {
+  50% { translate: 0 5px; }
+}
+
+/* ---------- 4. HUD: punteggi e mosse ---------- */
+
+.hud {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 6px 0 0;
+  list-style: none;
+}
+
+.score {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'cap name'
+    'coins coins';
+  align-items: center;
+  gap: 6px 8px;
+  min-width: 0;
+  padding: 8px 12px;
+  background: var(--black);
+  border: var(--border) solid var(--score-border);
+  color: var(--white);
+  transition: translate 150ms steps(3);
+}
+
+.score .player-cap { grid-area: cap; }
+
+.score-name {
+  grid-area: name;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.score-coins {
+  grid-area: coins;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--pixel);
+  font-size: 1rem;
+}
+
+.score-times {
+  font-size: 0.625rem;
+}
+
+.score-turn {
+  margin-left: auto;
+  font-family: var(--pixel);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+/* Il giocatore di turno: riquadro del suo colore, bordo bianco, rialzato */
+.score.is-current {
+  background: var(--player);
+  border-color: var(--white);
+  translate: 0 -4px;
+  text-shadow: 2px 2px 0 rgb(0 0 0 / 0.45);
+}
+
+.score.is-current .player-cap {
+  background: var(--white);
+}
+
+.score.is-scoring .score-coins {
+  animation: score-bump 360ms steps(3);
+}
+
+@keyframes score-bump {
+  40% { scale: 1.25; }
+}
+
+.hud-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.moves {
+  margin: 0;
+  font-size: 0.75rem;
+}
+
+.moves span {
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Riquadro dei messaggi: nero con bordo bianco */
+.status {
+  min-height: 48px;
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--panel);
+  border: var(--border) solid var(--white);
+  color: var(--panel-text);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ---------- 5. Carte: blocchi "?" con rotazione 3D ---------- */
+
+.board {
+  /* --columns e --rows vengono impostate da JavaScript in base al livello */
+  --gap: clamp(6px, 1.8vw, 12px);
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1fr);
+  gap: var(--gap);
+  /* Larghezza calcolata per far stare tutte le righe nello schermo */
+  width: min(
+    100%,
+    calc(var(--columns) * 108px),
+    calc((100dvh - var(--board-offset) - var(--ceiling-height)) * var(--columns) / var(--rows))
+  );
+  min-width: min(100%, 280px);
+  margin: 0 auto;
+}
+
+.card {
+  /* Reset dello stile del bottone */
+  position: relative;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+
+  aspect-ratio: 1;
+  perspective: 600px; /* profondità della rotazione 3D */
+  container-type: inline-size; /* permette di usare "cqi" per le dimensioni interne */
+}
+
+.card-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform var(--flip-duration) cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.card.is-flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Quando la carta si gira, il blocco "salta" come colpito da sotto */
+.card.is-flipped {
+  animation: block-bump 260ms cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+
+@keyframes block-bump {
+  40% { translate: 0 -14%; }
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border: var(--border) solid var(--black);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Dorso: il blocco "?" */
+.card-back {
+  background: var(--gold-block);
+  box-shadow:
+    inset 4px 4px 0 var(--gold-light),
+    inset -4px -4px 0 var(--gold-dark);
+}
+
+.card-back::after {
+  content: '?';
+  font-family: var(--pixel);
+  font-size: 44cqi;
+  line-height: 1;
+  color: #fff6dc;
+  text-shadow: 0.09em 0.09em 0 var(--gold-dark);
+  translate: 0.04em 0.04em;
+}
+
+/* Fronte: già ruotato di 180°, così appare quando la carta si gira */
+.card-front {
+  transform: rotateY(180deg);
+  background: #fff1cc;
+  box-shadow:
+    inset 4px 4px 0 var(--white),
+    inset -4px -4px 0 #e2bf7c;
+  font-size: clamp(1.2rem, 6vw, 2.6rem); /* per browser senza "cqi" */
+  font-size: 54cqi;
+  line-height: 1;
+}
+
+@media (hover: hover) {
+  .card:not(.is-flipped):hover .card-inner {
+    transform: translateY(-4px);
+  }
+}
+
+/* Coppia trovata: diventa un blocco "usato" con la striscia del colore di chi l'ha trovata */
+.card.is-matched .card-front {
+  background: var(--used-block);
+  box-shadow:
+    inset 4px 4px 0 #e08848,
+    inset -4px -4px 0 #6e2a00;
+}
+
+.card.is-matched .card-front::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 14%;
+  background: var(--player);
+  border-top: var(--border) solid var(--black);
+}
+
+.card[aria-disabled='true'] {
+  cursor: default;
+}
+
+/* La moneta che salta fuori dal blocco quando si trova una coppia */
+.coin-pop {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 2;
+  width: 26%;
+  aspect-ratio: 8 / 14;
+  background: var(--coin) center / contain no-repeat;
+  image-rendering: pixelated;
+  pointer-events: none;
+  translate: -50% 0;
+  opacity: 0;
+  animation: coin-pop 720ms cubic-bezier(0.2, 0.8, 0.3, 1) var(--flip-duration) forwards;
+}
+
+@keyframes coin-pop {
+  0% { opacity: 1; translate: -50% 10%; }
+  55% { opacity: 1; translate: -50% -120%; }
+  100% { opacity: 0; translate: -50% -80%; }
+}
+
+/* ---------- 6. Banda "Tocca a …" ---------- */
+
+.turn-banner {
+  position: fixed;
+  top: 40%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: grid;
+  justify-items: center;
+  padding: 22px 16px;
+  background: var(--black);
+  border-block: 6px solid var(--player, var(--white));
+  text-align: center;
+  opacity: 0;
+  pointer-events: none; /* non blocca i clic sulle carte */
+}
+
+.turn-banner-name {
+  max-width: 100%;
+  font-family: var(--pixel);
+  font-size: clamp(1.125rem, 5.5vw, 2.25rem);
+  line-height: 1.4;
+  color: var(--white);
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+  text-shadow: 4px 4px 0 var(--player);
+}
+
+.turn-banner.is-visible {
+  animation: banner-show 1500ms ease forwards;
+}
+
+@keyframes banner-show {
+  0% { opacity: 1; scale: 1 0; }
+  10% { opacity: 1; scale: 1 1; }
+  82% { opacity: 1; scale: 1 1; }
+  100% { opacity: 0; scale: 1 1; }
+}
+
+/* ---------- 7. Classifica ---------- */
+
+.screen--results {
+  display: grid;
+  justify-items: center;
+  max-width: 560px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.results-title {
+  margin: 24px 0 12px;
+  font-size: clamp(1.5rem, 7vw, 2.5rem);
+  line-height: 1.25;
+  outline: none;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.results-summary {
+  margin: 0 0 24px;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.ranking {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--black);
+  border: var(--border) solid var(--white);
+  color: var(--white);
+  text-align: left;
+}
+
+.ranking-rank {
+  width: 3ch;
+  font-family: var(--pixel);
+  font-size: 0.875rem;
+}
+
+.ranking-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.ranking-score {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--pixel);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+/* Chi vince (o chi pareggia al primo posto) sta su un blocco d'oro */
+.ranking-item.is-winner {
+  background: var(--gold);
+  border-color: var(--black);
+  color: var(--black);
+  box-shadow:
+    inset 4px 4px 0 var(--gold-light),
+    inset -4px -4px 0 var(--gold-dark);
+}
+
+.results-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* ---------- 8. Telefono e movimento ridotto ---------- */
+
+@media (max-width: 480px) {
+  :root {
+    --ground-height: 32px;
+    --board-offset: 315px;
+  }
+
+  /* Con 3 o 4 giocatori i punteggi occupano due righe: il tavolo deve stringersi */
+  .screen--game[data-players='3'],
+  .screen--game[data-players='4'] {
+    --board-offset: 380px;
+  }
+
+  .game-title {
+    margin: 0 0 6px;
+  }
+
+  .game-tagline {
+    margin-bottom: 14px;
+    font-size: 0.9rem;
+  }
+
+  .setup-form {
+    gap: 14px;
+  }
+
+  .field-label {
+    margin-bottom: 8px;
+  }
+
+  .choice--count .choice-body {
+    width: 48px;
+    height: 48px;
+    font-size: 1.125rem;
+  }
+
+  .choice--count input:checked + .choice-body {
+    translate: 0 -4px;
+  }
+
+  .pipe--short { --pipe-height: 8px; }
+  .pipe--medium { --pipe-height: 22px; }
+  .pipe--tall { --pipe-height: 36px; }
+
+  .pipe {
+    width: 44px;
+    margin-top: 18px;
+  }
+
+  .pipe::before {
+    top: -18px;
+    height: 18px;
+    left: -7px;
+    right: -7px;
+  }
+
+  .choice--pipe .choice-body {
+    gap: 4px;
+  }
+
+  .topbar {
+    padding-top: 10px;
+  }
+
+  .page {
+    padding-top: 6px;
+  }
+
+  .name-field {
+    padding: 0 10px;
+  }
+
+  .name-field input {
+    padding: 11px 0;
+  }
+
+  .pipe-sub {
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
+
+  .start-button {
+    justify-self: stretch;
+    min-height: 52px;
+    padding: 12px 14px;
+    font-size: 0.8125rem;
+    white-space: nowrap;
+  }
+
+  .scoreboard {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .score {
+    padding: 6px 10px;
+  }
+
+  .score-coins {
+    font-size: 0.875rem;
+  }
+
+  /* Su telefono basta il riquadro colorato e rialzato (gli screen reader leggono aria-current) */
+  .score-turn {
+    display: none;
+  }
+
+  .hud {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .status {
+    min-height: 42px;
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  .results-actions .button {
+    flex: 1 1 100%;
+  }
+}
+
+/* Chi ha attivato "riduci movimento" nel sistema vede cambi istantanei */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --flip-duration: 1ms;
+  }
+
+  .card.is-flipped,
+  .choice--pipe input:checked + .choice-body .pipe-marker,
+  .score.is-scoring .score-coins {
+    animation: none;
+  }
+
+  .coin-pop {
+    display: none;
+  }
+
+  .turn-banner.is-visible {
+    animation-name: banner-fade;
+  }
+
+  @keyframes banner-fade {
+    0%, 100% { opacity: 0; }
+    10%, 82% { opacity: 1; }
+  }
+}
