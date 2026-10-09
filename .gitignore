@@ -3,3 +3,6 @@
 
 # Schermate temporanee delle revisioni grafiche (impeccable)
 .impeccable/review/
+
+# Schermate originali di Stitch: solo per prova in locale (usano CDN e immagini dell'anime)
+prove/stitch/
