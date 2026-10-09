@@ -226,7 +226,7 @@ Ogni push su `main` aggiorna il sito. Tutti i percorsi sono relativi, quindi fun
 2. 🗺️ Nella pagina iniziale aggiungi un `<li>` con `<a class="level" href="scacchi/">`, copiando la scheda del Memory (livello "1-3").
 3. ↩️ Metti il link per tornare all'elenco: `<a href="../">‹ Tutti i giochi</a>`.
 4. ✨ Per le due versioni: nel `<head>` carica `../assets/tema.js` e `../assets/temi.css`, metti un pulsante `<button data-theme-toggle="short"><span data-theme-label></span></button>` e scrivi gli stili anime sotto `[data-theme='anime']`.
-5. ✅ Controlla con `node strumenti/verifica.js scacchi`.
+5. ✅ Aggiungi `'scacchi'` all'elenco `GIOCHI_INTERNI` in `strumenti/verifica.js` (così può usare `assets/` e non serve la provenienza), poi controlla con `node strumenti/verifica.js scacchi`.
 
 ---
 
