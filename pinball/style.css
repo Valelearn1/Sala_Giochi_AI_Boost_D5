@@ -823,6 +823,23 @@ canvas {
    7. VERSIONE ANIME: arena dei grimori (vedi ../assets/tema.js e ../assets/temi.css)
    ===================================================================== */
 
+/* ---------- Versione classica in modalità scura: il sotterraneo ---------- */
+
+:root[data-mode='dark']:not([data-theme='anime']) {
+  --page-bg: #000000;
+  --ink: #ffffff;
+  --panel: #10183c;
+  --brick: #1c6cb4;
+}
+
+:root[data-mode='dark']:not([data-theme='anime']) canvas {
+  box-shadow: 0 0 0 var(--border) #1c6cb4, 0 12px 30px rgb(0 0 0 / 0.5);
+}
+
+/* =====================================================================
+   7b. Variabili della versione anime
+   ===================================================================== */
+
 :root[data-theme='anime'] {
   --page-bg: var(--g-bg);
   --ink: var(--g-text-soft);
@@ -963,6 +980,14 @@ canvas {
   background: linear-gradient(100deg, #3a0711, var(--g-surface) 65%);
 }
 
+[data-theme='anime'][data-mode='light'] .overlay-card {
+  background: var(--g-surface);
+}
+
+[data-theme='anime'][data-mode='light'] .overlay {
+  background: rgb(246 239 230 / 0.82);
+}
+
 [data-theme='anime'] .overlay-title {
   font-size: clamp(1.5rem, 7vw, 2.25rem);
   color: var(--g-gold);
@@ -984,4 +1009,20 @@ canvas {
 
 [data-theme='anime'] .button--primary {
   box-shadow: none;
+}
+
+/* Telefoni molto stretti: barra in alto più compatta, così stanno tutti i pulsanti */
+@media (max-width: 400px) {
+  .topbar {
+    padding: 0 10px;
+  }
+
+  .topbar-actions {
+    gap: 4px;
+  }
+
+  .topbar .theme-toggle,
+  .topbar .sound-toggle {
+    padding: 6px;
+  }
 }

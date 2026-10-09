@@ -90,6 +90,25 @@ export const THEME_PLATFORM = {
   },
 };
 
+/** Versione classica in modalità scura: il livello sotterraneo (nero e mattoni blu). */
+export const THEME_PLATFORM_DARK = {
+  ...THEME_PLATFORM,
+  decor: 'underground', // niente nuvole né colline sottoterra
+  particleColor: '108, 196, 255',
+  colors: {
+    ...THEME_PLATFORM.colors,
+    abyssTop: '#000000',
+    abyssBottom: '#050a1a',
+    light: '108, 196, 255',
+    wall: '#1c6cb4', // mattoni blu
+    brickLight: '#6cc4ff',
+    brickMortar: '#000814',
+    targetDown: '#1a2a4a',
+    laneOff: '#1a2a4a',
+    paint: 'rgba(108, 196, 255, 0.22)',
+  },
+};
+
 /** Versione anime: arena dei grimori (cremisi, oro, smeraldo su fondo scuro). */
 export const THEME_ANIME = {
   tableName: 'Sfera Anti-Magia',
@@ -136,6 +155,11 @@ export const THEMES = {
   anime: THEME_ANIME,
 };
 
-export function getTheme(version) {
+/**
+ * Il tema del tavolo per una versione e una modalità (chiara/scura).
+ * Il tavolo anime è sempre scuro; quello classico ha il suo "sotterraneo".
+ */
+export function getTheme(version, mode = 'light') {
+  if (version !== 'anime' && mode === 'dark') return THEME_PLATFORM_DARK;
   return THEMES[version] ?? THEME_PLATFORM;
 }

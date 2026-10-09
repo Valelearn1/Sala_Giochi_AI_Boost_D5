@@ -46,8 +46,11 @@ let ballSaveUsed = false; // il salvataggio vale una volta per pallina
 
 const physics = createPhysics({ layout, config: PHYSICS, onEvent: handlePhysicsEvent });
 // Il tema del tavolo segue la versione della sala (classica = abissi, anime = grimori)
-const renderer = createRenderer({ canvas: elements.canvas, layout, theme: getTheme(window.SalaTema?.get()) });
-window.addEventListener('sala-tema', (event) => renderer.setTheme(getTheme(event.detail.theme)));
+const currentTableTheme = () => getTheme(window.SalaTema?.get(), window.SalaTema?.getMode());
+const renderer = createRenderer({ canvas: elements.canvas, layout, theme: currentTableTheme() });
+// Cambiando versione o modalità chiara/scura, il tavolo si ridisegna con il tema giusto
+window.addEventListener('sala-tema', () => renderer.setTheme(currentTableTheme()));
+window.addEventListener('sala-modo', () => renderer.setTheme(currentTableTheme()));
 const input = createInput({
   touchArea: elements.tableWrap,
   launchButton: elements.launchButton,

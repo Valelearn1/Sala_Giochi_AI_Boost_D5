@@ -131,7 +131,7 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
     } else if (theme.decor === 'sonar') {
       drawSonarRings(c);
     }
-    // decor 'none': nessuna decorazione (lo sfondo lo disegna chi usa il renderer)
+    // decor 'underground' e 'none': nessuna decorazione
     drawTableName(c);
     if (theme.decor === 'sonar') drawDepthMarks(c); // tacche di profondità: solo nel tema abissi
     drawWalls(c);
@@ -174,10 +174,10 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
     const t = tile.getContext('2d');
     t.fillStyle = colors.wall;
     t.fillRect(0, 0, 32, 32);
-    t.fillStyle = '#fc9838'; // luce sul bordo alto dei mattoni
+    t.fillStyle = colors.brickLight ?? '#fc9838'; // luce sul bordo alto dei mattoni
     t.fillRect(0, 0, 32, 2);
     t.fillRect(0, 16, 32, 2);
-    t.fillStyle = '#2a0e00'; // malta
+    t.fillStyle = colors.brickMortar ?? '#2a0e00'; // malta
     t.fillRect(0, 14, 32, 2);
     t.fillRect(0, 30, 32, 2);
     t.fillRect(14, 0, 2, 14);

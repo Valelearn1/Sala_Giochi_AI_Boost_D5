@@ -159,6 +159,15 @@ a.level:hover .level-block--mushroom svg {
     inset -3px -3px 0 rgb(0 0 0 / 0.35);
 }
 
+/* ---------- Pulsante chiaro/scuro in alto a destra ---------- */
+
+.hub-actions {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 5;
+}
+
 /* ---------- Pulsante fisso "Prova la versione anime" ---------- */
 
 .version-fab {
@@ -214,7 +223,8 @@ a.level:hover .level-block--mushroom svg {
   }
 
   [data-theme='anime'] .version-fab {
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.01em;
   }
 }
 

@@ -60,21 +60,20 @@
   --coin: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 14' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' d='M2 0h4v1h1v1h1v10h-1v1h-1v1H2v-1H1v-1H0V2h1V1h1z'/%3E%3Cpath fill='%23f8b800' d='M2 1h4v1h1v10h-1v1H2v-1H1V2h1z'/%3E%3Cpath fill='%23fff3b0' d='M2 2h1v8H2z'/%3E%3Cpath fill='%23b05800' d='M4 3h1v8H4z'/%3E%3C/svg%3E");
 }
 
-/* Tema scuro: il livello sotterraneo */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --sky: #000000;
-    --ceiling-height: 27px;
-    --ink: #ffffff;
-    --ink-soft: #c8d4ff;
-    --panel: #10183c;
+/* Modalità scura della versione classica: il livello sotterraneo
+   (data-mode lo imposta assets/tema.js: segue il sistema o il pulsante Chiaro/Scuro) */
+:root[data-mode='dark']:not([data-theme='anime']) {
+  --sky: #000000;
+  --ceiling-height: 27px;
+  --ink: #ffffff;
+  --ink-soft: #c8d4ff;
+  --panel: #10183c;
 
-    --brick: #1c6cb4;
-    --brick-light: #6cc4ff;
-    --brick-dark: #062a50;
+  --brick: #1c6cb4;
+  --brick-light: #6cc4ff;
+  --brick-dark: #062a50;
 
-    --bricks: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect width='32' height='32' fill='%231c6cb4'/%3E%3Cg fill='%236cc4ff'%3E%3Crect width='32' height='1'/%3E%3Crect y='16' width='32' height='1'/%3E%3C/g%3E%3Cg fill='%23000814'%3E%3Crect y='14' width='32' height='2'/%3E%3Crect y='30' width='32' height='2'/%3E%3Crect x='14' width='2' height='14'/%3E%3Crect x='30' width='2' height='14'/%3E%3Crect x='6' y='16' width='2' height='14'/%3E%3Crect x='22' y='16' width='2' height='14'/%3E%3C/g%3E%3C/svg%3E");
-  }
+  --bricks: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect width='32' height='32' fill='%231c6cb4'/%3E%3Cg fill='%236cc4ff'%3E%3Crect width='32' height='1'/%3E%3Crect y='16' width='32' height='1'/%3E%3C/g%3E%3Cg fill='%23000814'%3E%3Crect y='14' width='32' height='2'/%3E%3Crect y='30' width='32' height='2'/%3E%3Crect x='14' width='2' height='14'/%3E%3Crect x='30' width='2' height='14'/%3E%3Crect x='6' y='16' width='2' height='14'/%3E%3Crect x='22' y='16' width='2' height='14'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 /* Chi porta data-player="N" riceve il colore del giocatore N */
@@ -115,8 +114,8 @@ body {
 
 /* Nuvole sullo sfondo, solo negli spazi vuoti ai lati del contenuto
    (su schermi stretti non c'è posto: finirebbero sotto i testi) */
-@media (min-width: 1100px) and (prefers-color-scheme: light) {
-  body {
+@media (min-width: 1100px) {
+  :root[data-mode='light']:not([data-theme='anime']) body {
     background-image: var(--cloud), var(--cloud), var(--cloud);
     background-repeat: no-repeat;
     background-size: 128px 64px, 96px 48px, 160px 80px;
@@ -125,24 +124,22 @@ body {
 }
 
 /* Sottoterra il soffitto è una fila di mattoni */
-@media (prefers-color-scheme: dark) {
-  body::before {
-    content: '';
-    flex: none;
-    height: 24px;
-    background: var(--bricks) 0 100% / 24px 24px repeat-x;
-    border-bottom: var(--border) solid var(--black);
-    image-rendering: pixelated;
-  }
+:root[data-mode='dark']:not([data-theme='anime']) body::before {
+  content: '';
+  flex: none;
+  height: 24px;
+  background: var(--bricks) 0 100% / 24px 24px repeat-x;
+  border-bottom: var(--border) solid var(--black);
+  image-rendering: pixelated;
 }
 
 /* Su telefono il soffitto è più sottile, per lasciare spazio alle carte */
-@media (prefers-color-scheme: dark) and (max-width: 480px) {
-  :root {
+@media (max-width: 480px) {
+  :root[data-mode='dark']:not([data-theme='anime']) {
     --ceiling-height: 15px;
   }
 
-  body::before {
+  :root[data-mode='dark']:not([data-theme='anime']) body::before {
     height: 12px;
     background-size: 12px 12px;
   }
@@ -158,10 +155,8 @@ body {
   outline-offset: 4px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :focus-visible {
-    outline-color: var(--gold);
-  }
+:root[data-mode='dark'] :focus-visible {
+  outline-color: var(--gold);
 }
 
 .visually-hidden {

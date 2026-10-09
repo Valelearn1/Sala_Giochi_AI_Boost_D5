@@ -16,6 +16,12 @@
  * - Ogni pulsante con l'attributo data-theme-toggle cambia versione al clic.
  * - Quando la versione cambia, la pagina riceve l'evento "sala-tema" (per chi
  *   disegna con JavaScript, come il tavolo del flipper o le carte del Memory).
+ *
+ * MODALITÀ CHIARA / SCURA (indipendente dalla versione)
+ * - Sta su <html> come data-mode="light" o "dark"; i CSS usano [data-mode='dark'].
+ * - All'inizio segue il sistema (tema chiaro/scuro del computer o del telefono);
+ *   dopo un clic sul pulsante [data-mode-toggle] vale la scelta, ricordata dal browser.
+ * - Al cambio la pagina riceve l'evento "sala-modo".
  */
 
 (function () {
@@ -29,6 +35,13 @@
   // Testo corto per i pulsanti nella barra in alto dei giochi (data-theme-toggle="short")
   var SHORT_TEXT = { classica: 'Anime', anime: 'Classica' };
   var LONG_NAME = { classica: 'versione classica', anime: 'versione anime' };
+
+  var MODE_KEY = 'sala-modo';
+  var MODES = ['light', 'dark'];
+  // Testo del pulsante: dice a quale modalità si passa
+  var MODE_TEXT = { light: 'Scuro', dark: 'Chiaro' };
+  var MODE_NAME = { light: 'modalità chiara', dark: 'modalità scura' };
+  var systemDark = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 
   function readSaved() {
     try {
@@ -75,14 +88,80 @@
     }
   }
 
+  // --- Modalità chiara / scura ------------------------------------------
+
+  function readSavedMode() {
+    try {
+      var saved = localStorage.getItem(MODE_KEY);
+      if (MODES.indexOf(saved) >= 0) return saved;
+    } catch (error) {
+      // archivio bloccato: seguiamo il sistema
+    }
+    return systemDark && systemDark.matches ? 'dark' : 'light';
+  }
+
+  function hasSavedMode() {
+    try {
+      return MODES.indexOf(localStorage.getItem(MODE_KEY)) >= 0;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function getMode() {
+    return document.documentElement.dataset.mode || 'light';
+  }
+
+  function applyMode(mode) {
+    document.documentElement.dataset.mode = mode;
+    updateModeButtons(mode);
+  }
+
+  function setMode(mode, remember) {
+    applyMode(mode);
+    if (remember !== false) {
+      try {
+        localStorage.setItem(MODE_KEY, mode);
+      } catch (error) {
+        // Se non si può salvare, la scelta vale solo per questa visita
+      }
+    }
+    window.dispatchEvent(new CustomEvent('sala-modo', { detail: { mode: mode } }));
+  }
+
+  function toggleMode() {
+    setMode(getMode() === 'dark' ? 'light' : 'dark');
+  }
+
+  function updateModeButtons(mode) {
+    var buttons = document.querySelectorAll('[data-mode-toggle]');
+    for (var i = 0; i < buttons.length; i++) {
+      var label = buttons[i].querySelector('[data-mode-label]');
+      if (label) label.textContent = MODE_TEXT[mode];
+      var next = mode === 'dark' ? 'light' : 'dark';
+      buttons[i].setAttribute('aria-label', 'Passa alla ' + MODE_NAME[next] + ' (ora: ' + MODE_NAME[mode] + ')');
+      buttons[i].setAttribute('aria-pressed', String(mode === 'dark'));
+    }
+  }
+
+  // Finché l'utente non sceglie, se il sistema cambia tema la sala lo segue
+  if (systemDark && systemDark.addEventListener) {
+    systemDark.addEventListener('change', function (event) {
+      if (!hasSavedMode()) setMode(event.matches ? 'dark' : 'light', false);
+    });
+  }
+
   // Subito, prima del disegno della pagina
   apply(readSaved());
+  applyMode(readSavedMode());
 
   // Quando i pulsanti esistono, li colleghiamo
   document.addEventListener('DOMContentLoaded', function () {
     updateButtons(getTheme());
+    updateModeButtons(getMode());
     document.addEventListener('click', function (event) {
       if (event.target.closest('[data-theme-toggle]')) toggleTheme();
+      if (event.target.closest('[data-mode-toggle]')) toggleMode();
     });
   });
 
@@ -92,7 +171,18 @@
       apply(event.newValue);
       window.dispatchEvent(new CustomEvent('sala-tema', { detail: { theme: event.newValue } }));
     }
+    if (event.key === MODE_KEY && MODES.indexOf(event.newValue) >= 0) {
+      applyMode(event.newValue);
+      window.dispatchEvent(new CustomEvent('sala-modo', { detail: { mode: event.newValue } }));
+    }
   });
 
-  window.SalaTema = { get: getTheme, set: setTheme, toggle: toggleTheme };
+  window.SalaTema = {
+    get: getTheme,
+    set: setTheme,
+    toggle: toggleTheme,
+    getMode: getMode,
+    setMode: setMode,
+    toggleMode: toggleMode,
+  };
 })();

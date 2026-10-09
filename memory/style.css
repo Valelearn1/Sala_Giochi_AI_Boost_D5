@@ -27,10 +27,8 @@
   --board-offset: 300px; /* spazio occupato da HUD, intestazione e terreno */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --score-border: #34449a; /* sottoterra il nero non si stacca dallo sfondo */
-  }
+:root[data-mode='dark']:not([data-theme='anime']) {
+  --score-border: #34449a; /* sottoterra il nero non si stacca dallo sfondo */
 }
 
 /* ---------- 1. Impaginazione ---------- */
@@ -1183,6 +1181,7 @@
 /* ---------- Partita: pannello ---------- */
 
 [data-theme='anime'] .score {
+  color: var(--g-text);
   border: 2px solid transparent;
   border-radius: 14px;
   background: var(--g-surface-high);
@@ -1293,7 +1292,7 @@
 
 [data-theme='anime'] .card-name {
   background: rgb(15 13 18 / 0.85);
-  color: var(--g-text);
+  color: #e7e0e8; /* le carte restano scure anche in modalità chiara */
   font-family: var(--g-display);
   letter-spacing: 0.04em;
 }
@@ -1307,6 +1306,10 @@
 [data-theme='anime'] .card.is-matched .card-name {
   background: var(--player);
   color: #151218;
+}
+
+[data-theme='anime'][data-mode='light'] .card.is-matched .card-name {
+  color: #ffffff; /* i colori dei giocatori sono più scuri in modalità chiara */
 }
 
 @media (hover: hover) {
@@ -1339,7 +1342,7 @@
 }
 
 [data-theme='anime'] .turn-banner-name strong {
-  color: var(--g-gold);
+  color: #ecc246; /* la banda è sempre scura */
   text-decoration: underline;
   text-decoration-color: var(--g-crimson);
   text-decoration-thickness: 5px;
@@ -1389,4 +1392,21 @@
 
 [data-theme='anime'] .ranking-score::after {
   content: ' pt';
+}
+
+/* Telefoni molto stretti: barra in alto più compatta, così stanno tutti i pulsanti */
+@media (max-width: 400px) {
+  .topbar {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .topbar-actions {
+    gap: 4px;
+  }
+
+  .topbar .theme-toggle,
+  .topbar .sound-toggle {
+    padding: 6px;
+  }
 }

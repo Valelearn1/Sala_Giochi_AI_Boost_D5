@@ -50,6 +50,14 @@
   flex: none;
 }
 
+/* ---------- Pulsante modalità chiara / scura ---------- */
+
+/* Mostra l'icona della modalità a cui si passa: luna se ora è chiaro, sole se ora è scuro */
+[data-mode='light'] .mode-icon-sun,
+[data-mode='dark'] .mode-icon-moon {
+  display: none;
+}
+
 /* ---------- Pulsante audio (Memory e flipper) ---------- */
 
 /* Altoparlante pixel con onde (acceso) o con una X (spento) */
@@ -106,6 +114,16 @@
   .theme-toggle {
     padding: 6px 8px;
     font-size: 0.6875rem;
+  }
+
+  /* Il pulsante chiaro/scuro diventa solo icona (il nome completo è nell'aria-label) */
+  .mode-word {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
 
@@ -251,9 +269,57 @@
   font-weight: 800;
 }
 
+[data-theme='anime'] .sound-state::before {
+  color: var(--g-muted);
+}
+
 [data-theme='anime'] .sound-toggle[aria-pressed='true'],
 [data-theme='anime'] .sound-toggle[aria-pressed='true'] .sound-state::before {
   color: var(--g-emerald);
+}
+
+/* ---------- Versione anime in modalità chiara: pergamena, cremisi e oro scuro ---------- */
+
+:root[data-theme='anime'][data-mode='light'] {
+  --g-bg: #f6efe6;
+  --g-surface-lowest: #fffaf3;
+  --g-surface-low: #f3eadf;
+  --g-surface: #ede2d4;
+  --g-surface-high: #e4d6c4;
+  --g-surface-highest: #d9c7b1;
+  --g-text: #1d1418;
+  --g-text-soft: #4f3a3a;
+  --g-muted: #6b5252;
+  --g-line: #c4ab95;
+  --g-gold: #8f6700; /* oro scuro: leggibile come testo sulla pergamena */
+  --g-gold-deep: #6e5000;
+  --g-emerald: #007a45;
+  --g-emerald-deep: #005c34;
+
+  --player-0: #c8102e;
+  --player-1: #007a45;
+  --player-2: #8f6700;
+  --player-3: #5b3fc4;
+
+  color-scheme: light;
+}
+
+[data-theme='anime'][data-mode='light'] body {
+  background-image: radial-gradient(rgb(143 103 0 / 0.14) 1px, transparent 1.5px);
+}
+
+/* Sull'oro scuro il testo è bianco (sull'oro chiaro della modalità scura è quasi nero) */
+:root[data-theme='anime'][data-mode='light'] .button--primary,
+:root[data-theme='anime'][data-mode='light'] .level-cta,
+:root[data-theme='anime'][data-mode='light'] .launch-button,
+:root[data-theme='anime'][data-mode='light'] .hud-multiplier strong {
+  color: #ffffff;
+}
+
+:root[data-theme='anime'][data-mode='light'] .button--primary:hover,
+:root[data-theme='anime'][data-mode='light'] a.level:hover .level-cta,
+:root[data-theme='anime'][data-mode='light'] .launch-button:active {
+  background: #a87a00;
 }
 
 /* Sigillo riutilizzabile */
