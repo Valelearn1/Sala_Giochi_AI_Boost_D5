@@ -296,6 +296,7 @@ export function showTurnBanner(game) {
   // Il nome è in un <strong> a parte: nella versione anime è dorato e sottolineato
   // Nella versione anime è una scheda: "Cambio turno", il nome e una frase
   banner.innerHTML = `
+    <span class="turn-banner-slash"></span>
     <span class="turn-banner-pill">${icona('rigioca', 14)} Cambio turno</span>
     <span class="turn-banner-name">Tocca a <strong></strong></span>
     <span class="turn-banner-quote">«Gira due carte e trova i personaggi gemelli.»</span>`;

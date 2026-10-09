@@ -1323,6 +1323,58 @@ canvas {
   box-shadow: 0 0 0 1px rgb(179 18 46 / 0.6), 0 24px 60px rgb(0 0 0 / 0.7);
 }
 
+
+/* Colpo di spada: la scheda si apre lungo una diagonale, dietro a un fendente d'oro */
+@keyframes slash-reveal {
+  0% { clip-path: polygon(-30% 0, -30% 0, -50% 100%, -50% 100%); scale: 1.04; }
+  100% { clip-path: polygon(-30% 0, 130% 0, 110% 100%, -50% 100%); scale: 1; }
+}
+
+@keyframes slash-sweep {
+  0% { left: -40%; opacity: 1; }
+  70% { left: 115%; opacity: 1; }
+  100% { left: 115%; opacity: 0; }
+}
+
+#turn-overlay .overlay-card::after {
+  content: '';
+  position: absolute;
+  top: -10%;
+  bottom: -10%;
+  left: -40%;
+  z-index: 2;
+  width: 3px;
+  background: #fff3c4;
+  box-shadow: 0 0 14px 4px rgb(236 194 70 / 0.9);
+  rotate: 11deg;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* "Tocca a…" entra con il colpo di spada, come il cambio turno del Memory */
+[data-theme='anime'] #turn-overlay:not([hidden]) .overlay-card {
+  position: relative;
+  animation: slash-reveal 420ms cubic-bezier(0.3, 0.7, 0.3, 1) both;
+}
+
+[data-theme='anime'] #turn-overlay:not([hidden]) .overlay-card::after {
+  animation: slash-sweep 560ms cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+}
+
+:root:not([data-theme='anime']) #turn-overlay .overlay-card::after {
+  content: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme='anime'] #turn-overlay:not([hidden]) .overlay-card {
+    animation: none;
+  }
+
+  #turn-overlay .overlay-card::after {
+    content: none;
+  }
+}
+
 [data-theme='anime'] .overlay-title {
   font-size: clamp(1.75rem, 8vw, 2.5rem);
   font-weight: 800;

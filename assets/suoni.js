@@ -213,7 +213,10 @@ const ANIME = {
     tone({ frequency: noteToFrequency('A3'), start: t, duration: 0.25, wave: 'triangle', volume: 0.08 });
     tone({ frequency: noteToFrequency('Bb3'), start: t, duration: 0.25, wave: 'triangle', volume: 0.08 });
   },
-  turn: (t) => bells(['A5', 'E6'], 0.12, t, 0.9), // rintocco
+  turn: (t) => {
+    noise({ start: t, duration: 0.14, from: 7000, to: 1800, type: 'highpass', volume: 0.09 }); // fendente
+    bells(['A5', 'E6'], 0.12, t + 0.12, 0.9); // rintocco
+  },
   fanfare: (t) => {
     bells(['D5', 'F5', 'A5', 'D6'], 0.14, t, 0.7);
     bells(['A5', 'C#6', 'E6', 'A6'], 0.1, t + 0.7, 1.2);

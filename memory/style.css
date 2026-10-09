@@ -1073,8 +1073,13 @@
     display: none;
   }
 
-  .turn-banner.is-visible {
-    animation-name: banner-fade;
+  .turn-banner.is-visible,
+  [data-theme='anime'] .turn-banner.is-visible {
+    animation: banner-fade 1500ms ease forwards;
+  }
+
+  .turn-banner-slash {
+    display: none;
   }
 
   @keyframes banner-fade {
@@ -1091,7 +1096,7 @@
    ===================================================================== */
 
 /* Elementi creati da ui.js che servono solo alla versione anime */
-:root:not([data-theme='anime']) :is(.score-avatar, .ranking-avatar, .ranking-pairs, .turn-banner-pill, .turn-banner-quote) {
+:root:not([data-theme='anime']) :is(.score-avatar, .ranking-avatar, .ranking-pairs, .turn-banner-pill, .turn-banner-quote, .turn-banner-slash) {
   display: none;
 }
 
@@ -1827,6 +1832,49 @@
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+
+
+/* Colpo di spada: la scheda si apre lungo una diagonale, dietro a un fendente d'oro */
+@keyframes slash-reveal {
+  0% { clip-path: polygon(-30% 0, -30% 0, -50% 100%, -50% 100%); scale: 1.04; }
+  100% { clip-path: polygon(-30% 0, 130% 0, 110% 100%, -50% 100%); scale: 1; }
+}
+
+@keyframes slash-sweep {
+  0% { left: -40%; opacity: 1; }
+  70% { left: 115%; opacity: 1; }
+  100% { left: 115%; opacity: 0; }
+}
+
+.turn-banner-slash {
+  position: absolute;
+  top: -10%;
+  bottom: -10%;
+  left: -40%;
+  z-index: 2;
+  width: 3px;
+  background: #fff3c4;
+  box-shadow: 0 0 14px 4px rgb(236 194 70 / 0.9);
+  rotate: 11deg;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Entra con il fendente (circa 0,4 s), resta, poi svanisce */
+[data-theme='anime'] .turn-banner.is-visible {
+  animation:
+    slash-reveal 420ms cubic-bezier(0.3, 0.7, 0.3, 1) both,
+    banner-hold 1800ms linear forwards;
+}
+
+[data-theme='anime'] .turn-banner.is-visible .turn-banner-slash {
+  animation: slash-sweep 560ms cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+}
+
+@keyframes banner-hold {
+  0%, 85% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 [data-theme='anime'] .turn-banner-name {
