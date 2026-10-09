@@ -37,6 +37,8 @@ export const THEME_ABISSI = {
     bumperLight: '#ffc2dc',
     bumperDark: '#8a1f57',
     bumperGlow: 'rgba(255, 95, 162, 0.6)',
+    trail: '124, 249, 255', // scia dietro la pallina (r, g, b)
+    hitRing: '#ffffff', // onda d'urto dei bumper colpiti
     slingshot: '#7cf9ff',
     slingshotFillA: '#0b2e52',
     slingshotFillB: '#155a7e',
@@ -77,6 +79,8 @@ export const THEME_PLATFORM = {
     bumperLight: '#ff7a70',
     bumperDark: '#8a0a10',
     bumperGlow: 'rgba(255, 255, 255, 0.45)',
+    trail: '255, 255, 255', // scia dietro la pallina (r, g, b)
+    hitRing: '#ffffff', // onda d'urto dei bumper colpiti
     slingshot: '#ffffff',
     slingshotFillA: '#005800', // verde dei tubi
     slingshotFillB: '#00a800',
@@ -105,6 +109,7 @@ export const THEME_PLATFORM_DARK = {
     brickMortar: '#000814',
     targetDown: '#1a2a4a',
     laneOff: '#1a2a4a',
+    trail: '108, 196, 255',
     paint: 'rgba(108, 196, 255, 0.22)',
   },
 };
@@ -136,6 +141,8 @@ export const THEME_ANIME = {
     bumperLight: '#ffb3b3',
     bumperDark: '#410009',
     bumperGlow: 'rgba(236, 194, 70, 0.45)',
+    trail: '236, 194, 70', // scia di mana dorata
+    hitRing: '#ffe08e',
     slingshot: '#4edf91',
     slingshotFillA: '#1d1b20',
     slingshotFillB: '#373439',

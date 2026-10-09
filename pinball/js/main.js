@@ -125,6 +125,12 @@ function handlePhysicsEvent(event) {
   const result = applyHit(ballState, event, RULES);
   addPoints(match, result.points);
   renderer.flash(event.type, event.id);
+  // Effetti: onda d'urto sui bumper, scossa del tavolo sui colpi forti
+  if (event.type === 'bumper') {
+    renderer.ring(event.id);
+    renderer.shake(2, 120);
+  }
+  if (result.resetTargets || result.multiplierUp) renderer.shake(6, 320);
   playHitSound(event, result);
   if (result.resetTargets) {
     setTimeout(() => physics.resetTargets(), RULES.targetResetMs);
@@ -166,6 +172,7 @@ function loseBall() {
   hud.renderHud(match, 1); // il moltiplicatore si azzera con la pallina persa
   hud.showMessage(`Pallina persa · bonus +${hud.formatScore(bonus)}`, { sticky: true });
   sound.play('drain');
+  renderer.shake(8, 380); // pallina persa: colpo forte
 
   const { finished } = endBall(match);
   betweenTimer = setTimeout(() => (finished ? showResults() : beginTurn(lastBall)), BETWEEN_BALLS_MS);

@@ -11,6 +11,8 @@
  */
 
 const FLASH_MS = 280;
+const TRAIL_LENGTH = 12; // quante posizioni della pallina ricorda la scia
+const RING_MS = 420; // durata dell'onda d'urto dei bumper
 const DEFAULT_PAINT_FONT = { family: '"Press Start 2P", monospace', weight: 400 };
 const PLANKTON_COUNT = 42;
 
@@ -25,6 +27,11 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
   let pixelScale = 1; // pixel reali per unità del tavolo
   const flashes = new Map();
   const plankton = createPlankton(layout);
+  const trail = []; // ultime posizioni della pallina, dalla più vecchia alla più nuova
+  const rings = []; // onde d'urto in corso: { x, y, radius, startedAt }
+  let shakeEnd = 0;
+  let shakeStrength = 0;
+  let shakeDuration = 1;
 
   // --- Dimensioni ---------------------------------------------------------
 
@@ -63,6 +70,32 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
     flashes.set(`${type}:${id}`, performance.now());
   }
 
+  /** Un bumper colpito manda un'onda d'urto che si allarga e sfuma. */
+  function ring(bumperId) {
+    const bumper = layout.BUMPERS.find((item) => item.id === bumperId);
+    if (bumper) rings.push({ x: bumper.x, y: bumper.y, radius: bumper.radius, startedAt: performance.now() });
+  }
+
+  /**
+   * Scuote il tavolo per un attimo (colpi forti). `strength` in pixel CSS.
+   * Si muove l'intero canvas con CSS, così i bordi del disegno non restano vuoti.
+   */
+  function shake(strength, durationMs = 220) {
+    if (reducedMotion.matches) return;
+    shakeStrength = Math.max(strength, performance.now() < shakeEnd ? shakeStrength : 0);
+    shakeEnd = performance.now() + durationMs;
+    shakeDuration = durationMs;
+  }
+
+  function applyShake(now) {
+    if (now >= shakeEnd) {
+      if (canvas.style.translate) canvas.style.translate = '';
+      return;
+    }
+    const amount = shakeStrength * ((shakeEnd - now) / shakeDuration); // si calma verso la fine
+    canvas.style.translate = `${(Math.random() * 2 - 1) * amount}px ${(Math.random() * 2 - 1) * amount}px`;
+  }
+
   /** Intensità del lampeggio da 0 (spento) a 1 (appena colpito). */
   function flashLevel(type, id) {
     const startedAt = flashes.get(`${type}:${id}`);
@@ -95,9 +128,57 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
     else if (theme.bumperStyle === 'mushroom') drawMushroomBumpers();
     else drawBumpers(time);
     drawPlunger(view.charge);
+    drawRings();
     if (snapshot.gateClosed) drawGate();
     snapshot.flippers.forEach(drawFlipper);
+    updateTrail(snapshot.ball);
+    drawTrail();
     if (snapshot.ball) drawBall(snapshot.ball);
+    applyShake(performance.now());
+  }
+
+  /** Ricorda le ultime posizioni; una pallina nuova (o un salto lungo) azzera la scia. */
+  function updateTrail(ball) {
+    if (!ball || reducedMotion.matches) {
+      trail.length = 0;
+      return;
+    }
+    const last = trail.at(-1);
+    if (last && Math.hypot(ball.x - last.x, ball.y - last.y) > 120) trail.length = 0;
+    trail.push({ x: ball.x, y: ball.y, radius: ball.radius });
+    if (trail.length > TRAIL_LENGTH) trail.shift();
+  }
+
+  /** Scia: cerchi sempre più piccoli e trasparenti dietro la pallina. */
+  function drawTrail() {
+    const rgb = colors.trail;
+    if (!rgb) return;
+    trail.forEach((point, index) => {
+      const age = (index + 1) / trail.length; // 1 = la posizione più recente
+      ctx.fillStyle = `rgba(${rgb}, ${0.45 * age * age})`;
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, point.radius * (0.35 + 0.6 * age), 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  function drawRings() {
+    const now = performance.now();
+    for (let index = rings.length - 1; index >= 0; index--) {
+      const wave = rings[index];
+      const progress = (now - wave.startedAt) / RING_MS;
+      if (progress >= 1) {
+        rings.splice(index, 1);
+        continue;
+      }
+      ctx.strokeStyle = colors.hitRing ?? '#ffffff';
+      ctx.globalAlpha = 1 - progress;
+      ctx.lineWidth = 3 * (1 - progress) + 1;
+      ctx.beginPath();
+      ctx.arc(wave.x, wave.y, wave.radius * (1.1 + progress * 1.4), 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
   }
 
   /* ======================================================================
@@ -616,7 +697,7 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
     ctx.roundRect(x, y, width, height, radius);
   }
 
-  return { resize, draw, flash, setTheme };
+  return { resize, draw, flash, ring, shake, setTheme };
 }
 
 function tracePolyline(c, points) {
