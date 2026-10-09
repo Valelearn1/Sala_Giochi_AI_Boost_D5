@@ -62,9 +62,9 @@ function creaScheda(gioco, numero) {
   link.href = `${gioco.cartella.replace(/\/?$/, '/')}`;
 
   const testi = elemento('span', 'level-text');
-  const tags = elemento('span', 'level-tags only-anime');
-  tags.append(elemento('span', 'level-tag level-tag--accent', 'Da un compagno'));
-  if (gioco.giocatori) tags.append(elemento('span', 'level-tag', `${gioco.giocatori} giocatori`));
+  const tags = elemento('span', 'level-meta only-anime');
+  tags.append(elemento('span', 'anime-kicker', 'Da un compagno'));
+  if (gioco.giocatori) tags.append(elemento('span', 'level-players', `${gioco.giocatori} giocatori`));
 
   const titolo = elemento('span', 'level-title');
   const numeroLivello = elemento('span', 'level-world only-classica', `1-${numero}`);
@@ -79,7 +79,7 @@ function creaScheda(gioco, numero) {
 
   const invito = elemento('span', 'level-cta');
   invito.setAttribute('aria-hidden', 'true');
-  invito.append(elemento('span', 'only-classica', 'Gioca'), elemento('span', 'only-anime', 'Apri il grimorio'));
+  invito.append(elemento('span', 'only-classica', 'Gioca'), elemento('span', 'only-anime', '▷ Apri grimorio'));
 
   link.append(copertinaAnime(), iconaTubo(), testi, invito);
   voce.append(link);
@@ -94,6 +94,9 @@ async function mostraGiochiImportati() {
   giochi.forEach((gioco, indice) => {
     if (gioco.titolo && gioco.cartella) elenco.append(creaScheda(gioco, giaPresenti + indice + 1));
   });
+  // Versione anime: "N nel tomo" sopra l'elenco
+  const conta = document.querySelector('[data-conta-giochi]');
+  if (conta) conta.textContent = elenco.children.length;
 }
 
 mostraGiochiImportati();

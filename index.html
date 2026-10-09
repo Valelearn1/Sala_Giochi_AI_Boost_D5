@@ -16,10 +16,12 @@
     <link rel="stylesheet" href="assets/sala-giochi.css" />
     <link rel="stylesheet" href="assets/temi.css" />
     <link rel="stylesheet" href="style.css" />
+    <!-- Versione anime: barra in alto, barra di navigazione e icone (come le schermate di Stitch) -->
+    <script type="module" src="assets/barre-anime.js"></script>
     <!-- Aggiunge in fondo all'elenco i giochi importati dai compagni (giochi.json) -->
     <script type="module" src="assets/sala.js"></script>
   </head>
-  <body>
+  <body data-pagina="hub" data-titolo-anime="Arcane Hub" data-radice="./">
     <div class="hub-actions">
       <!-- Modalità chiara / scura: l'icona mostra dove si va (luna = passa allo scuro) -->
       <button type="button" class="theme-toggle mode-toggle" data-mode-toggle>
@@ -29,45 +31,69 @@
         <svg class="mode-icon-sun" viewBox="0 0 10 10" width="16" height="16" aria-hidden="true" shape-rendering="crispEdges">
           <path fill="currentColor" d="M4 3h2v1h1v2H6v1H4V6H3V4h1zM4 0h2v2H4zM4 8h2v2H4zM0 4h2v2H0zM8 4h2v2H8zM1 1h1v1H1zM8 1h1v1H8zM1 8h1v1H1zM8 8h1v1H8z" />
         </svg>
-        <span class="mode-word" data-mode-label>Scuro</span>
+        <span class="icona-anime icona-luna" data-icona="luna"></span>
+          <span class="icona-anime icona-sole" data-icona="sole"></span>
+          <span class="mode-word" data-mode-label>Scuro</span>
       </button>
     </div>
 
     <main class="page">
       <header class="intro">
         <h1 class="title pixel-text">Sala<br /><span class="title-accent">giochi</span></h1>
-        <p class="lead">
-          <span class="only-classica">Minigiochi da fare con gli amici, nel browser. Scegli un livello per iniziare.</span>
-          <span class="only-anime">Minigiochi da fare con gli amici, nel browser. Scegli un grimorio e apri la partita.</span>
-        </p>
+        <p class="lead only-classica">Minigiochi da fare con gli amici, nel browser. Scegli un livello per iniziare.</p>
+
+        <!-- Versione anime: scheda d'apertura come nella schermata "Arcane Hub" di Stitch -->
+        <div class="anime-hero only-anime">
+          <span class="anime-kicker"><span data-icona="libro" data-misura="14"></span> Biblioteca della sala</span>
+          <p class="anime-hero-title" aria-hidden="true">Sala giochi <span>del regno</span></p>
+          <p class="anime-hero-text">Scegli un grimorio e gioca con gli amici, passandovi lo stesso telefono o computer.</p>
+          <span class="anime-hero-chips">
+            <span class="anime-chip"><span data-icona="gruppo" data-misura="13"></span> 1–4 giocatori</span>
+            <span class="anime-chip anime-chip--emerald"><span data-icona="spunta" data-misura="13"></span> 100% didattico</span>
+          </span>
+        </div>
       </header>
 
-      <h2 class="levels-heading only-anime">Grimori della sala</h2>
+      <div class="anime-section-head only-anime">
+        <span class="anime-section-bar" aria-hidden="true"></span>
+        <h2 class="anime-section-title">Grimori attivi</h2>
+        <span class="anime-section-count"><span data-conta-giochi>2</span> nel tomo</span>
+      </div>
 
       <!-- Per aggiungere un gioco: copia un <li>, cambia link, numero del livello e testi -->
       <ul class="levels">
         <li>
           <a class="level level--memory" href="memory/">
-            <!-- Copertina disegnata in CSS, visibile solo nel tema Grimorio -->
+            <!-- Copertina disegnata in CSS, visibile solo nella versione anime -->
             <span class="grimoire-cover grimoire-cover--crimson only-anime" aria-hidden="true">
               <span class="grimoire-book"><span class="g-clover"></span></span>
+              <span class="cover-tag cover-tag--crimson">Tori Neri</span>
+              <span class="cover-tag cover-tag--right"><span data-icona="fiamma" data-misura="14"></span> III foglie</span>
             </span>
             <span class="level-block level-block--gold only-classica" aria-hidden="true"></span>
             <span class="level-text">
-              <span class="level-tags only-anime">
-                <span class="level-tag level-tag--accent">Tattica e memoria</span>
-                <span class="level-tag">2–4 giocatori</span>
+              <span class="level-meta only-anime">
+                <span class="anime-kicker"><span data-icona="bersaglio" data-misura="14"></span> Tattica e memoria</span>
+                <span class="level-players">2–4 giocatori</span>
               </span>
-              <span class="level-title"><span class="level-world only-classica">1-1</span> Memory</span>
+              <span class="level-title">
+                <span class="only-classica"><span class="level-world">1-1</span> Memory</span>
+                <span class="only-anime">Memory Arcano</span>
+              </span>
               <span class="level-desc">
                 <span class="only-classica">Trova le coppie a turno. Da 2 a 4 giocatori sullo stesso dispositivo.</span>
-                <span class="only-anime">Svela le rune gemelle a turno, passandovi lo stesso schermo. Tre spessori di grimorio: 8, 10 o 18 coppie.</span>
+                <span class="only-anime">Trova le coppie di personaggi a turno, passandovi lo stesso schermo.</span>
+              </span>
+              <span class="level-stats only-anime">
+                <span class="level-stat"><span class="level-stat-label">Livelli</span><span class="level-stat-value">3 tomi</span></span>
+                <span class="level-stat"><span class="level-stat-label">Coppie</span><span class="level-stat-value">8–18</span></span>
+                <span class="level-stat"><span class="level-stat-label">Modalità</span><span class="level-stat-value level-stat-value--emerald">A turni</span></span>
               </span>
             </span>
             <span class="level-cta" aria-hidden="true">
               <span class="only-classica">Gioca</span>
-              <span class="only-anime">Apri il grimorio</span>
-              <svg class="pixel-icon" viewBox="0 0 6 8" width="9" height="12">
+              <span class="only-anime">▷ Apri grimorio</span>
+              <svg class="pixel-icon icona-classica" viewBox="0 0 6 8" width="9" height="12">
                 <path fill="currentColor" d="M1 0h1v1h1v1h1v1h1v2h-1v1h-1v1h-1v1H1z" />
               </svg>
             </span>
@@ -78,6 +104,8 @@
           <a class="level level--pinball" href="pinball/">
             <span class="grimoire-cover grimoire-cover--emerald only-anime" aria-hidden="true">
               <span class="grimoire-book"><span class="g-clover"></span><span class="grimoire-orb"></span></span>
+              <span class="cover-tag cover-tag--emerald">Alba Dorata</span>
+              <span class="cover-tag cover-tag--right"><span data-icona="scintilla" data-misura="14"></span> Runico</span>
             </span>
             <span class="level-block level-block--mushroom only-classica" aria-hidden="true">
               <!-- Super Fungo in pixel: cappello rosso a pois, gambo color crema -->
@@ -89,9 +117,9 @@
               </svg>
             </span>
             <span class="level-text">
-              <span class="level-tags only-anime">
-                <span class="level-tag level-tag--emerald">Flipper</span>
-                <span class="level-tag">1–4 giocatori</span>
+              <span class="level-meta only-anime">
+                <span class="anime-kicker anime-kicker--emerald"><span data-icona="gamepad" data-misura="14"></span> Flipper anti-magia</span>
+                <span class="level-players">1–4 giocatori</span>
               </span>
               <span class="level-title">
                 <span class="only-classica"><span class="level-world">1-2</span> Regno dei Funghi</span>
@@ -99,13 +127,17 @@
               </span>
               <span class="level-desc">
                 <span class="only-classica">Flipper a turni tra Super Funghi e monete: tre palline a testa, da 1 a 4 giocatori.</span>
-                <span class="only-anime">Flipper arcano a turni: fai rimbalzare la sfera sui sigilli e accendi le tre rune. Tre sfere a testa.</span>
+                <span class="only-anime">Flipper arcano: fai rimbalzare la sfera sui sigilli magici e accendi le tre rune.</span>
+              </span>
+              <span class="level-record only-anime">
+                <span data-icona="trofeo" data-misura="20"></span>
+                <span class="level-record-text"><span class="level-stat-label">Regola della sala</span>3 sfere a testa · sfera salvata 10 s</span>
               </span>
             </span>
             <span class="level-cta" aria-hidden="true">
               <span class="only-classica">Gioca</span>
-              <span class="only-anime">Lancia la sfera</span>
-              <svg class="pixel-icon" viewBox="0 0 6 8" width="9" height="12">
+              <span class="only-anime">▷ Lancia sfera</span>
+              <svg class="pixel-icon icona-classica" viewBox="0 0 6 8" width="9" height="12">
                 <path fill="currentColor" d="M1 0h1v1h1v1h1v1h1v2h-1v1h-1v1h-1v1H1z" />
               </svg>
             </span>
@@ -113,6 +145,14 @@
         </li>
       </ul>
 
+      <!-- Versione anime: scheda finale (al posto del "torneo" della schermata Stitch, un'informazione vera) -->
+      <aside class="anime-note only-anime">
+        <span class="anime-note-icon" data-icona="scudo" data-misura="22"></span>
+        <span class="anime-note-text">
+          <span class="anime-note-title">Progetto didattico</span>
+          Esercizio del corso, senza scopo di lucro. Personaggi © Nintendo e © Yuki Tabata / Shueisha.
+        </span>
+      </aside>
     </main>
 
     <!-- Pulsante fisso per passare dalla versione classica a quella anime (e ritorno) -->

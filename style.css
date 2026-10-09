@@ -224,37 +224,117 @@ a.level:hover .level-block--mushroom svg {
 
   [data-theme='anime'] .version-fab {
     font-size: 0.75rem;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.04em;
   }
 }
 
 /* =====================================================================
-   TEMA GRIMORIO della pagina iniziale (segue le schermate di Stitch)
+   VERSIONE ANIME della pagina iniziale (segue la schermata "Arcane Hub" di Stitch)
+   La barra in alto e quella in basso arrivano da assets/barre-anime.js.
    ===================================================================== */
 
-[data-theme='anime'] .title {
-  font-size: clamp(2.5rem, 11vw, 4.5rem);
-  line-height: 0.98;
-  text-transform: uppercase;
+[data-theme='anime'] .hub-actions {
+  display: none; /* il pulsante chiaro/scuro è copiato nella barra in alto */
 }
 
-[data-theme='anime'] .title-accent {
+[data-theme='anime'] .page {
+  max-width: 560px;
+  padding: 24px 16px 112px;
+}
+
+/* Il titolo pixel resta per i lettori di schermo; si vede quello della scheda */
+[data-theme='anime'] .title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- Scheda d'apertura ---------- */
+
+.anime-hero {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 32px;
+  padding: 20px;
+  border-radius: var(--g-radius);
+  background:
+    radial-gradient(ellipse 90% 80% at 80% 0%, rgb(179 18 46 / 0.22), transparent 70%),
+    var(--g-surface);
+  box-shadow: var(--g-shadow);
+}
+
+.anime-hero-title {
+  margin: 0;
+  font-family: var(--g-display);
+  font-size: clamp(1.75rem, 8.5vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--g-text);
+}
+
+.anime-hero-title span {
+  display: block;
   color: var(--g-gold);
 }
 
-[data-theme='anime'] .lead {
+.anime-hero-text {
+  margin: 0;
   color: var(--g-text-soft);
-  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
-[data-theme='anime'] .levels-heading {
-  margin: 0 0 16px;
-  font-family: var(--g-display);
-  font-size: 1.375rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+.anime-hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
+
+[data-theme='anime'] .anime-hero .anime-chip {
+  background: var(--g-surface-lowest);
+}
+
+/* ---------- Titolo di sezione con la barretta d'oro ---------- */
+
+.anime-section-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.anime-section-bar {
+  width: 6px;
+  height: 28px;
+  border-radius: 2px;
+  background: var(--g-gold);
+}
+
+.anime-section-title {
+  flex: 1;
+  margin: 0;
+  font-family: var(--g-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--g-text);
+}
+
+.anime-section-count {
+  color: var(--g-text-soft);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ---------- Schede dei giochi ---------- */
 
 [data-theme='anime'] .levels {
   gap: 24px;
@@ -262,51 +342,48 @@ a.level:hover .level-block--mushroom svg {
 
 [data-theme='anime'] .level {
   display: grid;
-  gap: 16px;
+  gap: 20px;
   padding: 0 0 20px;
   overflow: hidden;
-  background: var(--g-surface);
   border: 0;
   border-radius: var(--g-radius);
+  background: var(--g-surface);
+  box-shadow: var(--g-shadow);
   color: var(--g-text);
 }
 
 [data-theme='anime'] .level-text {
+  gap: 10px;
   padding: 0 20px;
 }
 
-[data-theme='anime'] .level-tags {
+[data-theme='anime'] .level-meta {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
   gap: 8px;
-  margin-bottom: 4px;
 }
 
-[data-theme='anime'] .level-tag {
-  padding: 4px 10px;
-  border-radius: 6px;
+.anime-kicker--emerald {
+  color: var(--g-emerald);
+}
+
+[data-theme='anime'] .level-players {
+  padding: 3px 8px;
+  border-radius: var(--g-radius-sm);
   background: var(--g-surface-highest);
   color: var(--g-text);
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-}
-
-[data-theme='anime'] .level-tag--accent {
-  background: rgb(236 194 70 / 0.14);
-  color: var(--g-gold);
-}
-
-[data-theme='anime'] .level-tag--emerald {
-  background: rgb(78 223 145 / 0.14);
-  color: var(--g-emerald);
 }
 
 [data-theme='anime'] .level-title {
   font-family: var(--g-display);
-  font-size: 1.75rem;
-  font-weight: 800;
+  font-size: 1.625rem;
+  font-weight: 700;
   line-height: 1.15;
   text-transform: none;
 }
@@ -314,6 +391,65 @@ a.level:hover .level-block--mushroom svg {
 [data-theme='anime'] .level-desc {
   color: var(--g-text-soft);
   font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Tre riquadri con i dati del gioco */
+[data-theme='anime'] .level-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 6px;
+}
+
+[data-theme='anime'] .level-stat {
+  display: grid;
+  gap: 4px;
+  padding: 10px 6px;
+  border-radius: var(--g-radius-sm);
+  background: var(--g-surface-lowest);
+  box-shadow: var(--g-shadow);
+  text-align: center;
+}
+
+[data-theme='anime'] .level-stat-label {
+  display: block;
+  color: var(--g-text-soft);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+[data-theme='anime'] .level-stat-value {
+  color: var(--g-gold);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+[data-theme='anime'] .level-stat-value--emerald {
+  color: var(--g-emerald);
+}
+
+/* Riquadro con la regola del flipper (al posto del "record" inventato di Stitch) */
+[data-theme='anime'] .level-record {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+  padding: 12px 14px;
+  border-radius: var(--g-radius-sm);
+  background: var(--g-surface-lowest);
+  box-shadow: var(--g-shadow);
+  color: var(--g-gold);
+}
+
+[data-theme='anime'] .level-record-text {
+  display: grid;
+  gap: 2px;
+  color: var(--g-text);
+  font-size: 0.875rem;
+  font-weight: 700;
 }
 
 [data-theme='anime'] .level-cta {
@@ -321,25 +457,42 @@ a.level:hover .level-block--mushroom svg {
   margin: 0 20px;
   padding: 16px;
   border: 0;
-  border-radius: 12px;
+  border-radius: var(--g-radius-sm);
   background: var(--g-gold);
   color: #241a00;
-  box-shadow: none;
+  box-shadow: 4px 4px 0 #0d0b10;
   font-family: var(--g-display);
-  font-size: 1.05rem;
+  font-size: 1.125rem;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+[data-theme='anime'][data-mode='light'] .level-cta {
+  color: #ffffff;
+  box-shadow: 4px 4px 0 rgb(29 20 24 / 0.25);
+}
+
+[data-theme='anime'] a.level:hover {
+  translate: 0 -2px;
 }
 
 [data-theme='anime'] a.level:hover .level-cta {
-  background: #ffd45e;
+  filter: brightness(1.08);
 }
 
-/* Copertina: un grimorio rilegato in cuoio con il sigillo d'oro */
+[data-theme='anime'] a.level:active .level-cta {
+  translate: 2px 2px;
+  box-shadow: 2px 2px 0 #0d0b10;
+}
+
+/* ---------- Copertina: un grimorio rilegato con il trifoglio d'oro ---------- */
+
 [data-theme='anime'] .grimoire-cover {
+  position: relative;
   display: grid;
   place-items: center;
-  aspect-ratio: 16 / 7;
+  aspect-ratio: 16 / 8;
   background:
     radial-gradient(ellipse 60% 70% at 50% 60%, var(--cover-glow) 0%, transparent 70%),
     linear-gradient(var(--g-surface-lowest), var(--g-surface-low));
@@ -348,13 +501,50 @@ a.level:hover .level-block--mushroom svg {
 .grimoire-cover--crimson { --cover-glow: rgb(179 18 46 / 0.55); --book-a: #c2263f; --book-b: #5e0918; }
 .grimoire-cover--emerald { --cover-glow: rgb(0 181 107 / 0.45); --book-a: #129a5f; --book-b: #053520; }
 
+/* Etichette sopra la copertina, agli angoli */
+.cover-tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: var(--g-radius-sm);
+  background: rgb(15 13 18 / 0.85);
+  color: var(--g-text);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cover-tag--crimson {
+  background: var(--g-crimson);
+  color: #ffffff;
+}
+
+.cover-tag--emerald {
+  background: #00b56b;
+  color: #00210f;
+}
+
+.cover-tag--right {
+  left: auto;
+  right: 14px;
+}
+
+[data-theme='anime'][data-mode='light'] .cover-tag--right {
+  background: rgb(255 250 243 / 0.9);
+}
+
 [data-theme='anime'] .grimoire-book {
   position: relative;
   display: grid;
   place-items: center;
-  height: 76%;
+  height: 72%;
   aspect-ratio: 3 / 4;
-  border-radius: 6px 14px 14px 6px;
+  border-radius: 4px 8px 8px 4px;
   background:
     linear-gradient(90deg, rgb(0 0 0 / 0.45) 0 10%, rgb(255 255 255 / 0.08) 10% 12%, transparent 12%),
     linear-gradient(155deg, var(--book-a), var(--book-b));
@@ -389,18 +579,64 @@ a.level:hover .level-block--mushroom svg {
   box-shadow: 0 6px 16px rgb(0 0 0 / 0.5);
 }
 
-/* Pulsante fisso in versione anime: cremisi con testo oro */
-[data-theme='anime'] .version-fab {
-  border: 2px solid var(--g-gold);
-  border-radius: 999px;
-  background: var(--g-crimson);
-  color: #ffe08e;
+/* ---------- Scheda finale "Progetto didattico" ---------- */
+
+.anime-note {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+  padding: 20px;
+  border-radius: var(--g-radius);
+  background: var(--g-surface);
+  box-shadow: var(--g-shadow);
+  color: var(--g-text-soft);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.anime-note-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--g-radius-sm);
+  background: var(--g-surface-highest);
+  color: var(--g-gold);
+}
+
+.anime-note-title {
+  display: block;
+  margin-bottom: 4px;
   font-family: var(--g-display);
-  font-size: 0.875rem;
+  font-size: 1.0625rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--g-text);
+}
+
+/* ---------- Pulsante fisso: sopra la barra di navigazione ---------- */
+
+[data-theme='anime'] .version-fab {
+  bottom: calc(var(--g-nav-height) + 16px + env(safe-area-inset-bottom));
+  border: 0;
+  border-radius: var(--g-radius-sm);
+  background: var(--g-crimson);
+  color: #ffffff;
+  font-family: var(--g-body);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
   text-shadow: none;
-  box-shadow: 0 10px 28px rgb(0 0 0 / 0.5);
+  box-shadow: 4px 4px 0 #0d0b10;
+}
+
+[data-theme='anime'] .version-fab-icon {
+  color: var(--g-gold);
+}
+
+[data-theme='anime'] .ground {
+  display: none;
 }
 
 @keyframes block-bump {
