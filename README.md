@@ -15,7 +15,8 @@ Minigiochi da fare con gli amici, nel browser, passandosi lo stesso telefono o c
 | --- | --- | --- | --- |
 | 🟨 **1-1** | [Memory](memory/) | personaggi di Super Mario, blocchi "?" | personaggi di Black Clover, grimori |
 | 🍄 **1-2** | [Flipper](pinball/) | "Regno dei Funghi": mattoni e Super Funghi | "Sfera Anti-Magia": sigilli e rune |
-| 🟢 **1-3…** | [Giochi dei compagni](giochi/LEGGIMI.md) | arrivano dal tubo del bibliotecario | |
+| 🚀 **1-3** | [Missione Spazio (prova)](pinball/?tavolo=spazio) | tavolo di prova alla *3D Pinball Space Cadet* | stesso tavolo spaziale |
+| 🟢 **1-4…** | [Giochi dei compagni](giochi/LEGGIMI.md) | arrivano dal tubo del bibliotecario | |
 
 ---
 
@@ -144,7 +145,7 @@ Dettagli in [`giochi/LEGGIMI.md`](giochi/LEGGIMI.md).
 
 ## 🚀 Livelli segreti (prove)
 
-- 🌌 **Flipper spaziale** (`prove/space-cadet/`): una prova grafica di un tavolo ispirato a *3D Pinball Space Cadet*, con tasca dei bumper, corsia curva, rosa di luci e stella viola. Non è collegata alla sala.
+- 🌌 **Missione Spazio** (livello 1-3, `pinball/?tavolo=spazio`): tavolo di prova ispirato a *3D Pinball Space Cadet*, con tasca dei bumper, corsia curva, rosa di luci e stella viola. Usa lo stesso motore del flipper: per toglierlo basta cancellare la scheda 1-3 in `index.html` e `pinball/js/config/table-layout-spazio.js`.
 - 🖼️ **Schermate Stitch originali** (`prove/stitch/`): le 6 schermate generate da Google Stitch, da aprire in locale per confrontarle con la versione anime. Restano fuori dai commit (vedi `.gitignore`) perché usano CDN e immagini dell'anime.
 
 ---
@@ -176,7 +177,7 @@ Dettagli in [`giochi/LEGGIMI.md`](giochi/LEGGIMI.md).
 │   ├── js/config/          dati: tavolo, fisica, regole, temi
 │   └── tests/
 ├── giochi/                 🟢 giochi importati dai compagni
-└── prove/                  🚀 prove grafiche
+└── prove/                  🚀 prove (schermate Stitch, solo in locale)
 ```
 
 🧠 **Logica separata dall'interfaccia**: `memory/js/game.js` riceve azioni ("gira la carta 5") e aggiorna lo stato, senza mai toccare la pagina:

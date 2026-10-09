@@ -108,6 +108,13 @@ a.level:hover .level-block--gold {
   color: var(--g-gold);
 }
 
+.level-block--space {
+  background: #141a4a;
+  box-shadow:
+    inset 4px 4px 0 #3a3f8b,
+    inset -4px -4px 0 #070920;
+}
+
 .level-block--mushroom {
   background: #5c94fc;
   box-shadow:
@@ -347,6 +354,7 @@ a.level:hover .level-block--mushroom svg {
 
 .grimoire-cover--crimson { --cover-glow: rgb(179 18 46 / 0.55); --book-a: #c2263f; --book-b: #5e0918; }
 .grimoire-cover--emerald { --cover-glow: rgb(0 181 107 / 0.45); --book-a: #129a5f; --book-b: #053520; }
+.grimoire-cover--space { --cover-glow: rgb(90 110 255 / 0.45); --book-a: #3a3fb4; --book-b: #10133f; }
 
 [data-theme='anime'] .grimoire-book {
   position: relative;

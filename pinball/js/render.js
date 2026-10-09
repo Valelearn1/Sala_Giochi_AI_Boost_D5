@@ -130,6 +130,8 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
       drawHillsAndClouds(c);
     } else if (theme.decor === 'sonar') {
       drawSonarRings(c);
+    } else if (theme.decor === 'space' && layout.DECOR) {
+      drawSpace(c, layout.DECOR);
     }
     // decor 'underground' e 'none': nessuna decorazione
     drawTableName(c);
@@ -145,6 +147,95 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
       c.beginPath();
       c.arc(276, 345, radius, 0, Math.PI * 2);
       c.stroke();
+    }
+  }
+
+  /** Spazio profondo: nebulose, stelle, zona viola, binario metallico, rosa di luci, stella (tavolo 1-3). */
+  function drawSpace(c, decor) {
+    // Nebulose
+    for (const [x, y, r, color] of [[470, 160, 220, '255, 120, 200'], [110, 420, 200, '90, 140, 255'], [300, 760, 260, '60, 200, 255']]) {
+      const cloud = c.createRadialGradient(x, y, 0, x, y, r);
+      cloud.addColorStop(0, `rgba(${color}, 0.22)`);
+      cloud.addColorStop(1, `rgba(${color}, 0)`);
+      c.fillStyle = cloud;
+      c.fillRect(0, 0, layout.TABLE_WIDTH, layout.TABLE_HEIGHT);
+    }
+
+    // Stelle fisse (sempre nelle stesse posizioni)
+    let seed = 11;
+    const random = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    for (let i = 0; i < 160; i++) {
+      c.fillStyle = `rgba(255, 255, 255, ${0.25 + random() * 0.6})`;
+      c.fillRect(random() * layout.TABLE_WIDTH, random() * layout.TABLE_HEIGHT, 1.5, 1.5);
+    }
+
+    // Zona viola sotto la tasca dei bumper, a strisce
+    const { x, y, width, height } = decor.pocket;
+    c.save();
+    c.beginPath();
+    c.roundRect(x, y, width, height, 26);
+    c.clip();
+    c.fillStyle = 'rgba(140, 90, 230, 0.55)';
+    c.fillRect(x, y, width, height);
+    c.strokeStyle = 'rgba(210, 180, 255, 0.35)';
+    c.lineWidth = 8;
+    for (let sx = x - 150; sx < x + width + 30; sx += 28) {
+      c.beginPath();
+      c.moveTo(sx, y + height + 10);
+      c.lineTo(sx + 150, y - 10);
+      c.stroke();
+    }
+    c.restore();
+
+    // Binario metallico della corsia curva
+    const orbit = decor.orbit;
+    c.strokeStyle = 'rgba(160, 165, 190, 0.35)';
+    c.lineWidth = 30;
+    c.beginPath();
+    c.arc(orbit.cx, orbit.cy, orbit.radius, (orbit.fromDeg * Math.PI) / 180, (orbit.toDeg * Math.PI) / 180);
+    c.stroke();
+
+    // Rosa di luci: anello blu, anello arancio, pozzo azzurro, punto rosso
+    const center = decor.rosette;
+    const well = c.createRadialGradient(center.x, center.y, 4, center.x, center.y, 58);
+    well.addColorStop(0, '#9ff3ff');
+    well.addColorStop(0.5, '#2a8fd6');
+    well.addColorStop(1, 'rgba(20, 40, 120, 0)');
+    c.fillStyle = well;
+    c.beginPath();
+    c.arc(center.x, center.y, 58, 0, Math.PI * 2);
+    c.fill();
+    lightsInCircle(c, center, 96, 18, '#2747d8', 7);
+    lightsInCircle(c, center, 66, 12, '#ff8a2a', 6);
+    c.fillStyle = '#d61f2a';
+    c.beginPath();
+    c.arc(center.x, center.y, 6, 0, Math.PI * 2);
+    c.fill();
+
+    // Stella viola tra le alette, con le punte verso l'alto
+    c.save();
+    c.translate(decor.starburst.x, decor.starburst.y);
+    c.fillStyle = 'rgba(150, 70, 230, 0.75)';
+    c.beginPath();
+    const spikes = 7;
+    for (let i = 0; i <= spikes * 2; i++) {
+      const angle = Math.PI + (i * Math.PI) / spikes;
+      const radius = i % 2 === 0 ? 150 : 40;
+      c.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
+    }
+    c.closePath();
+    c.fill();
+    c.restore();
+  }
+
+  /** Lampadine disposte in cerchio. */
+  function lightsInCircle(c, center, radius, count, color, size) {
+    c.fillStyle = color;
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * Math.PI * 2;
+      c.beginPath();
+      c.arc(center.x + Math.cos(angle) * radius, center.y + Math.sin(angle) * radius, size, 0, Math.PI * 2);
+      c.fill();
     }
   }
 
