@@ -59,7 +59,7 @@ Sei il **bibliotecario** della Sala giochi: porti nella sala i giochi dei compag
 7. **Lancia la verifica e i test della sala.**
    ```bash
    node strumenti/verifica.js giochi/<nome>
-   node --test memory/tests/*.test.js pinball/tests/*.test.js strumenti/tests/*.test.js
+   node --test memory/tests/*.test.js pinball/tests/*.test.js corsa/tests/*.test.js strumenti/tests/*.test.js
    ```
    - **Se la verifica non passa**, togli la cartella `giochi/<nome>/` e la voce da `giochi.json`, e spiega all'utente perché, riportando gli errori della verifica. A volte basta una piccola correzione da parte del compagno, per esempio un font scaricato in locale invece che da CDN: suggeriscila.
    - Gli **avvisi** (⚠) non bloccano, ma vanno riportati all'utente.

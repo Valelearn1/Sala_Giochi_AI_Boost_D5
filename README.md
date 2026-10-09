@@ -38,7 +38,8 @@ git clone https://github.com/Valelearn1/Sala_Giochi_AI_Boost_D5.git
 | --- | --- | --- | --- | --- |
 | 🟨 **1-1** | [Memory](memory/) | personaggi di Super Mario, blocchi "?" | personaggi di Black Clover, grimori | abitanti di Springfield, carte a ciambella |
 | 🍄 **1-2** | [Flipper](pinball/) | "Regno dei Funghi": mattoni e Super Funghi | "Sfera Anti-Magia": sigilli e rune | "Centrale Nucleare": ciambelle e uranio |
-| 🟢 **1-3…** | [Giochi dei compagni](giochi/LEGGIMI.md) | arrivano dal tubo del bibliotecario | | |
+| 🏁 **1-3** | [Corsa](corsa/) | "Circuito dei Funghi": kart tra funghi e blocchi "?" | "Corsa dei Cavalieri Magici": scope su un sentiero di rune | "Gran Premio di Springfield": l'auto rosa di famiglia |
+| 🟢 **1-4…** | [Giochi dei compagni](giochi/LEGGIMI.md) | arrivano dal tubo del bibliotecario | | |
 
 ---
 
@@ -146,7 +147,41 @@ Flipper in tempo reale, multiplayer a turni: da 1 a 4 giocatori, **3 palline a t
 
 ---
 
-## 🟢 Mondo 1-3 · Il tubo dei compagni
+## 🏁 Mondo 1-3 · Corsa
+
+Corsa a cronometro vista dall'alto, **da 1 a 4 giocatori, uno alla volta** sullo stesso dispositivo.
+
+### 📜 Regole
+
+- 🏎️ Ognuno fa **3 giri** della stessa pista, dopo il conto alla rovescia **3, 2, 1… VIA!**
+- ⏱️ Vince il **tempo totale più basso**; a pari tempo si condivide la posizione. In classifica c'è anche il giro migliore di ciascuno.
+- 🌱 Fuori dalla strada (prato, sentiero) **si va piano**.
+- 🚩 Un giro conta solo passando **tutti i traguardi intermedi in ordine**: niente scorciatoie, niente giri al contrario.
+- 🏆 Il miglior tempo resta salvato nel browser e compare nella pagina iniziale.
+
+### 🎮 Controlli
+
+| Azione | Tastiera | Telefono |
+| --- | --- | --- |
+| Gas | ↑ o W | pulsante **Gas** (tenuto premuto) |
+| Freno / retromarcia | ↓ o S | pulsante **Freno** |
+| Sterzo | ← → o A D | pulsanti **◀ ▶** |
+| Pausa | P | pulsante **Pausa** |
+
+Sul computer (mouse e tastiera) i pulsanti touch sono nascosti, per lasciare più spazio alla pista.
+
+### 🔧 Com'è fatta
+
+- 📐 `js/config/` (solo **dati**): `track.js` la pista (punti della linea centrale, larghezza, giri, traguardi intermedi), `physics-config.js` come si guida, `theme.js` i tre temi.
+- 🧠 **Logica pura**, testata in `corsa/tests/`: `track.js` (curva morbida e "a che punto del giro sono"), `car.js` (gas, freno, sterzo), `race.js` (giri e tempi), `turns.js` (turni e classifica), `records.js`.
+- 🖌️ `js/render.js` (canvas), `js/input.js` (tastiera e touch), `js/hud.js` (pannello e schermate). `js/main.js` collega tutto.
+- 🛣️ Niente motore fisico: la pista è una **linea centrale con una larghezza**, e l'auto è "in pista" se ci sta abbastanza vicino.
+- 🤖 Un test fa guidare un **pilota automatico**: se qualcuno cambia la pista e la rende impossibile, il test lo dice.
+- 🐞 Con `corsa/?debug` dalla console si usa `corsaDebug`: `corsaDebug.state` mostra lo stato, `corsaDebug.advance(2)` fa avanzare il gioco di 2 secondi.
+
+---
+
+## 🟢 Mondo 1-4 · Il tubo dei compagni
 
 I giochi dei compagni entrano nella sala dal tubo verde, portati dall'agente **bibliotecario** (`.claude/agents/bibliotecario.md`). Con Claude Code basta scrivere:
 
@@ -197,7 +232,7 @@ Dettagli in [`giochi/LEGGIMI.md`](giochi/LEGGIMI.md).
 │   ├── temi.css            stile della versione anime, pulsanti versione e audio
 │   ├── suoni.js            effetti e musica, diversi per versione
 │   ├── suoni/, personaggi/ file facoltativi (vedi i LEGGIMI.md)
-│   └── fonts/              Press Start 2P, Syne, Plus Jakarta Sans (licenze OFL)
+│   └── fonts/              Press Start 2P, Syne, Plus Jakarta Sans, Nunito (OFL), Luckiest Guy (Apache 2.0)
 ├── memory/                 🟨 il Memory
 │   ├── js/game.js          LOGICA: stato, regole, turni, classifica (senza DOM né timer)
 │   ├── js/ui.js, main.js   interfaccia e collegamenti
@@ -205,6 +240,10 @@ Dettagli in [`giochi/LEGGIMI.md`](giochi/LEGGIMI.md).
 ├── pinball/                🍄 il flipper
 │   ├── lib/                Matter.js 0.20.0
 │   ├── js/config/          dati: tavolo, fisica, regole, temi
+│   └── tests/
+├── corsa/                  🏁 la corsa
+│   ├── js/config/          dati: pista, guida, temi
+│   ├── js/track.js, car.js, race.js, turns.js   LOGICA pura
 │   └── tests/
 ├── giochi/                 🟢 giochi importati dai compagni
 └── prove/                  🚀 prove (schermate Stitch, solo in locale)
@@ -229,7 +268,7 @@ Le istruzioni passo passo sono all'inizio, nella sezione **▶️ Come giocare**
 Serve Node.js 22 o successivo e non c'è niente da installare:
 
 ```bash
-node --test memory/tests/*.test.js pinball/tests/*.test.js strumenti/tests/*.test.js
+node --test memory/tests/*.test.js pinball/tests/*.test.js corsa/tests/*.test.js strumenti/tests/*.test.js
 node strumenti/verifica.js --tutti
 ```
 

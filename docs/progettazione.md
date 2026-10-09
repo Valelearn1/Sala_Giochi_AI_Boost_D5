@@ -97,7 +97,7 @@ Il CSS di ogni pagina ha una sezione `[data-theme='anime']` e una `[data-theme='
 
 ## Come si testa
 
-- **Logica**: `node --test memory/tests/*.test.js pinball/tests/*.test.js` (30 test, nessuna dipendenza).
+- **Logica**: `node --test memory/tests/*.test.js pinball/tests/*.test.js corsa/tests/*.test.js strumenti/tests/*.test.js` (56 test, nessuna dipendenza).
 - **Browser**: `pinball/?debug` espone `window.pinballDebug` per far avanzare la fisica a mano. Con questo sono stati verificati:
   - nessun attraversamento con migliaia di tiri alla velocità massima;
   - la durata delle palline con un "giocatore automatico" (mediana da 2,6 s a circa 12 s dopo i kicker);
