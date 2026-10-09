@@ -650,6 +650,45 @@
   100% { opacity: 0; translate: -50% -80%; }
 }
 
+/* Scintille attorno alle carte della coppia: 8 quadratini che volano verso l'esterno */
+.sparks {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.spark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12%;
+  aspect-ratio: 1;
+  margin: -6% 0 0 -6%;
+  background: #fff6dc;
+  box-shadow: 0 0 0 2px #f8b800;
+  opacity: 0;
+  animation: spark-burst 800ms cubic-bezier(0.2, 0.7, 0.3, 1) var(--flip-duration) forwards;
+}
+
+/* Prima ruota verso il suo angolo, poi si allontana dal centro */
+@keyframes spark-burst {
+  0% { opacity: 1; transform: rotate(var(--angle)) translateY(0) scale(1); }
+  60% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(var(--angle)) translateY(-85cqi) scale(0.4); }
+}
+
+/* "+1" che vola verso il punteggio */
+.point-fly {
+  position: fixed;
+  z-index: 30;
+  color: #ffd84a;
+  font-family: var(--pixel);
+  font-size: 1.25rem;
+  text-shadow: 2px 2px 0 #000000;
+  pointer-events: none;
+}
+
 /* ---------- 6. Banda "Tocca a …" ---------- */
 
 .turn-banner {
@@ -1740,6 +1779,21 @@
   width: 30%;
   aspect-ratio: 1;
   background: var(--g-clover) center / contain no-repeat;
+}
+
+/* Scintille d'oro rotonde, con un alone */
+[data-theme='anime'] .spark {
+  border-radius: 50%;
+  background: #ffe08e;
+  box-shadow: 0 0 8px 2px rgb(236 194 70 / 0.8);
+}
+
+[data-theme='anime'] .point-fly {
+  color: #ecc246;
+  font-family: var(--g-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-shadow: 0 0 12px rgb(236 194 70 / 0.7), 0 2px 0 #0d0b10;
 }
 
 /* ---------- Cambio turno: una scheda al centro ---------- */

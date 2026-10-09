@@ -215,15 +215,72 @@ function renderScoreboard(game) {
   elements.scoreboard.replaceChildren(...items);
 }
 
-/** Fa saltare fuori una moneta dalla carta appena accoppiata. */
-export function celebrateMatch(cardId) {
-  const button = elements.board.querySelector(`[data-card-id="${cardId}"]`);
-  const coin = document.createElement('span');
-  coin.className = 'coin-pop';
-  coin.setAttribute('aria-hidden', 'true');
-  // Quando l'animazione finisce, la moneta viene tolta dalla pagina
-  coin.addEventListener('animationend', () => coin.remove());
-  button.append(coin);
+/** Vero se nel sistema è attivo "riduci movimento": niente scintille né punti che volano. */
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/**
+ * Coppia trovata: una moneta (trifoglio nell'anime) salta fuori dall'ultima carta,
+ * le due carte sprizzano scintille e un "+1" vola fino al punteggio di chi l'ha trovata.
+ * Sul telefono c'è anche una piccola vibrazione.
+ */
+export function celebrateMatch(pairIds, lastCardId, playerIndex) {
+  const lastButton = elements.board.querySelector(`[data-card-id="${lastCardId}"]`);
+  lastButton.append(createEffect('coin-pop'));
+  navigator.vibrate?.(40); // solo dove c'è (telefoni Android): altrove non fa niente
+
+  if (prefersReducedMotion()) return;
+  for (const id of pairIds) {
+    const sparks = createEffect('sparks');
+    // 8 scintille, una ogni 45°: l'angolo lo legge il CSS (--angle)
+    sparks.innerHTML = Array.from({ length: 8 }, (_, index) =>
+      `<span class="spark" style="--angle: ${index * 45}deg"></span>`).join('');
+    elements.board.querySelector(`[data-card-id="${id}"]`).append(sparks);
+  }
+  flyPointToScore(lastButton, playerIndex);
+}
+
+/** Un elemento decorativo che si toglie da solo quando la sua animazione CSS finisce. */
+function createEffect(className) {
+  const effect = document.createElement('span');
+  effect.className = className;
+  effect.setAttribute('aria-hidden', 'true');
+  effect.addEventListener('animationend', (event) => {
+    if (event.target === effect || effect.contains(event.target)) effect.remove();
+  });
+  return effect;
+}
+
+/** "+1" che parte dalla carta e vola verso il punteggio del giocatore (Web Animations API). */
+function flyPointToScore(fromButton, playerIndex) {
+  const target = elements.scoreboard.querySelector(`[data-player="${playerIndex}"] .score-points`);
+  if (!target) return;
+  const from = fromButton.getBoundingClientRect();
+  const to = target.getBoundingClientRect();
+  const startX = from.left + from.width / 2;
+  const startY = from.top + from.height / 2;
+  const dx = to.left + to.width / 2 - startX;
+  const dy = to.top + to.height / 2 - startY;
+
+  const point = document.createElement('span');
+  point.className = 'point-fly';
+  point.dataset.player = playerIndex;
+  point.setAttribute('aria-hidden', 'true');
+  point.textContent = '+1';
+  point.style.left = `${startX}px`;
+  point.style.top = `${startY}px`;
+  document.body.append(point);
+
+  const animation = point.animate(
+    [
+      { transform: 'translate(-50%, -50%) scale(0.5)', opacity: 0 },
+      { transform: 'translate(-50%, -110%) scale(1.3)', opacity: 1, offset: 0.3 },
+      { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(0.7)`, opacity: 0.9 },
+    ],
+    { duration: 950, delay: 420, easing: 'cubic-bezier(0.5, 0, 0.3, 1)', fill: 'both' },
+  );
+  animation.finished.then(() => point.remove(), () => point.remove());
 }
 
 // --- Messaggi ------------------------------------------------------------------

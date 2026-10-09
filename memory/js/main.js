@@ -9,7 +9,7 @@
 
 import { getPairCount } from './cards.js';
 import { getCharacters } from './characters.js';
-import { createGame, flipCard, endTurn, getCurrentPlayer, OUTCOME } from './game.js';
+import { createGame, flipCard, endTurn, getCard, getCurrentPlayer, OUTCOME } from './game.js';
 import * as ui from './ui.js';
 import * as sound from '../../assets/suoni.js';
 
@@ -58,7 +58,10 @@ function handleCardClick(cardId) {
   const playerName = getCurrentPlayer(game).name;
 
   if (outcome === OUTCOME.MATCH || outcome === OUTCOME.GAME_OVER) {
-    ui.celebrateMatch(cardId);
+    // Le due carte della coppia: quella appena girata e la sua gemella
+    const { name } = getCard(game, cardId);
+    const pairIds = game.cards.filter((card) => card.isMatched && card.name === name).map((card) => card.id);
+    ui.celebrateMatch(pairIds, cardId, game.currentPlayerIndex);
     sound.play('match', { delay: 0.35 }); // quando la moneta salta fuori, a carta girata
   }
 
