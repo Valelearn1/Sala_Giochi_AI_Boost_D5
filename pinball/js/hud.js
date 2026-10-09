@@ -33,6 +33,7 @@ const elements = {
   exitButton: $('#exit-button'),
   resultsTitle: $('#results-title'),
   resultsSummary: $('#results-summary'),
+  record: $('#results-record'),
   ranking: $('#ranking'),
   replayButton: $('#replay-button'),
   settingsButton: $('#settings-button'),
@@ -154,7 +155,8 @@ export function hidePauseOverlay() {
 
 // --- Classifica ----------------------------------------------------------------
 
-export function renderResults(match) {
+/** `record`: { best, isNew } da records.js, il punteggio più alto su questo dispositivo. */
+export function renderResults(match, record = null) {
   const winners = getWinners(match);
   const isTie = winners.length > 1;
 
@@ -173,6 +175,14 @@ export function renderResults(match) {
     return item;
   });
   elements.ranking.replaceChildren(...items);
+
+  elements.record.hidden = !record?.best;
+  if (record?.best) {
+    elements.record.classList.toggle('is-new', record.isNew);
+    elements.record.textContent = record.isNew
+      ? `🏆 Nuovo record del dispositivo: ${formatScore(record.best.score)} punti`
+      : `Record del dispositivo: ${formatScore(record.best.score)} · ${record.best.name}`;
+  }
   elements.resultsTitle.focus();
 }
 

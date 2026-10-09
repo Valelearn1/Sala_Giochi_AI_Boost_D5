@@ -18,9 +18,10 @@ import { RULES } from './config/rules-config.js';
 import { getTheme } from './config/theme.js';
 import { createPhysics } from './physics.js';
 import { createBallState, applyHit, endOfBallBonus } from './rules.js';
-import { createMatch, getCurrentPlayer, addPoints, endBall } from './turns.js';
+import { createMatch, getCurrentPlayer, addPoints, endBall, getWinners } from './turns.js';
 import { createRenderer } from './render.js';
 import { createInput } from './input.js';
+import { loadRecord, saveRecord, updateRecord } from './records.js';
 import * as hud from './hud.js';
 import * as sound from '../../assets/suoni.js';
 
@@ -173,7 +174,12 @@ function loseBall() {
 function showResults() {
   phase = 'results';
   hud.showScreen('results');
-  hud.renderResults(match);
+  // Record del dispositivo: il punteggio più alto mai fatto con questo browser
+  const winners = getWinners(match);
+  const names = new Intl.ListFormat('it', { type: 'conjunction' }).format(winners.map((player) => player.name));
+  const { best, isNew } = updateRecord(loadRecord(), { name: names, score: winners[0].score });
+  if (isNew) saveRecord(best);
+  hud.renderResults(match, { best, isNew });
   sound.stopMusic();
   sound.play('fanfare');
 }

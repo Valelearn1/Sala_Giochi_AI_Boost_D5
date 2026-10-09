@@ -653,6 +653,22 @@ canvas {
   font-weight: 400;
 }
 
+/* Record del dispositivo, sotto il riassunto della partita */
+.results-record {
+  margin: -8px 0 24px;
+  padding: 8px 14px;
+  background: var(--panel);
+  border: 3px solid var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.results-record.is-new {
+  background: var(--accent);
+  border-color: #000000;
+  color: #1d0f00;
+}
+
 .results-actions {
   display: flex;
   flex-wrap: wrap;
@@ -1414,6 +1430,24 @@ canvas {
 [data-theme='anime'] .results-summary {
   margin-bottom: 28px;
   color: var(--g-text-soft);
+}
+
+/* Record: pastiglia scura, cremisi quando è nuovo (come "Nuovo record" di Stitch) */
+[data-theme='anime'] .results-record {
+  margin: -12px 0 28px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--g-surface-high);
+  color: var(--g-text-soft);
+  font-size: 0.875rem;
+  box-shadow: var(--g-shadow);
+}
+
+[data-theme='anime'] .results-record.is-new {
+  background: var(--g-crimson);
+  color: #ffffff;
+  box-shadow: 0 0 20px rgb(179 18 46 / 0.45), var(--g-shadow);
 }
 
 [data-theme='anime'] .ranking {

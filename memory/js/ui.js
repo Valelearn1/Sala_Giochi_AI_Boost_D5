@@ -35,6 +35,7 @@ const elements = {
   resultsSummary: document.querySelector('#results-summary'),
   ranking: document.querySelector('#ranking'),
   challengers: document.querySelector('[data-sfidanti]'),
+  record: document.querySelector('#results-record'),
   stats: {
     time: document.querySelector('[data-statistica="tempo"]'),
     moves: document.querySelector('[data-statistica="mosse"]'),
@@ -328,8 +329,11 @@ function formatDuration(milliseconds) {
   return minutes > 0 ? `${minutes}m ${seconds % 60}s` : `${seconds}s`;
 }
 
-/** `durationMs`: quanto è durata la partita (la misura main.js). */
-export function renderResults(game, { durationMs = 0 } = {}) {
+/**
+ * `durationMs`: quanto è durata la partita (la misura main.js).
+ * `record`: { best, isNew } da records.js, il miglior risultato del livello su questo dispositivo.
+ */
+export function renderResults(game, { durationMs = 0, record = null } = {}) {
   const winners = getWinners(game);
   const isTie = winners.length > 1;
 
@@ -347,6 +351,7 @@ export function renderResults(game, { durationMs = 0 } = {}) {
   elements.stats.moves.textContent = game.moves;
   elements.stats.accuracy.textContent = `${Math.round((pairCount / Math.max(game.moves, 1)) * 100)}%`;
   elements.challengers.textContent = game.players.length;
+  renderRecord(record);
 
   elements.ranking.replaceChildren(...getRanking(game).map(createRankingItem));
   elements.resultsTitle.focus();
@@ -372,6 +377,17 @@ function createRankingItem(entry) {
     </span>`;
   item.querySelector('.ranking-name').textContent = entry.name;
   return item;
+}
+
+function renderRecord(record) {
+  const box = elements.record;
+  box.hidden = !record?.best;
+  if (!record?.best) return;
+  const time = formatDuration(record.best.durationMs);
+  box.classList.toggle('is-new', record.isNew);
+  box.textContent = record.isNew
+    ? `🏆 Nuovo record del dispositivo: ${time} in ${record.best.moves} mosse`
+    : `Record del dispositivo: ${time} · ${record.best.name}`;
 }
 
 /** ['Anna', 'Bruno', 'Carla'] → "Anna, Bruno e Carla" */

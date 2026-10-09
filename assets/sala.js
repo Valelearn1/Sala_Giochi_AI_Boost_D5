@@ -100,3 +100,41 @@ async function mostraGiochiImportati() {
 }
 
 mostraGiochiImportati();
+
+// --- Record dei giochi di casa ----------------------------------------------
+// Memory e Flipper salvano il loro miglior risultato nel browser
+// (memory/js/records.js e pinball/js/records.js): qui lo mostriamo sulle schede.
+
+function leggiArchivio(chiave) {
+  try {
+    return JSON.parse(localStorage.getItem(chiave));
+  } catch {
+    return null; // navigazione privata o archivio bloccato
+  }
+}
+
+/** 72000 → "1m 12s" */
+function durata(millisecondi) {
+  const secondi = Math.round(millisecondi / 1000);
+  const minuti = Math.floor(secondi / 60);
+  return minuti > 0 ? `${minuti}m ${secondi % 60}s` : `${secondi}s`;
+}
+
+function mostraRecord() {
+  const memory = leggiArchivio('sala-record-memory') ?? {};
+  const tempi = ['4x4', '4x5', '6x6']
+    .filter((livello) => memory[livello]?.durationMs > 0)
+    .map((livello) => `${livello.replace('x', '×')} in ${durata(memory[livello].durationMs)}`);
+  const flipper = leggiArchivio('sala-record-flipper');
+
+  const testi = {
+    memory: tempi.length ? `🏆 Record: ${tempi.join(' · ')}` : '',
+    flipper: flipper?.score > 0 ? `🏆 Record: ${flipper.score.toLocaleString('it-IT')} punti · ${flipper.name}` : '',
+  };
+  for (const riga of document.querySelectorAll('[data-record]')) {
+    riga.textContent = testi[riga.dataset.record];
+    riga.hidden = !riga.textContent;
+  }
+}
+
+mostraRecord();

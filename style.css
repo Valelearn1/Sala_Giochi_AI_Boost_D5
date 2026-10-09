@@ -133,6 +133,19 @@ a.level:hover .level-block--mushroom svg {
   text-transform: uppercase;
 }
 
+/* Record del dispositivo sulla scheda del gioco */
+.level-best {
+  color: var(--gold);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+[data-theme='anime'] .level-best {
+  color: var(--g-gold);
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+
 /* Numero del livello, come "1-1" nei giochi a piattaforme */
 .level-world {
   color: var(--gold);

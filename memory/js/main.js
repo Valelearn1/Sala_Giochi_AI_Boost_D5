@@ -9,7 +9,8 @@
 
 import { getPairCount } from './cards.js';
 import { getCharacters } from './characters.js';
-import { createGame, flipCard, endTurn, getCard, getCurrentPlayer, OUTCOME } from './game.js';
+import { createGame, flipCard, endTurn, getCard, getCurrentPlayer, getWinners, OUTCOME } from './game.js';
+import { loadRecords, saveRecords, updateRecord } from './records.js';
 import * as ui from './ui.js';
 import * as sound from '../../assets/suoni.js';
 
@@ -91,7 +92,12 @@ function showResults() {
   pendingTimer = null;
   // Prima mostriamo la schermata: un elemento nascosto non può ricevere il focus.
   ui.showScreen('results');
-  ui.renderResults(game, { durationMs: Date.now() - startTime });
+  const durationMs = Date.now() - startTime;
+  // Record del livello su questo dispositivo: vale il tempo più basso
+  const winnerNames = new Intl.ListFormat('it', { type: 'conjunction' }).format(getWinners(game).map((player) => player.name));
+  const { records, best, isNew } = updateRecord(loadRecords(), settings.difficulty, { name: winnerNames, durationMs, moves: game.moves });
+  if (isNew) saveRecords(records);
+  ui.renderResults(game, { durationMs, record: { best, isNew } });
 
   isPlaying = false;
   sound.stopMusic();
