@@ -1,0 +1,326 @@
+/* =====================================================================
+   VERSIONE SIMPSON — stile comune a tutte le pagine
+   Mondo: Springfield come in un cartone animato. Cielo azzurro con nuvole
+   soffici, giallo Simpson, ciambelle rosa, contorni neri spessi e ombre
+   nette, angoli arrotondati. Di sera (modalità scura) Springfield di notte.
+
+   Come per l'anime, tutto è dietro [data-theme='simpson'] e la base resta
+   lo stile classico: qui si ridefiniscono variabili e pezzi comuni,
+   nei style.css di ogni pagina le parti proprie del gioco.
+   Disegni (nuvole, ciambella, prato) in SVG scritti a mano: nessuna immagine ufficiale.
+   ===================================================================== */
+
+/* Font (licenze libere, file in fonts/):
+   Luckiest Guy (Apache 2.0) per i titoli a fumetto, Nunito (SIL OFL) per i testi */
+@font-face {
+  font-family: 'Luckiest Guy';
+  src: url('fonts/LuckiestGuy-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('fonts/Nunito-Variable.ttf') format('truetype');
+  font-weight: 200 1000;
+  font-display: swap;
+}
+
+/* ---------- Colori e misure ---------- */
+
+:root[data-theme='simpson'] {
+  --s-sky: #7fcbff;
+  --s-sky-deep: #4fb3f6;
+  --s-yellow: #ffd90f; /* il giallo della pelle dei Simpson */
+  --s-yellow-dark: #e0a800;
+  --s-pink: #f48fb1; /* glassa della ciambella */
+  --s-pink-dark: #c2185b;
+  --s-dough: #f4b860; /* impasto della ciambella */
+  --s-orange: #f26b21; /* maglietta di Bart */
+  --s-blue: #2b6fd6; /* capelli di Marge */
+  --s-green: #3fa34d; /* prato di Evergreen Terrace */
+  --s-ink: #1b1b1b; /* contorni */
+  --s-paper: #ffffff; /* schede */
+  --s-paper-soft: #fff6d0;
+  --s-text: #1b1b1b;
+  --s-text-soft: #4a4f63;
+  --s-shadow: 4px 4px 0 var(--s-ink);
+  --s-shadow-small: 3px 3px 0 var(--s-ink);
+  --s-radius: 16px;
+  --s-radius-small: 10px;
+  --s-display: 'Luckiest Guy', 'Nunito', system-ui, sans-serif;
+  --s-body: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Variabili della base classica, con i colori di Springfield */
+  --sky: var(--s-sky);
+  --ink: #12305c;
+  --ink-soft: #24467a;
+  --panel: var(--s-paper);
+  --panel-text: var(--s-text);
+  --panel-muted: var(--s-text-soft);
+  --gold: var(--s-yellow);
+  --gold-light: #fff2a0;
+  --gold-dark: var(--s-yellow-dark);
+  --player-0: #f26b21; /* Bart */
+  --player-1: #2b6fd6; /* Marge */
+  --player-2: #d6336c; /* Lisa */
+  --player-3: #2f9e44; /* Ned */
+  --pixel: var(--s-display);
+  --font: var(--s-body);
+  --ceiling-height: 0px;
+  --border: 3px;
+
+  /* Una ciambella rosa con le codette (al posto della moneta) */
+  --coin: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='17' fill='%23f4b860' stroke='%231b1b1b' stroke-width='3'/%3E%3Cpath d='M20 5a15 15 0 0 1 15 15c-2 3-5 1-7 4s-6 2-8 0-6 1-8-2-5-2-6-4A15 15 0 0 1 20 5z' fill='%23f48fb1'/%3E%3Ccircle cx='20' cy='20' r='6' fill='%237fcbff' stroke='%231b1b1b' stroke-width='3'/%3E%3Cg stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M12 12l2 2' stroke='%23ffd90f'/%3E%3Cpath d='M27 10l-1 3' stroke='%232b6fd6'/%3E%3Cpath d='M30 18l-3 1' stroke='%23ffffff'/%3E%3Cpath d='M10 19l3 1' stroke='%233fa34d'/%3E%3Cpath d='M17 9h3' stroke='%23f26b21'/%3E%3C/g%3E%3C/svg%3E");
+  /* Nuvola soffice da cartone (al posto della nuvola pixel) */
+  --cloud: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 90'%3E%3Cpath d='M30 80c-16 0-24-18-12-28-4-18 18-30 32-20 6-20 36-24 46-6 14-14 40-6 40 14 18-4 32 12 24 28-2 8-10 12-18 12z' fill='%23ffffff'/%3E%3Cpath d='M22 74c40 8 110 8 150 0 0 4-4 6-10 6H30c-6 0-8-2-8-6z' fill='%23d6efff'/%3E%3C/svg%3E");
+}
+
+/* Springfield di notte (modalità scura): cielo blu notte, schede scure */
+:root[data-theme='simpson'][data-mode='dark'] {
+  --s-sky: #1b2a52;
+  --s-sky-deep: #0f1a38;
+  --s-paper: #2a3560;
+  --s-paper-soft: #222c50;
+  --s-text: #ffffff;
+  --s-text-soft: #c9d4f5;
+  --s-ink: #070b1a;
+  --ink: #ffffff;
+  --ink-soft: #c9d4f5;
+  --cloud: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 90'%3E%3Cpath d='M30 80c-16 0-24-18-12-28-4-18 18-30 32-20 6-20 36-24 46-6 14-14 40-6 40 14 18-4 32 12 24 28-2 8-10 12-18 12z' fill='%23324274'/%3E%3C/svg%3E");
+}
+
+/* ---------- Pagina ---------- */
+
+[data-theme='simpson'] body {
+  background-color: var(--s-sky);
+  background-image:
+    var(--cloud),
+    var(--cloud),
+    var(--cloud),
+    linear-gradient(var(--s-sky) 0%, var(--s-sky-deep) 100%);
+  background-repeat: no-repeat;
+  background-size: 180px 81px, 130px 58px, 220px 99px, 100% 100%;
+  background-position: 4% 90px, 96% 40px, 92% 62%, 0 0;
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--s-body);
+  font-weight: 600;
+  caret-color: var(--s-orange);
+}
+
+/* Di notte: stelline al posto delle nuvole grandi */
+[data-theme='simpson'][data-mode='dark'] body {
+  background-image:
+    radial-gradient(circle, #fff7c2 0 1.5px, transparent 2.5px),
+    radial-gradient(circle, #ffffff 0 1px, transparent 2px),
+    var(--cloud),
+    linear-gradient(var(--s-sky) 0%, var(--s-sky-deep) 100%);
+  background-size: 160px 140px, 110px 90px, 160px 72px, 100% 100%;
+  background-position: 20px 30px, 70px 60px, 92% 70%, 0 0;
+  background-repeat: repeat, repeat, no-repeat, no-repeat;
+}
+
+/* Niente soffitto di mattoni del livello sotterraneo */
+:root[data-theme='simpson'][data-mode='dark'] body::before {
+  content: none;
+}
+
+html[data-theme='simpson'] {
+  scrollbar-color: var(--s-yellow-dark) var(--s-sky);
+}
+
+[data-theme='simpson'] ::selection {
+  background: var(--s-yellow);
+  color: var(--s-ink);
+}
+
+[data-theme='simpson'] :focus-visible {
+  outline: 3px solid var(--s-orange);
+  outline-offset: 3px;
+}
+
+/* Titoli a fumetto: lettere gialle con contorno nero, come un logo da cartone */
+[data-theme='simpson'] .pixel-text {
+  font-family: var(--s-display);
+  font-weight: 400;
+  color: var(--s-yellow);
+  letter-spacing: 0.02em;
+  text-shadow:
+    2px 0 0 var(--s-ink),
+    -2px 0 0 var(--s-ink),
+    0 2px 0 var(--s-ink),
+    0 -2px 0 var(--s-ink),
+    2px 2px 0 var(--s-ink),
+    -2px -2px 0 var(--s-ink),
+    2px -2px 0 var(--s-ink),
+    -2px 2px 0 var(--s-ink),
+    4px 5px 0 var(--s-ink);
+}
+
+/* Il prato di Evergreen Terrace al posto dei mattoni, con la siepe */
+[data-theme='simpson'] .ground {
+  background:
+    radial-gradient(circle at 12px 0, #57c052 0 12px, transparent 13px) 0 0 / 24px 14px repeat-x,
+    linear-gradient(#57c052 0 14px, #3e9a35 14px 100%);
+  border-top: 0;
+  box-shadow: inset 0 3px 0 rgb(0 0 0 / 0.08);
+  image-rendering: auto;
+}
+
+[data-theme='simpson'][data-mode='dark'] .ground {
+  background:
+    radial-gradient(circle at 12px 0, #2f6e3b 0 12px, transparent 13px) 0 0 / 24px 14px repeat-x,
+    linear-gradient(#2f6e3b 0 14px, #21532c 14px 100%);
+}
+
+[data-theme='simpson'] .coin-icon {
+  width: 18px;
+  height: 18px;
+  image-rendering: auto;
+}
+
+/* ---------- Pulsanti: tondi, contorno nero, ombra netta ---------- */
+
+[data-theme='simpson'] .button {
+  border: 3px solid var(--s-ink);
+  border-radius: 999px;
+  font-family: var(--s-display);
+  font-size: 1.0625rem;
+  letter-spacing: 0.04em;
+  text-shadow: none;
+  box-shadow: var(--s-shadow-small);
+  transition: translate 80ms ease, box-shadow 80ms ease;
+}
+
+[data-theme='simpson'] .button:active {
+  transform: none;
+  translate: 2px 2px;
+  box-shadow: 1px 1px 0 var(--s-ink);
+}
+
+[data-theme='simpson'] .button--primary {
+  background: var(--s-orange);
+  color: #ffffff;
+}
+
+[data-theme='simpson'] .button--primary:hover {
+  background: #ff7d33;
+}
+
+[data-theme='simpson'] .button--secondary,
+[data-theme='simpson'] .button--ghost {
+  background: var(--s-paper);
+  color: var(--s-text);
+  border-color: var(--s-ink);
+}
+
+[data-theme='simpson'] .button--secondary:hover,
+[data-theme='simpson'] .button--ghost:hover {
+  background: var(--s-paper-soft);
+}
+
+[data-theme='simpson'] .button--large {
+  font-size: 1.25rem;
+}
+
+/* ---------- Barra in alto: pulsanti a pastiglia ---------- */
+
+[data-theme='simpson'] .theme-toggle,
+[data-theme='simpson'] .sound-toggle {
+  border: 3px solid var(--s-ink);
+  border-radius: 999px;
+  background: var(--s-paper);
+  color: var(--s-text);
+  font-family: var(--s-display);
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  box-shadow: var(--s-shadow-small);
+}
+
+[data-theme='simpson'] .theme-toggle:hover,
+[data-theme='simpson'] .sound-toggle:hover {
+  background: var(--s-paper-soft);
+}
+
+[data-theme='simpson'] .sound-state::before {
+  color: var(--s-text-soft);
+}
+
+[data-theme='simpson'] .sound-toggle[data-on='true'] {
+  background: var(--s-yellow);
+  color: var(--s-ink);
+  border-color: var(--s-ink);
+}
+
+[data-theme='simpson'] .sound-toggle[data-on='true'] .sound-state::before {
+  color: var(--s-ink);
+}
+
+/* ---------- Menu delle versioni e pannello Audio ---------- */
+
+[data-theme='simpson'] .version-menu,
+[data-theme='simpson'] .audio-panel {
+  border: 3px solid var(--s-ink);
+  border-radius: var(--s-radius);
+  background: var(--s-paper);
+  color: var(--s-text);
+  font-family: var(--s-body);
+  box-shadow: var(--s-shadow);
+}
+
+[data-theme='simpson'] .version-menu-title,
+[data-theme='simpson'] .version-option-detail {
+  color: var(--s-text-soft);
+}
+
+[data-theme='simpson'] .version-option {
+  border-radius: var(--s-radius-small);
+}
+
+[data-theme='simpson'] .version-option:hover {
+  background: var(--s-paper-soft);
+}
+
+[data-theme='simpson'] .version-option[aria-pressed='true'] {
+  border-color: var(--s-ink);
+  background: var(--s-yellow);
+  color: var(--s-ink);
+}
+
+[data-theme='simpson'] .version-option[aria-pressed='true'] .version-option-detail,
+[data-theme='simpson'] .version-option[aria-pressed='true'] .version-option-name::after {
+  color: var(--s-ink);
+}
+
+[data-theme='simpson'] .version-swatch {
+  border-color: var(--s-ink);
+}
+
+[data-theme='simpson'] .version-option:focus-visible,
+[data-theme='simpson'] .audio-switch:focus-visible,
+[data-theme='simpson'] .audio-volume-slider:focus-visible {
+  outline: 3px solid var(--s-orange);
+}
+
+[data-theme='simpson'] .audio-switch-track {
+  border: 2px solid var(--s-ink);
+  background: #c9ced8;
+}
+
+[data-theme='simpson'] .audio-switch-thumb {
+  top: 1px;
+  left: 1px;
+  border: 2px solid var(--s-ink);
+}
+
+[data-theme='simpson'] .audio-switch[aria-checked='true'] .audio-switch-track {
+  background: var(--s-green);
+}
+
+[data-theme='simpson'] .audio-volume-value {
+  color: var(--s-orange);
+}
+
+[data-theme='simpson'] .audio-volume-slider {
+  accent-color: var(--s-orange);
+}

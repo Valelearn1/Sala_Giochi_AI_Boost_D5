@@ -23,9 +23,17 @@
 
 /* ---------- Testi diversi a seconda del tema ---------- */
 
-/* <span class="only-8bit">Gioca</span><span class="only-grimorio">Apri il grimorio</span> */
+/* <span class="only-classica">Gioca</span><span class="only-anime">Apri grimorio</span><span class="only-simpson">Gioca!</span>
+   Ogni testo si vede solo nella sua versione. */
 [data-theme='anime'] .only-classica,
-:root:not([data-theme='anime']) .only-anime {
+[data-theme='simpson'] .only-classica,
+:root:not([data-theme='anime']) .only-anime,
+:root:not([data-theme='simpson']) .only-simpson {
+  display: none !important;
+}
+
+/* Testi uguali nella classica e nei Simpson, diversi solo nell'anime */
+[data-theme='anime'] .not-anime {
   display: none !important;
 }
 
@@ -663,6 +671,161 @@
 
 .icona {
   flex: none;
+}
+
+/* La barra in alto sta sopra il contenuto: i menu che si aprono da lì non finiscono sotto le carte */
+.topbar {
+  position: relative;
+  z-index: 30;
+}
+
+/* ---------- Menu delle versioni (creato da assets/tema.js) ----------
+   Si apre sotto il pulsante della versione (nei giochi) o sopra il pulsante fisso (pagina iniziale). */
+
+.version-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 60;
+  display: grid;
+  gap: 6px;
+  width: min(280px, calc(100vw - 32px));
+  padding: 12px;
+  border: 3px solid #ffffff;
+  background: #000000;
+  color: #ffffff;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  text-align: left;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.4);
+}
+
+/* Pagina iniziale: il menu sta sopra il pulsante fisso in basso a destra */
+.version-fab + .version-menu {
+  position: fixed;
+  top: auto;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: calc(max(16px, env(safe-area-inset-bottom)) + 64px);
+  z-index: 21;
+}
+
+.version-menu-title {
+  margin: 0 0 4px;
+  color: #c8d4ff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.version-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  padding: 8px 10px;
+  border: 2px solid transparent;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.version-option:hover {
+  background: rgb(255 255 255 / 0.1);
+}
+
+.version-option:focus-visible {
+  outline: 3px dashed #ffffff;
+  outline-offset: 2px;
+}
+
+/* La versione attiva: bordo d'oro e segno di spunta */
+.version-option[aria-pressed='true'] {
+  border-color: #f8b800;
+}
+
+.version-option[aria-pressed='true'] .version-option-name::after {
+  content: ' ✓';
+  color: #f8b800;
+}
+
+.version-option-texts {
+  display: grid;
+  gap: 1px;
+}
+
+.version-option-name {
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.version-option-detail {
+  color: #c8d4ff;
+  font-size: 0.8125rem;
+}
+
+/* Un'anteprima di colore per ogni versione */
+.version-swatch {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 2px solid #ffffff;
+}
+
+.version-swatch--classica {
+  background: linear-gradient(#5c94fc 0 62%, #c84c0c 62%);
+}
+
+.version-swatch--anime {
+  background:
+    radial-gradient(circle at 50% 50%, #ecc246 0 20%, transparent 22%),
+    linear-gradient(135deg, #b3122e, #151218);
+}
+
+/* Una ciambella: buco azzurro, glassa rosa, impasto giallo */
+.version-swatch--simpson {
+  border-radius: 50%;
+  background: radial-gradient(circle, #8fd3ff 0 20%, #f48fb1 22% 60%, #f4b860 62%);
+}
+
+[data-theme='anime'] .version-menu {
+  border: 0;
+  border-radius: var(--g-radius);
+  background: var(--g-surface-high);
+  color: var(--g-text);
+  font-family: var(--g-body);
+  box-shadow: var(--g-shadow), 0 12px 30px rgb(0 0 0 / 0.45);
+}
+
+[data-theme='anime'] .version-fab + .version-menu {
+  bottom: calc(var(--g-nav-height) + 16px + 64px + env(safe-area-inset-bottom));
+}
+
+[data-theme='anime'] .version-menu-title,
+[data-theme='anime'] .version-option-detail {
+  color: var(--g-text-soft);
+}
+
+[data-theme='anime'] .version-option {
+  border-radius: var(--g-radius-sm);
+}
+
+[data-theme='anime'] .version-option:hover {
+  background: var(--g-surface-highest);
+}
+
+[data-theme='anime'] .version-option[aria-pressed='true'] {
+  border-color: var(--g-gold);
+}
+
+[data-theme='anime'] .version-option[aria-pressed='true'] .version-option-name::after {
+  color: var(--g-gold);
+}
+
+[data-theme='anime'] .version-option:focus-visible {
+  outline: 2px solid var(--g-gold);
 }
 
 /* ---------- Pannello Audio (assets/pannello-audio.js) ----------

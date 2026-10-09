@@ -14,6 +14,7 @@
     <!-- La versione (classica o anime) va applicata prima di tutto il resto -->
     <script src="../assets/tema.js"></script>
     <link rel="stylesheet" href="../assets/temi.css" />
+    <link rel="stylesheet" href="../assets/simpson.css" />
     <link rel="stylesheet" href="style.css" />
     <!-- Versione anime: barra in alto, barra di navigazione e icone (come le schermate di Stitch) -->
     <script type="module" src="../assets/barre-anime.js"></script>
@@ -27,6 +28,7 @@
       <span class="topbar-name">
         <span class="only-classica">Regno dei Funghi</span>
         <span class="only-anime">Sfera Anti-Magia</span>
+        <span class="only-simpson">Centrale Nucleare</span>
       </span>
       <div class="topbar-actions">
         <!-- Modalità chiara / scura: l'icona mostra dove si va (luna = passa allo scuro) -->
@@ -70,10 +72,12 @@
         <h1 id="setup-title" class="title">
           <span class="only-classica">Regno dei<br />Funghi</span>
           <span class="only-anime">Sfera<br />Anti-Magia</span>
+          <span class="only-simpson">Centrale<br />Nucleare</span>
         </h1>
         <p class="tagline">
           <span class="only-classica">Flipper tra Super Funghi e monete: tre palline a testa, il punteggio più alto vince.</span>
           <span class="only-anime">Flipper arcano tra sigilli e rune: tre sfere a testa, il punteggio più alto vince.</span>
+          <span class="only-simpson">Flipper nella centrale di Springfield, tra ciambelle e barre di uranio: tre palline a testa, il punteggio più alto vince.</span>
         </p>
 
         <!-- Versione anime: scheda d'apertura nello stile delle schermate di Stitch -->
@@ -86,7 +90,7 @@
         <form id="setup-form" class="setup-form">
           <fieldset class="field">
             <legend class="field-label">
-              <span class="only-classica">Giocatori</span>
+              <span class="not-anime">Giocatori</span>
               <span class="field-head only-anime"><span data-icona="gruppo"></span> Numero di maghi</span>
             </legend>
             <div class="count-choices">
@@ -99,7 +103,7 @@
 
           <fieldset class="field">
             <legend class="field-label">
-              <span class="only-classica">Nomi <span class="field-hint">facoltativi</span></span>
+              <span class="not-anime">Nomi <span class="field-hint">facoltativi</span></span>
               <span class="field-head only-anime"><span data-icona="scudo"></span> Nomi dei maghi</span>
               <span class="field-extra only-anime">Facoltativi</span>
             </legend>

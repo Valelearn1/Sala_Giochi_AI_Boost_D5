@@ -1,19 +1,21 @@
 /*
  * VERSIONE DELLA SALA GIOCHI
  *
- * Un solo sito con due "vesti":
+ * Un solo sito con tre "vesti":
  * - "classica" (predefinita): Memory e flipper a tema Super Mario (platform 8-bit);
- * - "anime": Memory e flipper a tema anime (grimori, sigilli, cremisi e oro).
+ * - "anime": Memory e flipper a tema anime (grimori, sigilli, cremisi e oro);
+ * - "simpson": Memory e flipper a tema Simpson (Springfield, giallo e ciambelle).
  * Regole, turni e fisica sono gli stessi: cambia solo la grafica.
  *
  * Questo è uno script "classico" (non un modulo) caricato nel <head>:
  * così la versione viene applicata PRIMA che la pagina venga disegnata,
  * senza il lampeggio della grafica sbagliata.
  *
- * - La versione scelta sta sull'elemento <html> come data-theme="classica" o "anime";
- *   i fogli di stile usano [data-theme='anime'] per cambiare grafica.
+ * - La versione scelta sta sull'elemento <html> come data-theme="classica", "anime" o "simpson";
+ *   i fogli di stile usano [data-theme='anime'] e [data-theme='simpson'] per cambiare grafica.
  * - La scelta viene ricordata dal browser (localStorage).
- * - Ogni pulsante con l'attributo data-theme-toggle cambia versione al clic.
+ * - Ogni pulsante con l'attributo data-theme-toggle apre il menu delle versioni
+ *   (creato qui sotto, subito dopo il pulsante): si sceglie una delle tre.
  * - Quando la versione cambia, la pagina riceve l'evento "sala-tema" (per chi
  *   disegna con JavaScript, come il tavolo del flipper o le carte del Memory).
  *
@@ -26,15 +28,13 @@
 
 (function () {
   var STORAGE_KEY = 'sala-versione';
-  var THEMES = ['classica', 'anime'];
-  // Testo del pulsante: dice dove si va, non dove si è
-  var BUTTON_TEXT = {
-    classica: 'Prova la versione anime',
-    anime: 'Torna alla versione classica',
+  var THEMES = ['classica', 'anime', 'simpson'];
+  // Nome nel pulsante e nel menu, piccola descrizione e nome completo per gli screen reader
+  var THEME_INFO = {
+    classica: { name: 'Classica', detail: 'Super Mario · 8-bit', long: 'versione classica' },
+    anime: { name: 'Anime', detail: 'Black Clover · grimori', long: 'versione anime' },
+    simpson: { name: 'Simpson', detail: 'Springfield · ciambelle', long: 'versione Simpson' },
   };
-  // Testo corto per i pulsanti nella barra in alto dei giochi (data-theme-toggle="short")
-  var SHORT_TEXT = { classica: 'Anime', anime: 'Classica' };
-  var LONG_NAME = { classica: 'versione classica', anime: 'versione anime' };
 
   var MODE_KEY = 'sala-modo';
   var MODES = ['light', 'dark'];
@@ -71,21 +71,76 @@
     window.dispatchEvent(new CustomEvent('sala-tema', { detail: { theme: theme } }));
   }
 
+  /** Passa alla versione successiva (classica → anime → simpson → classica). */
   function toggleTheme() {
-    setTheme(getTheme() === 'anime' ? 'classica' : 'anime');
+    setTheme(THEMES[(THEMES.indexOf(getTheme()) + 1) % THEMES.length]);
   }
 
-  /** Aggiorna testo e stato di tutti i pulsanti di cambio versione. */
+  /** Aggiorna testo e stato dei pulsanti di cambio versione e dei loro menu. */
   function updateButtons(theme) {
+    var info = THEME_INFO[theme];
     var buttons = document.querySelectorAll('[data-theme-toggle]');
     for (var i = 0; i < buttons.length; i++) {
       var isShort = buttons[i].dataset.themeToggle === 'short';
       var label = buttons[i].querySelector('[data-theme-label]');
-      if (label) label.textContent = isShort ? SHORT_TEXT[theme] : BUTTON_TEXT[theme];
-      // Il pulsante corto ha bisogno di un nome completo per gli screen reader
-      if (isShort) buttons[i].setAttribute('aria-label', BUTTON_TEXT[theme] + ' (ora: ' + LONG_NAME[theme] + ')');
-      buttons[i].setAttribute('aria-pressed', String(theme === 'anime'));
+      if (label) label.textContent = isShort ? info.name : 'Versione: ' + info.name;
+      buttons[i].setAttribute('aria-label', 'Cambia versione della sala (ora: ' + info.long + ')');
     }
+    // Nel menu la versione attiva è "premuta"
+    var options = document.querySelectorAll('[data-theme-choice]');
+    for (var j = 0; j < options.length; j++) {
+      options[j].setAttribute('aria-pressed', String(options[j].dataset.themeChoice === theme));
+    }
+  }
+
+  // --- Menu delle versioni ----------------------------------------------
+
+  /** Crea il menu (nascosto) subito dopo ogni pulsante [data-theme-toggle]. */
+  function createMenus() {
+    var buttons = document.querySelectorAll('[data-theme-toggle]');
+    for (var i = 0; i < buttons.length; i++) {
+      var menu = document.createElement('div');
+      menu.className = 'version-menu';
+      menu.id = 'version-menu-' + i;
+      menu.hidden = true;
+      menu.setAttribute('role', 'group');
+      menu.setAttribute('aria-label', 'Scegli la versione della sala');
+      var html = '<p class="version-menu-title" aria-hidden="true">Scegli la versione</p>';
+      for (var j = 0; j < THEMES.length; j++) {
+        var info = THEME_INFO[THEMES[j]];
+        html +=
+          '<button type="button" class="version-option" data-theme-choice="' + THEMES[j] + '" aria-pressed="false">' +
+          '<span class="version-swatch version-swatch--' + THEMES[j] + '" aria-hidden="true"></span>' +
+          '<span class="version-option-texts"><span class="version-option-name">' + info.name + '</span>' +
+          '<span class="version-option-detail">' + info.detail + '</span></span></button>';
+      }
+      menu.innerHTML = html;
+      buttons[i].setAttribute('aria-expanded', 'false');
+      buttons[i].setAttribute('aria-controls', menu.id);
+      buttons[i].after(menu);
+    }
+  }
+
+  function closeMenus(returnFocusTo) {
+    var buttons = document.querySelectorAll('[data-theme-toggle]');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].setAttribute('aria-expanded', 'false');
+      var menu = document.getElementById(buttons[i].getAttribute('aria-controls'));
+      if (menu) menu.hidden = true;
+    }
+    if (returnFocusTo) returnFocusTo.focus();
+  }
+
+  function toggleMenu(button) {
+    var menu = document.getElementById(button.getAttribute('aria-controls'));
+    var wasOpen = menu && !menu.hidden;
+    closeMenus();
+    if (!menu || wasOpen) return;
+    menu.hidden = false;
+    button.setAttribute('aria-expanded', 'true');
+    // Il focus va sulla versione attiva, così da tastiera si sceglie subito
+    var current = menu.querySelector('[aria-pressed="true"]') || menu.querySelector('button');
+    if (current) current.focus();
   }
 
   // --- Modalità chiara / scura ------------------------------------------
@@ -157,11 +212,28 @@
 
   // Quando i pulsanti esistono, li colleghiamo
   document.addEventListener('DOMContentLoaded', function () {
+    createMenus();
     updateButtons(getTheme());
     updateModeButtons(getMode());
     document.addEventListener('click', function (event) {
-      if (event.target.closest('[data-theme-toggle]')) toggleTheme();
+      var toggle = event.target.closest('[data-theme-toggle]');
+      var choice = event.target.closest('[data-theme-choice]');
+      if (toggle) {
+        toggleMenu(toggle);
+      } else if (choice) {
+        var menu = choice.closest('.version-menu');
+        var owner = menu && document.querySelector('[aria-controls="' + menu.id + '"]');
+        if (choice.dataset.themeChoice !== getTheme()) setTheme(choice.dataset.themeChoice);
+        closeMenus(owner);
+      } else if (!event.target.closest('.version-menu')) {
+        closeMenus(); // clic fuori dal menu
+      }
       if (event.target.closest('[data-mode-toggle]')) toggleMode();
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key !== 'Escape') return;
+      var open = document.querySelector('[data-theme-toggle][aria-expanded="true"]');
+      if (open) closeMenus(open);
     });
   });
 

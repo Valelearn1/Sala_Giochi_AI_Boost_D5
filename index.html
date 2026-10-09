@@ -15,6 +15,7 @@
     <link rel="preload" href="assets/fonts/PressStart2P-Regular.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="stylesheet" href="assets/sala-giochi.css" />
     <link rel="stylesheet" href="assets/temi.css" />
+    <link rel="stylesheet" href="assets/simpson.css" />
     <link rel="stylesheet" href="style.css" />
     <!-- Versione anime: barra in alto, barra di navigazione e icone (come le schermate di Stitch) -->
     <script type="module" src="assets/barre-anime.js"></script>
@@ -41,6 +42,7 @@
       <header class="intro">
         <h1 class="title pixel-text">Sala<br /><span class="title-accent">giochi</span></h1>
         <p class="lead only-classica">Minigiochi da fare con gli amici, nel browser. Scegli un livello per iniziare.</p>
+        <p class="lead only-simpson">Benvenuti a Springfield! Minigiochi da fare con gli amici, nel browser. Scegli un gioco per iniziare.</p>
 
         <!-- Versione anime: scheda d'apertura come nella schermata "Arcane Hub" di Stitch -->
         <div class="anime-hero only-anime">
@@ -71,6 +73,8 @@
               <span class="cover-tag cover-tag--right"><span data-icona="fiamma" data-misura="14"></span> III foglie</span>
             </span>
             <span class="level-block level-block--gold only-classica" aria-hidden="true"></span>
+            <!-- Versione Simpson: una ciambella rosa -->
+            <span class="level-block level-block--donut only-simpson" aria-hidden="true"></span>
             <span class="level-text">
               <span class="level-meta only-anime">
                 <span class="anime-kicker"><span data-icona="bersaglio" data-misura="14"></span> Tattica e memoria</span>
@@ -78,10 +82,12 @@
               </span>
               <span class="level-title">
                 <span class="only-classica"><span class="level-world">1-1</span> Memory</span>
+                <span class="only-simpson">Memory di Springfield</span>
                 <span class="only-anime">Memory Arcano</span>
               </span>
               <span class="level-desc">
                 <span class="only-classica">Trova le coppie a turno. Da 2 a 4 giocatori sullo stesso dispositivo.</span>
+                <span class="only-simpson">Trova le coppie di abitanti di Springfield, a turno. Da 2 a 4 giocatori sullo stesso dispositivo.</span>
                 <span class="only-anime">Trova le coppie di personaggi a turno, passandovi lo stesso schermo.</span>
               </span>
               <!-- Record di questo dispositivo: lo scrive assets/sala.js, se c'è -->
@@ -93,7 +99,7 @@
               </span>
             </span>
             <span class="level-cta" aria-hidden="true">
-              <span class="only-classica">Gioca</span>
+              <span class="not-anime">Gioca</span>
               <span class="only-anime">▷ Apri grimorio</span>
               <svg class="pixel-icon icona-classica" viewBox="0 0 6 8" width="9" height="12">
                 <path fill="currentColor" d="M1 0h1v1h1v1h1v1h1v2h-1v1h-1v1h-1v1H1z" />
@@ -109,6 +115,8 @@
               <span class="cover-tag cover-tag--emerald">Alba Dorata</span>
               <span class="cover-tag cover-tag--right"><span data-icona="scintilla" data-misura="14"></span> Runico</span>
             </span>
+            <!-- Versione Simpson: il simbolo della centrale nucleare -->
+            <span class="level-block level-block--nuclear only-simpson" aria-hidden="true"></span>
             <span class="level-block level-block--mushroom only-classica" aria-hidden="true">
               <!-- Super Fungo in pixel: cappello rosso a pois, gambo color crema -->
               <svg class="pixel-icon" viewBox="0 0 10 8" width="40" height="32">
@@ -125,10 +133,12 @@
               </span>
               <span class="level-title">
                 <span class="only-classica"><span class="level-world">1-2</span> Regno dei Funghi</span>
+                <span class="only-simpson">Centrale Nucleare</span>
                 <span class="only-anime">Sfera Anti-Magia</span>
               </span>
               <span class="level-desc">
                 <span class="only-classica">Flipper a turni tra Super Funghi e monete: tre palline a testa, da 1 a 4 giocatori.</span>
+                <span class="only-simpson">Flipper a turni nella centrale di Springfield, tra ciambelle e barre di uranio: tre palline a testa.</span>
                 <span class="only-anime">Flipper arcano: fai rimbalzare la sfera sui sigilli magici e accendi le tre rune.</span>
               </span>
               <span class="level-best" data-record="flipper" hidden></span>
@@ -138,7 +148,7 @@
               </span>
             </span>
             <span class="level-cta" aria-hidden="true">
-              <span class="only-classica">Gioca</span>
+              <span class="not-anime">Gioca</span>
               <span class="only-anime">▷ Lancia sfera</span>
               <svg class="pixel-icon icona-classica" viewBox="0 0 6 8" width="9" height="12">
                 <path fill="currentColor" d="M1 0h1v1h1v1h1v1h1v2h-1v1h-1v1h-1v1H1z" />

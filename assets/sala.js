@@ -48,6 +48,13 @@ function iconaTubo() {
   return blocco;
 }
 
+/** Versione Simpson: un vecchio televisore, "un gioco da un altro canale". */
+function iconaTv() {
+  const blocco = elemento('span', 'level-block level-block--tv only-simpson', '📺');
+  blocco.setAttribute('aria-hidden', 'true');
+  return blocco;
+}
+
 function copertinaAnime() {
   const copertina = elemento('span', 'grimoire-cover grimoire-cover--crimson only-anime');
   copertina.setAttribute('aria-hidden', 'true');
@@ -79,9 +86,9 @@ function creaScheda(gioco, numero) {
 
   const invito = elemento('span', 'level-cta');
   invito.setAttribute('aria-hidden', 'true');
-  invito.append(elemento('span', 'only-classica', 'Gioca'), elemento('span', 'only-anime', '▷ Apri grimorio'));
+  invito.append(elemento('span', 'not-anime', 'Gioca'), elemento('span', 'only-anime', '▷ Apri grimorio'));
 
-  link.append(copertinaAnime(), iconaTubo(), testi, invito);
+  link.append(copertinaAnime(), iconaTubo(), iconaTv(), testi, invito);
   voce.append(link);
   return voce;
 }
