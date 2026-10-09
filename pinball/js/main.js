@@ -56,6 +56,7 @@ const input = createInput({
   touchArea: elements.tableWrap,
   launchButton: elements.launchButton,
   pauseButton: elements.pauseButton,
+  flipperButtons: document.querySelectorAll('[data-flipper]'),
   onLaunchStart: () => {
     chargeStartedAt = performance.now();
   },

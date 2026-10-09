@@ -9,6 +9,7 @@
  * Tastiera: Z o ← = aletta sinistra, M o → = aletta destra,
  *           Spazio tenuto = carica, P = pausa.
  * Touch: metà sinistra / destra del tavolo = alette, pulsante "Lancia", pulsante pausa.
+ * Versione anime: anche i pulsanti "Flipper SX / DX" sotto il tavolo ([data-flipper]).
  */
 
 const LEFT_KEYS = ['KeyZ', 'ArrowLeft'];
@@ -19,11 +20,12 @@ const RIGHT_KEYS = ['KeyM', 'ArrowRight'];
  * @param {HTMLElement} options.touchArea - zona dove i tocchi azionano le alette
  * @param {HTMLElement} options.launchButton
  * @param {HTMLElement} [options.pauseButton]
+ * @param {Iterable<HTMLElement>} [options.flipperButtons] - pulsanti con data-flipper="left|right"
  * @param {() => void} options.onLaunchStart - inizio della carica
  * @param {() => void} options.onLaunchRelease - rilascio: lancio
  * @param {() => void} options.onPause
  */
-export function createInput({ touchArea, launchButton, pauseButton, onLaunchStart, onLaunchRelease, onPause }) {
+export function createInput({ touchArea, launchButton, pauseButton, flipperButtons = [], onLaunchStart, onLaunchRelease, onPause }) {
   // Lo stato che legge la fisica a ogni passo
   const controls = { left: false, right: false };
   let enabled = false;
@@ -93,6 +95,20 @@ export function createInput({ touchArea, launchButton, pauseButton, onLaunchStar
   };
   touchArea.addEventListener('pointerup', releasePointer);
   touchArea.addEventListener('pointercancel', releasePointer);
+
+  // Pulsanti "Flipper SX / DX": come un dito sulla metà del tavolo
+  for (const button of flipperButtons) {
+    const side = button.dataset.flipper;
+    button.addEventListener('pointerdown', (event) => {
+      if (!enabled) return;
+      event.preventDefault(); // niente zoom o selezione con tocchi veloci
+      activePointers.set(event.pointerId, side);
+      controls[side] = true;
+      capturePointer(button, event.pointerId);
+    });
+    button.addEventListener('pointerup', releasePointer);
+    button.addEventListener('pointercancel', releasePointer);
+  }
 
   // --- Pulsanti ------------------------------------------------------------
 

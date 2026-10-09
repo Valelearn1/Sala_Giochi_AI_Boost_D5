@@ -15,11 +15,13 @@
     <script src="../assets/tema.js"></script>
     <link rel="stylesheet" href="../assets/temi.css" />
     <link rel="stylesheet" href="style.css" />
+    <!-- Versione anime: barra in alto, barra di navigazione e icone (come le schermate di Stitch) -->
+    <script type="module" src="../assets/barre-anime.js"></script>
     <!-- Matter.js (fisica) in locale: script classico, deve venire prima del modulo -->
     <script src="lib/matter.min.js"></script>
     <script type="module" src="js/main.js"></script>
   </head>
-  <body>
+  <body data-pagina="flipper" data-titolo-anime="Sfera Anti-Magia" data-radice="../">
     <header class="topbar">
       <a class="back-link" href="../">‹ Tutti i giochi</a>
       <span class="topbar-name">
@@ -35,6 +37,8 @@
           <svg class="mode-icon-sun" viewBox="0 0 10 10" width="16" height="16" aria-hidden="true" shape-rendering="crispEdges">
             <path fill="currentColor" d="M4 3h2v1h1v2H6v1H4V6H3V4h1zM4 0h2v2H4zM4 8h2v2H4zM0 4h2v2H0zM8 4h2v2H8zM1 1h1v1H1zM8 1h1v1H8zM1 8h1v1H1zM8 8h1v1H8z" />
           </svg>
+          <span class="icona-anime icona-luna" data-icona="luna"></span>
+          <span class="icona-anime icona-sole" data-icona="sole"></span>
           <span class="mode-word" data-mode-label>Scuro</span>
         </button>
         <!-- Cambia versione della sala: classica (Super Mario) o anime -->
@@ -42,6 +46,7 @@
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
             <path fill="currentColor" d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9zM19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" />
           </svg>
+          <span class="icona-anime" data-icona="scintilla" data-misura="18"></span>
           <span data-theme-label>Anime</span>
         </button>
         <!-- Audio: spento all'avvio. aria-pressed dice agli screen reader se è acceso -->
@@ -51,6 +56,8 @@
             <path class="sound-waves" fill="currentColor" d="M8 3h1v4H8zM10 1h1v8h-1z" />
             <path class="sound-mute" fill="currentColor" d="M8 3h1v1H8zM10 3h1v1h-1zM9 4h1v2H9zM8 6h1v1H8zM10 6h1v1h-1z" />
           </svg>
+          <span class="icona-anime icona-audio" data-icona="audio"></span>
+          <span class="icona-anime icona-muto" data-icona="muto"></span>
           <span class="sound-word">Audio</span>
           <span class="sound-state" aria-hidden="true"></span>
         </button>
@@ -69,9 +76,19 @@
           <span class="only-anime">Flipper arcano tra sigilli e rune: tre sfere a testa, il punteggio più alto vince.</span>
         </p>
 
+        <!-- Versione anime: scheda d'apertura nello stile delle schermate di Stitch -->
+        <div class="setup-hero only-anime">
+          <span class="anime-chip"><span data-icona="bacchetta" data-misura="14"></span> Arena runica</span>
+          <p class="setup-hero-title" aria-hidden="true">Sfera Anti-Magia</p>
+          <p class="setup-hero-text">Fai rimbalzare la sfera sui sigilli magici: tre sfere a testa, il punteggio più alto vince.</p>
+        </div>
+
         <form id="setup-form" class="setup-form">
           <fieldset class="field">
-            <legend class="field-label">Giocatori</legend>
+            <legend class="field-label">
+              <span class="only-classica">Giocatori</span>
+              <span class="field-head only-anime"><span data-icona="gruppo"></span> Numero di maghi</span>
+            </legend>
             <div class="count-choices">
               <label class="choice"><input type="radio" name="player-count" value="1" checked /><span>1</span></label>
               <label class="choice"><input type="radio" name="player-count" value="2" /><span>2</span></label>
@@ -81,7 +98,11 @@
           </fieldset>
 
           <fieldset class="field">
-            <legend class="field-label">Nomi <span class="field-hint">facoltativi</span></legend>
+            <legend class="field-label">
+              <span class="only-classica">Nomi <span class="field-hint">facoltativi</span></span>
+              <span class="field-head only-anime"><span data-icona="scudo"></span> Nomi dei maghi</span>
+              <span class="field-extra only-anime">Facoltativi</span>
+            </legend>
             <div class="names">
               <label class="name-field" data-player="0">
                 <span class="player-dot" aria-hidden="true"></span>
@@ -106,7 +127,11 @@
             </div>
           </fieldset>
 
-          <button type="submit" class="button button--primary button--large">Inizia la partita</button>
+          <button type="submit" class="button button--primary button--large start-button">
+            <span class="only-anime" data-icona="bacchetta" data-misura="22"></span>
+            <span>Inizia la partita</span>
+            <span class="only-anime" data-icona="freccia" data-misura="22"></span>
+          </button>
         </form>
 
         <dl class="controls-help">
@@ -146,7 +171,20 @@
           </div>
         </div>
 
+        <!-- Versione anime: due grandi pulsanti per le alette, come nella schermata Stitch -->
+        <div class="flipper-buttons only-anime">
+          <button type="button" class="flipper-button flipper-button--left" data-flipper="left" aria-label="Aletta sinistra">
+            <span data-icona="indietro" data-misura="26"></span>
+            <span class="flipper-button-text">Flipper <strong>SX</strong></span>
+          </button>
+          <button type="button" class="flipper-button flipper-button--right" data-flipper="right" aria-label="Aletta destra">
+            <span class="flipper-button-text">Flipper <strong>DX</strong></span>
+            <span data-icona="freccia" data-misura="26"></span>
+          </button>
+        </div>
+
         <aside id="hud" class="hud" aria-label="Pannello di gioco">
+          <span class="hud-avatar only-anime" data-icona="persona" data-misura="24"></span>
           <div class="hud-current">
             <span class="hud-label">Di turno</span>
             <strong id="hud-player" class="hud-player"></strong>
@@ -154,7 +192,17 @@
           </div>
           <div class="hud-multiplier" aria-label="Moltiplicatore">
             <span class="hud-label">Molt.</span>
+            <span class="hud-multiplier-word only-anime" aria-hidden="true">Moltiplicatore</span>
             <strong id="hud-multiplier">×1</strong>
+          </div>
+          <!-- Versione anime: punteggio grande di chi gioca e sfere rimaste -->
+          <div class="hud-arcane only-anime" aria-hidden="true">
+            <span class="hud-arcane-label">Punteggio arcano</span>
+            <strong id="hud-score" class="hud-arcane-score">0</strong>
+            <span class="hud-mana">
+              <span class="hud-arcane-label hud-arcane-label--emerald">Sfere rimaste</span>
+              <span id="hud-mana" class="hud-mana-dots"></span>
+            </span>
           </div>
           <ol id="hud-scores" class="hud-scores" aria-label="Punteggi"></ol>
           <p id="message" class="message" role="status" aria-live="polite"></p>
@@ -165,13 +213,21 @@
 
       <!-- SCHERMATA 3: classifica -->
       <section id="results-screen" class="screen screen--results" aria-labelledby="results-title" hidden>
+        <span class="anime-chip results-pill only-anime"><span data-icona="trofeo" data-misura="14"></span> Fine duello arcano • Flipper</span>
         <h2 id="results-title" class="results-title" tabindex="-1"></h2>
         <p id="results-summary" class="results-summary"></p>
         <ol id="ranking" class="ranking"></ol>
         <div class="results-actions">
-          <button type="button" id="replay-button" class="button button--primary button--large">Rigioca</button>
-          <button type="button" id="settings-button" class="button button--ghost">Cambia impostazioni</button>
+          <button type="button" id="replay-button" class="button button--primary button--large">
+            <span class="only-anime" data-icona="rigioca" data-misura="20"></span>
+            Rigioca
+          </button>
+          <button type="button" id="settings-button" class="button button--ghost">
+            <span class="only-anime" data-icona="bacchetta" data-misura="20"></span>
+            Cambia impostazioni
+          </button>
         </div>
+        <a class="results-home only-anime" href="../"><span data-icona="gamepad" data-misura="18"></span> Torna alla sala giochi</a>
       </section>
     </main>
   </body>

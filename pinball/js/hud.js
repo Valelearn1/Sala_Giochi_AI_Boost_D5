@@ -17,6 +17,9 @@ const elements = {
   player: $('#hud-player'),
   ball: $('#hud-ball'),
   multiplier: $('#hud-multiplier'),
+  // Versione anime: punteggio grande e pallini delle sfere rimaste
+  currentScore: $('#hud-score'),
+  mana: $('#hud-mana'),
   scores: $('#hud-scores'),
   message: $('#message'),
   hud: $('#hud'),
@@ -71,6 +74,10 @@ export function renderHud(match, multiplier) {
   elements.player.textContent = current.name;
   elements.ball.textContent = `Pallina ${getBallNumber(match)}/${match.ballsPerPlayer}`;
   elements.multiplier.textContent = `×${multiplier}`;
+  elements.currentScore.textContent = formatScore(current.score);
+  // Un pallino per sfera: acceso se la sfera è ancora da giocare (compresa quella in gioco)
+  elements.mana.innerHTML = Array.from({ length: match.ballsPerPlayer }, (_, index) =>
+    `<span class="hud-mana-dot${index < current.ballsLeft ? ' is-full' : ''}"></span>`).join('');
 
   const items = match.players.map((player, index) => {
     const item = document.createElement('li');
