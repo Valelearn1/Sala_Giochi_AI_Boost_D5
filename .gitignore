@@ -1,0 +1,5 @@
+# File di sistema di macOS
+.DS_Store
+
+# Schermate temporanee delle revisioni grafiche (impeccable)
+.impeccable/review/
