@@ -128,9 +128,10 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
       drawEngravedClover(c);
     } else if (theme.decor === 'platform') {
       drawHillsAndClouds(c);
-    } else {
+    } else if (theme.decor === 'sonar') {
       drawSonarRings(c);
     }
+    // decor 'none': nessuna decorazione (lo sfondo lo disegna chi usa il renderer)
     drawTableName(c);
     if (theme.decor === 'sonar') drawDepthMarks(c); // tacche di profondità: solo nel tema abissi
     drawWalls(c);
