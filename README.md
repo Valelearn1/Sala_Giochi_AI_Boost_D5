@@ -9,6 +9,29 @@ Minigiochi da fare con gli amici, nel browser, passandosi lo stesso telefono o c
 
 ---
 
+## ▶️ Come giocare (compagni, partite da qui!)
+
+> 🌐 **Sito online:** https://valelearn1.github.io/Sala_Giochi_AI_Boost_D5/
+>
+> ⚠️ Per ora Chrome mostra un avviso rosso "sito pericoloso": Google ha segnalato **tutto** l'account `valelearn1.github.io` per vecchi progetti, non per questo. Finché l'avviso non viene tolto, usate uno dei due modi qui sotto.
+
+**1️⃣ Scaricate la repo**
+
+```bash
+git clone https://github.com/Valelearn1/Sala_Giochi_AI_Boost_D5.git
+```
+
+**2️⃣ Apritela con un piccolo server locale** (il doppio clic su `index.html` non basta: il browser blocca i moduli JavaScript aperti da `file://`)
+
+| | Modo | Cosa fare |
+| --- | --- | --- |
+| 🅰️ | **VS Code** (senza terminale) | Aprite la cartella `Sala_Giochi_AI_Boost_D5` in VS Code → installate l'estensione **Live Server** (di Ritwick Dey) → tasto destro su `index.html` → **Open with Live Server** |
+| 🅱️ | **Terminale** | `cd Sala_Giochi_AI_Boost_D5` e poi `python3 -m http.server 8000` → aprite http://localhost:8000 |
+
+💡 È tutto **HTML, CSS e JavaScript**: Python o Live Server servono solo ad aprire i file nel browser, non fanno parte del gioco. Con Node.js va bene anche `npx serve .`.
+
+---
+
 ## 🗺️ Mappa del mondo
 
 | Livello | Gioco | ⭐ Versione classica | ✨ Versione anime |
@@ -192,11 +215,7 @@ PLAYING ──(2ª carta diversa)──► CHECKING ──(endTurn)──► PLA
 
 ## 🎮 Premi START: avviarlo in locale
 
-Il codice usa gli **ES modules**, che i browser bloccano se apri `index.html` con un doppio clic (`file://`). Serve un piccolo server statico:
-
-- 🧩 **VS Code + Live Server**: clic destro su `index.html` → *Open with Live Server*;
-- 🟩 **Node.js**: `npx serve .` e apri l'indirizzo che compare (di solito http://localhost:3000);
-- 🐍 **Python**: `python3 -m http.server 8000` e apri http://localhost:8000.
+Le istruzioni passo passo sono all'inizio, nella sezione **▶️ Come giocare**: servono la repo scaricata e un piccolo server locale (VS Code + Live Server, `python3 -m http.server 8000` oppure `npx serve .`).
 
 ### 🧪 Test
 
@@ -216,6 +235,8 @@ node strumenti/verifica.js --tutti
 3. Dopo un paio di minuti il sito è su `https://<nome-utente>.github.io/<nome-repo>/`.
 
 Ogni push su `main` aggiorna il sito. Tutti i percorsi sono relativi, quindi funzionano anche dentro `/<nome-repo>/`.
+
+🛡️ **Se Chrome dice "sito pericoloso"**: Google Safe Browsing segnala l'intero dominio `<nome-utente>.github.io`, quindi un solo vecchio progetto (per esempio il clone di un sito famoso con una pagina di login) blocca anche quelli nuovi. Per toglierlo: spegni Pages sui progetti che imitano siti reali (Settings → Pages → Source → None), registra `https://<nome-utente>.github.io/` su Google Search Console e in **Problemi di sicurezza** chiedi una revisione.
 
 ⚠️ Un sito GitHub Pages è **pubblico**, anche se la repo è privata: le immagini e i suoni dei personaggi, se li aggiungi, tienili solo in locale (vedi i `LEGGIMI.md` in `assets/`).
 
