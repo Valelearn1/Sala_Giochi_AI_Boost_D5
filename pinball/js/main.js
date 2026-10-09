@@ -9,6 +9,8 @@
 import * as layout from './config/table-layout.js';
 import { PHYSICS } from './config/physics-config.js';
 import { THEME } from './config/theme.js';
+import { RULES } from './config/rules-config.js';
+import { createBallState, applyHit, endOfBallBonus } from './rules.js';
 import { createPhysics } from './physics.js';
 import { createRenderer } from './render.js';
 import { createInput } from './input.js';
@@ -25,7 +27,13 @@ const physics = createPhysics({ layout, config: PHYSICS, onEvent: handlePhysicsE
 const renderer = createRenderer({ canvas: elements.canvas, layout, theme: THEME });
 
 let paused = false;
+let ballState = newBallState(); // regole della pallina in gioco
+let score = 0; // fase 2: un solo punteggio, i giocatori arrivano nella fase 3
 let chargeStartedAt = null; // momento in cui è iniziata la carica del lanciatore
+
+function newBallState() {
+  return createBallState({ laneCount: layout.TOP_LANES.length, targetCount: layout.TARGETS.length });
+}
 
 const input = createInput({
   touchArea: elements.tableWrap,
@@ -49,10 +57,27 @@ function currentCharge() {
 
 function handlePhysicsEvent(event) {
   if (event.type === 'drain') {
-    // Fase 1: gioco libero, la pallina riappare nel lanciatore
-    elements.message.textContent = 'Pallina persa';
+    const { bonus } = endOfBallBonus(ballState, RULES);
+    score += bonus;
+    showMessage(`Pallina persa · bonus ${bonus} · totale ${score}`);
+    ballState = newBallState(); // il moltiplicatore si azzera
+    physics.resetTargets();
     setTimeout(() => physics.spawnBall(), 800);
+    return;
   }
+
+  // Un elemento colpito: punti, lampeggio ed eventuale messaggio
+  const result = applyHit(ballState, event, RULES);
+  score += result.points;
+  renderer.flash(event.type, event.id);
+  if (result.resetTargets) {
+    setTimeout(() => physics.resetTargets(), RULES.targetResetMs);
+  }
+  showMessage(result.message ?? `${score} punti · ×${ballState.multiplier}`);
+}
+
+function showMessage(text) {
+  elements.message.textContent = text;
 }
 
 function togglePause() {
@@ -78,7 +103,7 @@ function frame(now) {
     }
   }
 
-  renderer.draw(physics.getSnapshot(), { charge: currentCharge() });
+  renderer.draw(physics.getSnapshot(), { charge: currentCharge(), lanesLit: ballState.lanesLit });
   requestAnimationFrame(frame);
 }
 
@@ -99,7 +124,7 @@ document.addEventListener('visibilitychange', () => {
 
 // Con "?debug" nell'indirizzo, fisica e comandi sono raggiungibili dalla console del browser
 if (new URLSearchParams(location.search).has('debug')) {
-  window.pinballDebug = { physics, input, PHYSICS, layout };
+  window.pinballDebug = { physics, input, PHYSICS, layout, getScore: () => score, getBallState: () => ballState };
 }
 
 physics.spawnBall();

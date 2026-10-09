@@ -10,7 +10,7 @@
 
 import { Matter } from './matter.js';
 
-const { Engine, Bodies, Body, Composite, Events, Vector, Vertices } = Matter;
+const { Engine, Bodies, Body, Bounds, Composite, Events, Vector, Vertices } = Matter;
 
 // "Categorie" di collisione: servono per accendere e spegnere elementi
 const CATEGORY_DEFAULT = 0x0001;
@@ -36,16 +36,29 @@ export function createPhysics({ layout, config, onEvent }) {
     plugin: { kind: 'drain' },
   });
 
+  const bumpers = layout.BUMPERS.map((data) => createBumper(data, config));
+  const slingshots = layout.SLINGSHOTS.map((data) => createSlingshot(data, config));
+  const targets = layout.TARGETS.map((data) => createTarget(data, config));
+  const sensors = [
+    ...layout.TOP_LANES.map((data) => createSensor(data, 'lane')),
+    ...layout.OUTLANES.map((data) => createSensor(data, 'outlane')),
+  ];
+
   Composite.add(engine.world, [
     ...layout.WALLS.flatMap((wall) => createWall(wall, config)),
     createPlunger(layout.SHOOTER, config),
     shooterGate,
     drain,
     ...flippers.map((flipper) => flipper.body),
+    ...bumpers,
+    ...slingshots.map((slingshot) => slingshot.body),
+    ...targets,
+    ...sensors,
   ]);
 
   let ball = null;
   let stillMs = 0; // da quanto tempo la pallina è (quasi) ferma
+  let targetsWaitingToRise = false; // bersagli da rialzare appena la pallina non c'è sopra
 
   Events.on(engine, 'collisionStart', (event) => {
     for (const pair of event.pairs) {
@@ -55,13 +68,53 @@ export function createPhysics({ layout, config, onEvent }) {
   });
 
   function handleBallCollision(body) {
-    const { kind, id } = body.plugin ?? {};
+    const { kind, id, points } = body.plugin ?? {};
+
     if (kind === 'drain') {
       removeBall();
       onEvent({ type: 'drain' });
+    } else if (kind === 'bumper') {
+      kickAwayFrom(body.position, config.bumperKick);
+      onEvent({ type: 'bumper', id, points });
+    } else if (kind === 'slingshot') {
+      // Spinge solo il lato "attivo", quello rivolto verso il centro del tavolo
+      const slingshot = slingshots.find((item) => item.body === body);
+      if (isOnActiveEdge(slingshot, ball.position, config.ballRadius)) {
+        Body.setVelocity(ball, Vector.mult(slingshot.normal, config.slingshotKick));
+        onEvent({ type: 'slingshot', id, points });
+      }
+    } else if (kind === 'target' && !body.plugin.isDown) {
+      setTargetDown(body, true);
+      onEvent({ type: 'target', id, points });
+    } else if (kind === 'lane' || kind === 'outlane') {
+      onEvent({ type: kind, id, points });
     }
-    // Gli altri elementi (bumper, bersagli…) arrivano nella fase 2
-    void id;
+  }
+
+  /** Respinge la pallina lontano da un punto (il centro del bumper). */
+  function kickAwayFrom(point, speed) {
+    const direction = Vector.normalise(Vector.sub(ball.position, point));
+    Body.setVelocity(ball, Vector.mult(direction, speed));
+  }
+
+  // --- Bersagli ------------------------------------------------------------
+
+  function setTargetDown(target, down) {
+    target.plugin.isDown = down;
+    target.collisionFilter.mask = down ? COLLIDE_WITH_NOTHING : COLLIDE_WITH_ALL;
+  }
+
+  /** Rialza tutti i bersagli (appena la pallina non ci sta sopra, per non intrappolarla). */
+  function resetTargets() {
+    targetsWaitingToRise = true;
+  }
+
+  function raiseWaitingTargets() {
+    const blocked = ball && targets.some((target) => Bounds.overlaps(target.bounds, ball.bounds));
+    if (!blocked) {
+      targets.forEach((target) => setTargetDown(target, false));
+      targetsWaitingToRise = false;
+    }
   }
 
   // --- Pallina -----------------------------------------------------------
@@ -115,6 +168,8 @@ export function createPhysics({ layout, config, onEvent }) {
     }
 
     Engine.update(engine, config.stepMs);
+
+    if (targetsWaitingToRise) raiseWaitingTargets();
 
     if (ball) {
       updateShooterGate();
@@ -176,6 +231,7 @@ export function createPhysics({ layout, config, onEvent }) {
       ball: ball ? { x: ball.position.x, y: ball.position.y, radius: config.ballRadius } : null,
       flippers: flippers.map((flipper) => ({ id: flipper.id, vertices: flipper.body.vertices })),
       gateClosed: isGateClosed(),
+      targetsDown: targets.map((target) => target.plugin.isDown),
     };
   }
 
@@ -185,6 +241,7 @@ export function createPhysics({ layout, config, onEvent }) {
     spawnBall,
     removeBall,
     launch,
+    resetTargets,
     isBallInShooterLane,
     hasBall: () => ball !== null,
     getBall: () => ball,
@@ -217,6 +274,64 @@ function createWall(wall, config) {
   }
 
   return bodies;
+}
+
+/** Bumper: cerchio fisso che respinge la pallina (la spinta è in handleBallCollision). */
+function createBumper(data, config) {
+  return Bodies.circle(data.x, data.y, data.radius, {
+    isStatic: true,
+    restitution: config.bumperRestitution,
+    plugin: { kind: 'bumper', id: data.id, points: data.points },
+  });
+}
+
+/**
+ * Slingshot: triangolo fisso. Ci serve anche la "normale" del lato attivo (a → c):
+ * la direzione, perpendicolare al lato, in cui viene spinta la pallina.
+ */
+function createSlingshot(data, config) {
+  const a = { x: data.a[0], y: data.a[1] };
+  const b = { x: data.b[0], y: data.b[1] };
+  const c = { x: data.c[0], y: data.c[1] };
+  const center = Vertices.centre([a, b, c]);
+
+  let normal = Vector.normalise(Vector.perp(Vector.sub(c, a)));
+  // La normale deve puntare FUORI dal triangolo, cioè lontano dal suo centro
+  if (Vector.dot(normal, Vector.sub(center, a)) > 0) normal = Vector.neg(normal);
+
+  // Attenzione: fromVertices riordina e sposta i vertici che riceve,
+  // quindi gli passiamo delle copie e teniamo a, c e la normale calcolati prima
+  const body = Bodies.fromVertices(center.x, center.y, [[{ ...a }, { ...b }, { ...c }]], {
+    isStatic: true,
+    restitution: config.slingshotRestitution,
+    plugin: { kind: 'slingshot', id: data.id, points: data.points },
+  });
+
+  return { body, a, c, normal };
+}
+
+/** Vero se la pallina tocca il lato attivo dello slingshot (e non gli altri due lati). */
+function isOnActiveEdge(slingshot, ballPosition, ballRadius) {
+  const distanceFromEdge = Vector.dot(Vector.sub(ballPosition, slingshot.a), slingshot.normal);
+  return distanceFromEdge > ballRadius * 0.5;
+}
+
+/** Bersaglio abbattibile: rettangolo che, colpito, smette di urtare la pallina. */
+function createTarget(data, config) {
+  return Bodies.rectangle(data.x, data.y, data.width, data.height, {
+    isStatic: true,
+    restitution: config.targetRestitution,
+    plugin: { kind: 'target', id: data.id, points: data.points, isDown: false },
+  });
+}
+
+/** Sensore: la pallina lo attraversa senza urtarlo, ma noi sappiamo che è passata. */
+function createSensor(data, kind) {
+  return Bodies.rectangle(data.x, data.y, data.width, data.height, {
+    isStatic: true,
+    isSensor: true,
+    plugin: { kind, id: data.id, points: data.points },
+  });
 }
 
 /** Il pistone: il "pavimento" della corsia di lancio su cui appoggia la pallina. */
