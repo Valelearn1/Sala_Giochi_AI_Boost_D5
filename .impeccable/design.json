@@ -1,0 +1,1061 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-09T12:56:16.325Z",
+  "title": "Design System: Sala giochi",
+  "extensions": {
+    "colorMeta": {
+      "sky": {
+        "role": "neutral",
+        "displayName": "Cielo NES",
+        "canonical": "#5c94fc",
+        "tonalRamp": [
+          "#000038",
+          "#001c5d",
+          "#013595",
+          "#2357b9",
+          "#457ce1",
+          "#6c9ffe",
+          "#abc8fc",
+          "#e7effd"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Inchiostro Notte",
+        "canonical": "#0b1238",
+        "tonalRamp": [
+          "#03052a",
+          "#172047",
+          "#313d67",
+          "#4e5b88",
+          "#6f7ead",
+          "#90a0d1",
+          "#b5c6f9",
+          "#e9eefc"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Inchiostro Tenue",
+        "canonical": "#1d2a66",
+        "tonalRamp": [
+          "#030035",
+          "#121b56",
+          "#2a3a77",
+          "#465999",
+          "#677cc0",
+          "#879ee4",
+          "#b2c5fd",
+          "#e9eefe"
+        ]
+      },
+      "panel": {
+        "role": "neutral",
+        "displayName": "Riquadro Nero",
+        "canonical": "#000000",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#808080",
+          "#a1a1a1",
+          "#c7c7c7",
+          "#eeeeee"
+        ]
+      },
+      "panel-text": {
+        "role": "neutral",
+        "displayName": "Bianco Riquadro",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#808080",
+          "#a1a1a1",
+          "#c7c7c7",
+          "#eeeeee"
+        ]
+      },
+      "panel-muted": {
+        "role": "neutral",
+        "displayName": "Lavanda Secondaria",
+        "canonical": "#c8d4ff",
+        "tonalRamp": [
+          "#050724",
+          "#1a2141",
+          "#353d60",
+          "#525b80",
+          "#747ea5",
+          "#94a0c8",
+          "#bac5f0",
+          "#e9eefd"
+        ]
+      },
+      "brick": {
+        "role": "tertiary",
+        "displayName": "Mattone",
+        "canonical": "#c84c0c",
+        "tonalRamp": [
+          "#1d0200",
+          "#421200",
+          "#6d2502",
+          "#9d3801",
+          "#d05319",
+          "#f77743",
+          "#fdb397",
+          "#ffe9e1"
+        ]
+      },
+      "brick-light": {
+        "role": "tertiary",
+        "displayName": "Mattone Luce",
+        "canonical": "#fc9838",
+        "tonalRamp": [
+          "#170700",
+          "#381c01",
+          "#5f3304",
+          "#894c09",
+          "#bb6807",
+          "#e8851d",
+          "#feb579",
+          "#feeadc"
+        ]
+      },
+      "brick-dark": {
+        "role": "tertiary",
+        "displayName": "Mattone Ombra",
+        "canonical": "#6e2600",
+        "tonalRamp": [
+          "#1c0300",
+          "#411401",
+          "#6d2500",
+          "#904525",
+          "#b76848",
+          "#dc8968",
+          "#fdb395",
+          "#ffe9e1"
+        ]
+      },
+      "gold": {
+        "role": "secondary",
+        "displayName": "Oro Moneta",
+        "canonical": "#f8b800",
+        "tonalRamp": [
+          "#120900",
+          "#302100",
+          "#523b04",
+          "#785701",
+          "#a37800",
+          "#cc980e",
+          "#fcbb10",
+          "#feecca"
+        ]
+      },
+      "gold-light": {
+        "role": "secondary",
+        "displayName": "Oro Moneta Luce",
+        "canonical": "#ffe08a",
+        "tonalRamp": [
+          "#110a00",
+          "#2d2302",
+          "#4f3d00",
+          "#725a06",
+          "#9a7d21",
+          "#bc9e48",
+          "#e3c46f",
+          "#feeec1"
+        ]
+      },
+      "gold-dark": {
+        "role": "secondary",
+        "displayName": "Oro Moneta Ombra",
+        "canonical": "#b05800",
+        "tonalRamp": [
+          "#190500",
+          "#3b1900",
+          "#633004",
+          "#904701",
+          "#be651b",
+          "#e48744",
+          "#fdb586",
+          "#fcebdf"
+        ]
+      },
+      "pipe": {
+        "role": "tertiary",
+        "displayName": "Verde Tubo",
+        "canonical": "#00a800",
+        "tonalRamp": [
+          "#001000",
+          "#002e00",
+          "#004f00",
+          "#057204",
+          "#0b9c09",
+          "#35c130",
+          "#64e95d",
+          "#ccffc7"
+        ]
+      },
+      "pipe-light": {
+        "role": "tertiary",
+        "displayName": "Verde Tubo Luce",
+        "canonical": "#8ce048",
+        "tonalRamp": [
+          "#030f00",
+          "#132b00",
+          "#264b00",
+          "#3b6d04",
+          "#529504",
+          "#69ba0c",
+          "#8ee24a",
+          "#d2ffb6"
+        ]
+      },
+      "pipe-dark": {
+        "role": "tertiary",
+        "displayName": "Verde Tubo Ombra",
+        "canonical": "#004a00",
+        "tonalRamp": [
+          "#001000",
+          "#002e00",
+          "#064e05",
+          "#2e6e2a",
+          "#52924d",
+          "#73b56e",
+          "#99dc93",
+          "#ccffc7"
+        ]
+      },
+      "used-block": {
+        "role": "secondary",
+        "displayName": "Blocco Usato",
+        "canonical": "#b4581e",
+        "tonalRamp": [
+          "#1a0400",
+          "#3f1600",
+          "#672c03",
+          "#944205",
+          "#c0632b",
+          "#e5854f",
+          "#feb38c",
+          "#ffeadf"
+        ]
+      },
+      "card-front": {
+        "role": "neutral",
+        "displayName": "Crema Carta",
+        "canonical": "#fff1cc",
+        "tonalRamp": [
+          "#110a00",
+          "#2e2302",
+          "#4a3f1f",
+          "#695d3c",
+          "#8c7f5e",
+          "#aea17e",
+          "#d4c6a3",
+          "#fceec9"
+        ]
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "Rosso Cappello Premuto",
+        "canonical": "#c8141e",
+        "tonalRamp": [
+          "#200000",
+          "#4c0003",
+          "#7b040c",
+          "#b10716",
+          "#e13735",
+          "#ff6b61",
+          "#feb0a8",
+          "#fde9e7"
+        ]
+      },
+      "player-0": {
+        "role": "primary",
+        "displayName": "Rosso Cappello (giocatore 1)",
+        "canonical": "#e4202a",
+        "tonalRamp": [
+          "#200000",
+          "#4b0105",
+          "#7c010d",
+          "#b20116",
+          "#e8262e",
+          "#fe6c64",
+          "#fdb1a9",
+          "#ffe9e6"
+        ]
+      },
+      "player-1": {
+        "role": "secondary",
+        "displayName": "Verde Cappello (giocatore 2)",
+        "canonical": "#12a838",
+        "tonalRamp": [
+          "#001001",
+          "#002e07",
+          "#044e15",
+          "#037222",
+          "#0b9b32",
+          "#39bf50",
+          "#67e776",
+          "#caffcc"
+        ]
+      },
+      "player-2": {
+        "role": "secondary",
+        "displayName": "Viola Cappello (giocatore 3)",
+        "canonical": "#8a3ffc",
+        "tonalRamp": [
+          "#10002b",
+          "#2d005f",
+          "#4e019c",
+          "#700cdb",
+          "#9050fe",
+          "#aa89fe",
+          "#cbbcfe",
+          "#efecfd"
+        ]
+      },
+      "player-3": {
+        "role": "secondary",
+        "displayName": "Arancio Cappello (giocatore 4)",
+        "canonical": "#ff7a00",
+        "tonalRamp": [
+          "#190500",
+          "#3d1700",
+          "#662e03",
+          "#934402",
+          "#c65f08",
+          "#f87707",
+          "#ffb489",
+          "#fdeae0"
+        ]
+      },
+      "underground-panel": {
+        "role": "neutral",
+        "displayName": "Riquadro Sotterraneo",
+        "canonical": "#10183c",
+        "tonalRamp": [
+          "#040628",
+          "#172145",
+          "#323d65",
+          "#4e5b85",
+          "#707eab",
+          "#91a0ce",
+          "#b6c6f6",
+          "#e9eefc"
+        ]
+      },
+      "underground-brick": {
+        "role": "tertiary",
+        "displayName": "Mattone Sotterraneo",
+        "canonical": "#1c6cb4",
+        "tonalRamp": [
+          "#000b1f",
+          "#002547",
+          "#014175",
+          "#065fa6",
+          "#3884ce",
+          "#5ba6f3",
+          "#9eccfd",
+          "#e5f0fc"
+        ]
+      },
+      "underground-brick-light": {
+        "role": "tertiary",
+        "displayName": "Mattone Sotterraneo Luce",
+        "canonical": "#6cc4ff",
+        "tonalRamp": [
+          "#000d1a",
+          "#00273e",
+          "#004468",
+          "#016495",
+          "#2b88c0",
+          "#52abe4",
+          "#8dd0ff",
+          "#e0f1fe"
+        ]
+      },
+      "underground-brick-dark": {
+        "role": "tertiary",
+        "displayName": "Mattone Sotterraneo Ombra",
+        "canonical": "#062a50",
+        "tonalRamp": [
+          "#000a21",
+          "#012449",
+          "#1e4169",
+          "#3c608a",
+          "#5e83af",
+          "#7ea5d3",
+          "#a3cbfb",
+          "#e5f0fc"
+        ]
+      },
+      "underground-score-border": {
+        "role": "neutral",
+        "displayName": "Bordo Punteggi Sotterraneo",
+        "canonical": "#34449a",
+        "tonalRamp": [
+          "#040034",
+          "#121166",
+          "#273489",
+          "#4254ac",
+          "#6279d4",
+          "#829bf9",
+          "#b4c5fd",
+          "#e9eefd"
+        ]
+      },
+      "g-bg": {
+        "role": "neutral",
+        "displayName": "Fondo Tomo",
+        "canonical": "#151218",
+        "tonalRamp": [
+          "#0d0a0f",
+          "#262229",
+          "#413e45",
+          "#5f5c63",
+          "#827e86",
+          "#a49fa8",
+          "#c9c5ce",
+          "#f1ecf5"
+        ]
+      },
+      "g-surface-lowest": {
+        "role": "neutral",
+        "displayName": "Superficie Più Bassa",
+        "canonical": "#0f0d12",
+        "tonalRamp": [
+          "#0c0a0f",
+          "#252328",
+          "#413e45",
+          "#5f5c63",
+          "#817f86",
+          "#a3a0a7",
+          "#c9c6cd",
+          "#f0edf5"
+        ]
+      },
+      "g-surface-low": {
+        "role": "neutral",
+        "displayName": "Superficie Bassa",
+        "canonical": "#1d1b20",
+        "tonalRamp": [
+          "#0c0a0f",
+          "#252328",
+          "#413e44",
+          "#5f5c62",
+          "#817f85",
+          "#a3a0a7",
+          "#c8c6cd",
+          "#f0edf4"
+        ]
+      },
+      "g-surface": {
+        "role": "neutral",
+        "displayName": "Superficie",
+        "canonical": "#211f24",
+        "tonalRamp": [
+          "#0c0a0f",
+          "#252328",
+          "#413f44",
+          "#5f5c62",
+          "#817f85",
+          "#a3a0a7",
+          "#c8c6cd",
+          "#f0edf4"
+        ]
+      },
+      "g-surface-high": {
+        "role": "neutral",
+        "displayName": "Superficie Alta",
+        "canonical": "#2c292f",
+        "tonalRamp": [
+          "#0c0a0f",
+          "#262328",
+          "#413e45",
+          "#5f5c63",
+          "#827e86",
+          "#a3a0a7",
+          "#c9c5cd",
+          "#f0ecf5"
+        ]
+      },
+      "g-surface-highest": {
+        "role": "neutral",
+        "displayName": "Superficie Più Alta",
+        "canonical": "#373439",
+        "tonalRamp": [
+          "#0d0a0e",
+          "#262327",
+          "#413e43",
+          "#5f5c62",
+          "#827f84",
+          "#a3a0a6",
+          "#c9c6cc",
+          "#f1edf3"
+        ]
+      },
+      "g-text": {
+        "role": "neutral",
+        "displayName": "Testo Pergamena",
+        "canonical": "#e7e0e8",
+        "tonalRamp": [
+          "#0e090e",
+          "#272228",
+          "#433e44",
+          "#615b62",
+          "#847e85",
+          "#a59fa6",
+          "#cbc5cc",
+          "#f3ecf4"
+        ]
+      },
+      "g-text-soft": {
+        "role": "neutral",
+        "displayName": "Pergamena Rosata",
+        "canonical": "#e3bebd",
+        "tonalRamp": [
+          "#1a0405",
+          "#361b1b",
+          "#543736",
+          "#745454",
+          "#987676",
+          "#bb9797",
+          "#e2bdbc",
+          "#fde9e8"
+        ]
+      },
+      "g-muted": {
+        "role": "neutral",
+        "displayName": "Pergamena Spenta",
+        "canonical": "#b99a99",
+        "tonalRamp": [
+          "#190405",
+          "#351c1c",
+          "#533737",
+          "#735554",
+          "#977776",
+          "#ba9897",
+          "#e1bebc",
+          "#fce9e9"
+        ]
+      },
+      "g-line": {
+        "role": "neutral",
+        "displayName": "Filo Bruno",
+        "canonical": "#5b4040",
+        "tonalRamp": [
+          "#180505",
+          "#341c1d",
+          "#523838",
+          "#725555",
+          "#967877",
+          "#b89998",
+          "#dfbebe",
+          "#fee9e8"
+        ]
+      },
+      "g-crimson": {
+        "role": "secondary",
+        "displayName": "Cremisi",
+        "canonical": "#b3122e",
+        "tonalRamp": [
+          "#1f0002",
+          "#4a010c",
+          "#7c001a",
+          "#af092b",
+          "#da414d",
+          "#fd6b70",
+          "#ffafad",
+          "#fee9e8"
+        ]
+      },
+      "g-crimson-hover": {
+        "role": "secondary",
+        "displayName": "Cremisi Acceso",
+        "canonical": "#cf1a3a",
+        "tonalRamp": [
+          "#1f0002",
+          "#4a010d",
+          "#7c001c",
+          "#af092d",
+          "#e13349",
+          "#fd6b72",
+          "#ffafae",
+          "#fee9e8"
+        ]
+      },
+      "g-crimson-soft": {
+        "role": "secondary",
+        "displayName": "Cremisi Tenue",
+        "canonical": "#ffb3b3",
+        "tonalRamp": [
+          "#1f0002",
+          "#460a12",
+          "#67292c",
+          "#894749",
+          "#af6a6b",
+          "#d38b8b",
+          "#fcb0b0",
+          "#fee8e8"
+        ]
+      },
+      "g-gold": {
+        "role": "primary",
+        "displayName": "Oro Grimorio",
+        "canonical": "#ecc246",
+        "tonalRamp": [
+          "#110a00",
+          "#2e2200",
+          "#4f3d01",
+          "#735a08",
+          "#9c7c0b",
+          "#c59c00",
+          "#ecc246",
+          "#feedc1"
+        ]
+      },
+      "g-gold-hover": {
+        "role": "primary",
+        "displayName": "Oro Grimorio Acceso",
+        "canonical": "#ffd45e",
+        "tonalRamp": [
+          "#110a00",
+          "#2e2200",
+          "#4f3d05",
+          "#745a01",
+          "#9e7b00",
+          "#c59c0e",
+          "#ecc24a",
+          "#feedc3"
+        ]
+      },
+      "g-gold-deep": {
+        "role": "primary",
+        "displayName": "Oro Grimorio Profondo",
+        "canonical": "#cea62c",
+        "tonalRamp": [
+          "#110a00",
+          "#2e2200",
+          "#4f3d03",
+          "#745a00",
+          "#9c7c0f",
+          "#c49c1c",
+          "#ebc24f",
+          "#feedc2"
+        ]
+      },
+      "g-on-gold": {
+        "role": "neutral",
+        "displayName": "Inchiostro su Oro",
+        "canonical": "#241a00",
+        "tonalRamp": [
+          "#110a00",
+          "#2d2306",
+          "#493f22",
+          "#685d3f",
+          "#8b7f61",
+          "#ada181",
+          "#d3c6a6",
+          "#fbeecc"
+        ]
+      },
+      "g-emerald": {
+        "role": "tertiary",
+        "displayName": "Smeraldo",
+        "canonical": "#4edf91",
+        "tonalRamp": [
+          "#001004",
+          "#012c17",
+          "#064d2b",
+          "#017040",
+          "#13985b",
+          "#1dbf73",
+          "#57e798",
+          "#c6ffd9"
+        ]
+      },
+      "g-emerald-deep": {
+        "role": "tertiary",
+        "displayName": "Smeraldo Profondo",
+        "canonical": "#00b56b",
+        "tonalRamp": [
+          "#001005",
+          "#002d16",
+          "#004d2b",
+          "#047041",
+          "#03995a",
+          "#20bf74",
+          "#59e699",
+          "#c6feda"
+        ]
+      },
+      "anime-player-0": {
+        "role": "primary",
+        "displayName": "Corallo (giocatore 1, anime)",
+        "canonical": "#ff5a6e",
+        "tonalRamp": [
+          "#200003",
+          "#4a0010",
+          "#7a0422",
+          "#af0534",
+          "#de3953",
+          "#fd6a78",
+          "#ffaeb1",
+          "#ffe8e8"
+        ]
+      },
+      "anime-player-1": {
+        "role": "tertiary",
+        "displayName": "Smeraldo (giocatore 2, anime)",
+        "canonical": "#4edf91",
+        "tonalRamp": [
+          "#001004",
+          "#012c17",
+          "#064d2b",
+          "#017040",
+          "#13985b",
+          "#1dbf73",
+          "#57e798",
+          "#c6ffd9"
+        ]
+      },
+      "anime-player-2": {
+        "role": "primary",
+        "displayName": "Oro (giocatore 3, anime)",
+        "canonical": "#ecc246",
+        "tonalRamp": [
+          "#110a00",
+          "#2e2200",
+          "#4f3d01",
+          "#735a08",
+          "#9c7c0b",
+          "#c59c00",
+          "#ecc246",
+          "#feedc1"
+        ]
+      },
+      "anime-player-3": {
+        "role": "secondary",
+        "displayName": "Lilla (giocatore 4, anime)",
+        "canonical": "#b9a7ff",
+        "tonalRamp": [
+          "#0f002c",
+          "#290c59",
+          "#442e7a",
+          "#614d9d",
+          "#8370c4",
+          "#a492e8",
+          "#c9bdfd",
+          "#efecfe"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display pixel",
+        "purpose": "Titolo della sala e del Memory (classica): bianco con contorno nero e ombra mattone."
+      },
+      "headline": {
+        "displayName": "Titolo grande pixel",
+        "purpose": "Classifica e banda \"Tocca a …\" (classica)."
+      },
+      "title": {
+        "displayName": "Titolo scheda pixel",
+        "purpose": "Titoli delle schede gioco nella pagina iniziale (classica)."
+      },
+      "label": {
+        "displayName": "Etichetta pixel",
+        "purpose": "Pulsanti, punteggi, toggle (classica)."
+      },
+      "body": {
+        "displayName": "Testo di sistema",
+        "purpose": "Sottotitoli, stati, nomi (classica)."
+      },
+      "anime-display": {
+        "displayName": "Display Syne",
+        "purpose": "Titoli di pagina nella versione anime, maiuscoli."
+      },
+      "anime-title": {
+        "displayName": "Titolo Syne",
+        "purpose": "Titoli delle schede grimorio."
+      },
+      "anime-button": {
+        "displayName": "Pulsante Syne",
+        "purpose": "Pulsanti e toggle anime."
+      },
+      "anime-body": {
+        "displayName": "Testo Plus Jakarta Sans",
+        "purpose": "Testo corrente anime."
+      },
+      "anime-label": {
+        "displayName": "Etichetta Plus Jakarta Sans",
+        "purpose": "Etichette piccole maiuscole, es. \"Punti\"."
+      }
+    },
+    "shadows": [
+      {
+        "name": "bevel-button",
+        "value": "inset 3px 3px 0 rgb(255 255 255 / 0.45), inset -3px -3px 0 rgb(0 0 0 / 0.35)",
+        "purpose": "Smusso dei pulsanti primari classici; alla pressione si inverte."
+      },
+      {
+        "name": "bevel-block",
+        "value": "inset 4px 4px 0 var(--gold-light), inset -4px -4px 0 var(--gold-dark)",
+        "purpose": "Blocchi \"?\", blocco scelto, vincitore (classica)."
+      },
+      {
+        "name": "float-classic",
+        "value": "inset 3px 3px 0 rgb(255 255 255 / 0.45), inset -3px -3px 0 rgb(0 0 0 / 0.35), 0 8px 20px rgb(0 0 0 / 0.35)",
+        "purpose": "Solo il pulsante fisso di versione (classica)."
+      },
+      {
+        "name": "canvas-classic",
+        "value": "0 0 0 3px #000000, 0 12px 30px rgb(0 0 0 / 0.3)",
+        "purpose": "Cornice del tavolo del flipper (classica)."
+      },
+      {
+        "name": "glow-crimson",
+        "value": "0 8px 22px rgb(179 18 46 / 0.4)",
+        "purpose": "Scelta selezionata del numero di giocatori (anime)."
+      },
+      {
+        "name": "halo-turn",
+        "value": "0 0 0 4px rgb(236 194 70 / 0.12)",
+        "purpose": "Punteggio del giocatore di turno (anime)."
+      },
+      {
+        "name": "glow-match",
+        "value": "0 0 18px color-mix(in srgb, var(--player) 35%, transparent)",
+        "purpose": "Carta abbinata (anime)."
+      },
+      {
+        "name": "float-anime",
+        "value": "0 10px 28px rgb(0 0 0 / 0.5)",
+        "purpose": "Pulsante fisso di versione (anime)."
+      },
+      {
+        "name": "banner-anime",
+        "value": "0 20px 50px rgb(0 0 0 / 0.6)",
+        "purpose": "Banda \"Tocca a …\" (anime)."
+      },
+      {
+        "name": "canvas-anime",
+        "value": "0 0 0 1px var(--g-line), 0 18px 50px rgb(0 0 0 / 0.6)",
+        "purpose": "Cornice del tavolo del flipper (anime)."
+      }
+    ],
+    "motion": [
+      {
+        "name": "press-classic",
+        "value": "transform 80ms steps(2)",
+        "purpose": "Pressione dei pulsanti classici."
+      },
+      {
+        "name": "lift-classic",
+        "value": "translate 120ms steps(3)",
+        "purpose": "Sollevamento di schede e blocchi (classica)."
+      },
+      {
+        "name": "block-bump",
+        "value": "260ms cubic-bezier(0.3, 0.7, 0.4, 1)",
+        "purpose": "Sobbalzo del blocco colpito."
+      },
+      {
+        "name": "card-flip",
+        "value": "420ms cubic-bezier(0.2, 0.7, 0.3, 1)",
+        "purpose": "Rotazione 3D della carta (--flip-duration)."
+      },
+      {
+        "name": "coin-pop",
+        "value": "720ms cubic-bezier(0.2, 0.8, 0.3, 1)",
+        "purpose": "Moneta (o trifoglio) che salta fuori a ogni coppia."
+      },
+      {
+        "name": "turn-banner",
+        "value": "1500ms ease",
+        "purpose": "Apertura e chiusura della banda di turno."
+      },
+      {
+        "name": "press-anime",
+        "value": "transform 100ms ease, background-color 150ms ease",
+        "purpose": "Pulsanti anime; pressione scale(0.98)."
+      },
+      {
+        "name": "grimoire-hover",
+        "value": "rotate 200ms ease, translate 200ms ease",
+        "purpose": "Il grimorio della scheda si raddrizza e sale."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "max-width: 480px"
+      },
+      {
+        "name": "pinball-stack",
+        "value": "max-width: 760px"
+      },
+      {
+        "name": "phone-landscape",
+        "value": "(orientation: landscape) and (max-height: 520px)"
+      },
+      {
+        "name": "clouds",
+        "value": "min-width: 1100px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Pulsante primario (classica)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Azione principale della versione classica: blocco rosso con smusso pixel.",
+      "html": "<button class=\"ds-btn-primary\">Inizia</button>",
+      "css": ".ds-btn-primary { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:12px 22px; border:3px solid #000; border-radius:0; background:#e4202a; color:#fff; font-family:'Press Start 2P', ui-monospace, monospace; font-size:0.875rem; line-height:1.2; text-transform:uppercase; text-shadow:2px 2px 0 rgb(0 0 0 / 0.5); box-shadow:inset 3px 3px 0 rgb(255 255 255 / 0.45), inset -3px -3px 0 rgb(0 0 0 / 0.35); cursor:pointer; transition:transform 80ms steps(2); } .ds-btn-primary:hover { background:#c8141e; } .ds-btn-primary:active { transform:translateY(3px); box-shadow:inset 3px 3px 0 rgb(0 0 0 / 0.35), inset -3px -3px 0 rgb(255 255 255 / 0.2); } .ds-btn-primary:focus-visible { outline:3px dashed #fff; outline-offset:4px; }"
+    },
+    {
+      "name": "Pulsante secondario (classica)",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Riquadro nero con bordo bianco, senza smusso.",
+      "html": "<button class=\"ds-btn-secondary\">Menu</button>",
+      "css": ".ds-btn-secondary { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:12px 22px; border:3px solid #fff; border-radius:0; background:#000; color:#fff; font-family:'Press Start 2P', ui-monospace, monospace; font-size:0.875rem; text-transform:uppercase; cursor:pointer; } .ds-btn-secondary:hover { background:#1b1b1b; } .ds-btn-secondary:focus-visible { outline:3px dashed #fff; outline-offset:4px; }"
+    },
+    {
+      "name": "Pulsante primario (anime)",
+      "kind": "button",
+      "refersTo": "button-primary-anime",
+      "description": "Azione principale anime: oro con inchiostro scuro.",
+      "html": "<button class=\"ds-btn-gold\">Gioca ancora</button>",
+      "css": ".ds-btn-gold { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:12px 22px; border:0; border-radius:12px; background:#ecc246; color:#241a00; font-family:'Syne', 'Plus Jakarta Sans', system-ui, sans-serif; font-weight:800; font-size:0.875rem; letter-spacing:0.04em; text-transform:uppercase; cursor:pointer; transition:transform 100ms ease, background-color 150ms ease; } .ds-btn-gold:hover { background:#ffd45e; } .ds-btn-gold:active { transform:scale(0.98); } .ds-btn-gold:focus-visible { outline:3px solid #ecc246; outline-offset:3px; }"
+    },
+    {
+      "name": "Pulsante Inizia (anime)",
+      "kind": "button",
+      "refersTo": "button-start-anime",
+      "description": "Avvio della partita nel Memory anime: cremisi, alto 64px.",
+      "html": "<button class=\"ds-btn-crimson\">Inizia</button>",
+      "css": ".ds-btn-crimson { display:inline-flex; align-items:center; justify-content:center; min-height:64px; min-width:280px; padding:16px 32px; border:0; border-radius:12px; background:#b3122e; color:#fff; font-family:'Syne', 'Plus Jakarta Sans', system-ui, sans-serif; font-weight:800; font-size:1.125rem; letter-spacing:0.04em; text-transform:uppercase; cursor:pointer; transition:transform 100ms ease, background-color 150ms ease; } .ds-btn-crimson:hover { background:#cf1a3a; } .ds-btn-crimson:active { transform:scale(0.98); } .ds-btn-crimson:focus-visible { outline:3px solid #ecc246; outline-offset:3px; }"
+    },
+    {
+      "name": "Campo nome (classica)",
+      "kind": "input",
+      "refersTo": "name-field",
+      "description": "Campo nero con cappello del colore del giocatore.",
+      "html": "<label class=\"ds-name\"><span class=\"ds-cap\"></span><input placeholder=\"Giocatore 1\" /></label>",
+      "css": ".ds-name { display:flex; align-items:center; gap:10px; padding:0 12px; background:#000; border:3px solid #fff; --player:#e4202a; } .ds-name:focus-within { border-color:var(--player); outline:3px dashed #fff; outline-offset:3px; } .ds-cap { flex:none; width:14px; height:14px; background:var(--player); box-shadow:inset -3px -3px 0 rgb(0 0 0 / 0.35); } .ds-name input { width:100%; padding:13px 0; border:0; background:none; color:#fff; font:600 1rem system-ui, sans-serif; outline:none; } .ds-name input::placeholder { color:#a8a8b8; }"
+    },
+    {
+      "name": "Campo nome (anime)",
+      "kind": "input",
+      "refersTo": "name-field-anime",
+      "description": "Campo sulla superficie più bassa, bordo sottile, pallino rotondo.",
+      "html": "<label class=\"ds-name-g\"><span class=\"ds-dot\"></span><input placeholder=\"Giocatore 1\" /></label>",
+      "css": ".ds-name-g { display:flex; align-items:center; gap:10px; padding:0 12px; background:#0f0d12; border:1px solid #5b4040; border-radius:12px; --player:#ff5a6e; } .ds-name-g:focus-within { border-color:var(--player); } .ds-dot { flex:none; width:14px; height:14px; border-radius:50%; background:var(--player); } .ds-name-g input { width:100%; padding:13px 0; border:0; background:none; color:#e7e0e8; font:600 1rem 'Plus Jakarta Sans', system-ui, sans-serif; outline:none; } .ds-name-g input::placeholder { color:#b99a99; }"
+    },
+    {
+      "name": "Toggle versione",
+      "kind": "nav",
+      "refersTo": "button-secondary",
+      "description": "Pulsante corto nella barra in alto dei giochi; dice dove si va.",
+      "html": "<button class=\"ds-toggle\" aria-pressed=\"false\">Anime</button>",
+      "css": ".ds-toggle { display:inline-flex; align-items:center; gap:8px; min-height:40px; padding:6px 12px; border:3px solid #fff; background:#000; color:#fff; font-family:'Press Start 2P', ui-monospace, monospace; font-size:0.75rem; text-transform:uppercase; cursor:pointer; } .ds-toggle:hover { background:#1b1b1b; } .ds-toggle:focus-visible { outline:3px dashed #fff; outline-offset:4px; }"
+    },
+    {
+      "name": "Punteggio di turno (classica)",
+      "kind": "chip",
+      "refersTo": "score-chip",
+      "description": "Riquadro del giocatore; quello di turno si riempie del suo colore e sale.",
+      "html": "<ul class=\"ds-scores\"><li class=\"ds-score is-current\"><span class=\"ds-cap\"></span>Anna<b>×3</b></li><li class=\"ds-score\" style=\"--player:#12a838\"><span class=\"ds-cap\"></span>Luca<b>×1</b></li></ul>",
+      "css": ".ds-scores { display:flex; gap:8px; padding:6px 0 0; margin:0; list-style:none; } .ds-score { --player:#e4202a; display:flex; align-items:center; gap:8px; padding:8px 12px; background:#000; border:3px solid #000; color:#fff; font:700 1rem system-ui, sans-serif; transition:translate 150ms steps(3); } .ds-score b { font-family:'Press Start 2P', ui-monospace, monospace; font-weight:400; font-size:0.875rem; } .ds-score.is-current { background:var(--player); border-color:#fff; translate:0 -4px; text-shadow:2px 2px 0 rgb(0 0 0 / 0.45); } .ds-score .ds-cap { width:14px; height:14px; background:var(--player); } .ds-score.is-current .ds-cap { background:#fff; }"
+    },
+    {
+      "name": "Carta del Memory (classica)",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "Dorso: blocco \"?\" d'oro con rivetti e smusso.",
+      "html": "<button class=\"ds-block\" aria-label=\"Carta coperta\"></button>",
+      "css": ".ds-block { width:96px; aspect-ratio:1; padding:0; border:3px solid #000; background:linear-gradient(#b05800 0 0) 9% 9% / 10% 10% no-repeat, linear-gradient(#b05800 0 0) 91% 9% / 10% 10% no-repeat, linear-gradient(#b05800 0 0) 9% 91% / 10% 10% no-repeat, linear-gradient(#b05800 0 0) 91% 91% / 10% 10% no-repeat, #f8b800; box-shadow:inset 4px 4px 0 #ffe08a, inset -4px -4px 0 #b05800; cursor:pointer; transition:translate 120ms steps(3); } .ds-block::after { content:'?'; font-family:'Press Start 2P', ui-monospace, monospace; font-size:42px; line-height:1; color:#fff6dc; text-shadow:0.09em 0.09em 0 #b05800; } .ds-block:hover { translate:0 -4px; } .ds-block:focus-visible { outline:3px dashed #fff; outline-offset:4px; }"
+    },
+    {
+      "name": "Carta del Memory (anime)",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "Dorso: grimorio scuro con il trifoglio d'oro originale.",
+      "html": "<button class=\"ds-grimoire\" aria-label=\"Carta coperta\"></button>",
+      "css": ".ds-grimoire { width:96px; aspect-ratio:1; padding:0; border:2px solid #3b3236; border-radius:12px; background:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 47q7 24-5 45' fill='none' stroke='%23ecc246' stroke-width='5' stroke-linecap='round'/%3E%3Cg fill='%23ecc246' stroke='%237a5d0c' stroke-width='2'%3E%3Cpath id='f' d='M50 47C31 41 25 18 39 13c7-2 11 4 11 9 0-5 4-11 11-9 14 5 8 28-11 34z'/%3E%3Cuse href='%23f' transform='rotate(120 50 47)'/%3E%3Cuse href='%23f' transform='rotate(240 50 47)'/%3E%3C/g%3E%3Ccircle cx='50' cy='47' r='4' fill='%237a5d0c'/%3E%3C/svg%3E\") center / 50% no-repeat, linear-gradient(160deg, #2c292f, #1a171d); cursor:pointer; } .ds-grimoire:hover { border-color:#ecc246; } .ds-grimoire:focus-visible { outline:3px solid #ecc246; outline-offset:3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Una sala, due cartucce",
+    "overview": "La Sala giochi è un solo sito con la stessa impaginazione, lo stesso markup e la stessa logica, che si può \"inserire\" in due cartucce grafiche. La **versione classica** (predefinita) è un livello di un platform a 8 bit: cielo NES pieno, terreno di mattoni, blocchi \"?\" d'oro, tubi verdi, lettering pixel bianco con contorno nero, riquadri neri con bordo bianco, angoli vivi e smussi pixel. La **versione anime** è un'arena di grimori su fondo scuro a puntini: cremisi, oro e smeraldo, titoli larghi in Syne 800, superfici arrotondate a gradini tonali, grimori con un trifoglio d'oro disegnato a mano. Entrambe servono lo stesso scopo: si capisce a colpo d'occhio, anche da un metro, di chi è il turno.\n\nLa versione attiva vive su `<html data-theme=\"classica|anime\">`, scritta da `assets/tema.js` prima del primo disegno e ricordata in `localStorage` (`sala-versione`). Ogni regola anime è un override dietro `[data-theme='anime']`; la classica è la base senza selettore. I testi che cambiano tra le versioni usano coppie `.only-classica` / `.only-anime`. Il flipper riceve l'evento `sala-tema` e ridisegna il tavolo con un tema canvas diverso (`THEME_PLATFORM` \"Regno dei Funghi\", `THEME_ANIME` \"Sfera Anti-Magia\").\n\nLa densità è da gioco su telefono tenuto in mano: bersagli da almeno 40–48px, pochi elementi per schermata, il tavolo/la griglia sempre interi nell'altezza dello schermo. Tutti i disegni (nuvole, mattoni, moneta, trifoglio, sigillo) sono SVG scritti a mano nei CSS o disegnati sul canvas: nessuna immagine da scaricare.",
+    "keyCharacteristics": [
+      "Due vesti sullo stesso markup, scelte dall'utente e persistite; classica predefinita.",
+      "Classica: angoli vivi, bordi 3px, smussi inset al posto delle ombre, Press Start 2P con contorno nero.",
+      "Anime: fondo #151218 a puntini dorati, scala di superfici tonali, raggi 12–16px, Syne 800 + Plus Jakarta Sans.",
+      "Colore del giocatore come segnale principale del turno, in entrambe le versioni.",
+      "Tutto vettoriale e locale; font self-hosted in `assets/fonts` (OFL).",
+      "\"Riduci movimento\" rispettato ovunque."
+    ],
+    "rules": [
+      {
+        "name": "The Player Color Rule",
+        "body": "Il colore del giocatore è il segnale del turno e della proprietà: riempie il punteggio di turno (classica), colora il pallino/cappello, il bordo del campo nome a fuoco, la fascia del nome sulle coppie trovate e il bordo della banda \"Tocca a …\". Non va usato come decorazione generica.",
+        "section": "colors"
+      },
+      {
+        "name": "The Gold Ink Rule",
+        "body": "Nella versione anime il testo su oro è g-on-gold (#241a00) e su cremisi è bianco; l'oro come colore del testo è riservato a punti, selezione e titoli d'accento (\"giochi\" nel titolo della sala).",
+        "section": "colors"
+      },
+      {
+        "name": "The One Hook Rule",
+        "body": "Ogni differenza visiva tra le versioni passa da `[data-theme='anime']` sugli stessi elementi; i colori anime si leggono solo dalle variabili `--g-*` di `assets/temi.css`.",
+        "section": "colors"
+      },
+      {
+        "name": "The Pixel Outline Rule",
+        "body": "Press Start 2P su sfondo libero è sempre bianco, maiuscolo, con contorno nero su quattro lati più un'ombra spostata (`.pixel-text`); non si usa per paragrafi.",
+        "section": "typography"
+      },
+      {
+        "name": "The Weight Is the Voice Rule",
+        "body": "Nella versione anime display e pulsanti stanno a 800; non introdurre pesi intermedi per i titoli.",
+        "section": "typography"
+      },
+      {
+        "name": "The Bevel Not Blur Rule",
+        "body": "Nella classica la profondità è uno smusso inset o uno spostamento verticale; le ombre sfocate restano limitate al pulsante fisso e alla cornice del canvas.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Tonal Ladder Rule",
+        "body": "Nell'anime una superficie selezionata o di turno sale a g-surface-highest e prende il bordo oro; a riposo è g-surface-high senza bordo visibile.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** costruire ogni nuova schermata sul markup comune e aggiungere la versione anime solo con override `[data-theme='anime']` e variabili `--g-*`.",
+      "**Do** coprire entrambe le versioni a ogni modifica, con le coppie `.only-classica` / `.only-anime` quando cambia il testo.",
+      "**Do** segnalare il turno con il colore del giocatore (riempimento + bordo bianco + sollevamento nella classica; bordo oro + g-surface-highest nell'anime).",
+      "**Do** usare angoli vivi, bordi 3px e smussi inset nella classica; raggi 12/14/16px e la scala tonale nell'anime.",
+      "**Do** disegnare le nuove icone e decorazioni come SVG in pixel (crispEdges) nella classica, o come disegni originali a linea d'oro nell'anime, inline nel CSS o sul canvas.",
+      "**Do** mettere testo g-on-gold sull'oro anime e testo nero sull'oro del vincitore classico.",
+      "**Do** tenere i bersagli tattili ad almeno 40–48px e il tavolo sempre intero nello schermo, verificando telefono in verticale, in orizzontale (max-height 520px) e desktop.",
+      "**Do** dare a ogni animazione la sua alternativa con `prefers-reduced-motion: reduce`."
+    ],
+    "donts": [
+      "**Don't** arrotondare gli angoli o aggiungere ombre sfocate agli elementi della versione classica.",
+      "**Don't** usare Press Start 2P per paragrafi o testo lungo, né senza il contorno nero su fondo libero.",
+      "**Don't** mettere testo bianco direttamente sull'oro (#ecc246 o #f8b800) in nuovi componenti.",
+      "**Don't** introdurre colori fuori dalle due tavolozze; i colori anime vanno presi dalle variabili `--g-*`.",
+      "**Don't** aggiungere immagini ufficiali, loghi o raster scaricati alla repo; trifoglio e sigillo sono disegni originali."
+    ]
+  }
+}
