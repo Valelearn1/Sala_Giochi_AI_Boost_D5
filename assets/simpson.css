@@ -139,6 +139,11 @@ html[data-theme='simpson'] {
   outline-offset: 3px;
 }
 
+/* I titoli ricevono il focus solo da codice (per gli screen reader): niente contorno */
+[data-theme='simpson'] [tabindex='-1']:focus-visible {
+  outline: none;
+}
+
 /* Titoli a fumetto: lettere gialle con contorno nero, come un logo da cartone */
 [data-theme='simpson'] .pixel-text {
   font-family: var(--s-display);

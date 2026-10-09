@@ -1,9 +1,10 @@
 /*
  * PERSONAGGI DELLE CARTE
  *
- * Due mazzi, uno per ogni versione della sala:
+ * Tre mazzi, uno per ogni versione della sala:
  * - "classica": personaggi del mondo di Super Mario (Nintendo);
- * - "anime": personaggi di Black Clover (Yuki Tabata / Shueisha).
+ * - "anime": personaggi di Black Clover (Yuki Tabata / Shueisha);
+ * - "simpson": abitanti di Springfield (I Simpson, Matt Groening / 20th Television).
  * I personaggi appartengono ai rispettivi autori: qui sono usati solo
  * per un progetto scolastico, senza scopo di lucro.
  *
@@ -58,6 +59,28 @@ export const CHARACTERS = {
     { name: 'Nacht', emoji: '🦇', image: null },
     { name: 'Liebe', emoji: '😈', image: null },
     { name: 'Secre', emoji: '🕊️', image: null },
+  ],
+  simpson: [
+    { name: 'Homer', emoji: '🍩', image: null },
+    { name: 'Marge', emoji: '💙', image: null },
+    { name: 'Bart', emoji: '🛹', image: null },
+    { name: 'Lisa', emoji: '🎷', image: null },
+    { name: 'Maggie', emoji: '🍼', image: null },
+    { name: 'Nonno Abe', emoji: '👴', image: null },
+    { name: 'Flanders', emoji: '🙏', image: null },
+    { name: 'Mr. Burns', emoji: '💰', image: null },
+    { name: 'Smithers', emoji: '📋', image: null },
+    { name: 'Apu', emoji: '🏪', image: null },
+    { name: 'Krusty', emoji: '🤡', image: null },
+    { name: 'Milhouse', emoji: '👓', image: null },
+    { name: 'Nelson', emoji: '👊', image: null },
+    { name: 'Ralph', emoji: '🖍️', image: null },
+    { name: 'Winchester', emoji: '🚓', image: null },
+    { name: 'Skinner', emoji: '🏫', image: null },
+    { name: 'Otto', emoji: '🚌', image: null },
+    { name: 'Willie', emoji: '🧹', image: null },
+    { name: 'Caprapall', emoji: '📚', image: null },
+    { name: 'Martin', emoji: '🎓', image: null },
   ],
 };
 

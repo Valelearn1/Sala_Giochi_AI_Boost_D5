@@ -2222,6 +2222,358 @@
   }
 }
 
+/* =====================================================================
+   VERSIONE SIMPSON (Memory di Springfield)
+   Cartoncini bianchi con contorno nero, carte a ciambella, giallo Simpson.
+   Colori, font e pezzi comuni sono in ../assets/simpson.css.
+   ===================================================================== */
+
+[data-theme='simpson'] {
+  --score-border: var(--s-ink);
+}
+
+[data-theme='simpson'] .game-title {
+  font-size: clamp(3rem, 14vw, 5rem);
+}
+
+[data-theme='simpson'] .game-tagline {
+  font-weight: 800;
+}
+
+[data-theme='simpson'] .field-label {
+  font-size: 1.375rem;
+}
+
+[data-theme='simpson'] .field-hint {
+  font-family: var(--s-body);
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: var(--ink);
+  text-shadow: none;
+  text-transform: none;
+}
+
+/* Numero di giocatori: tre bottoni tondi, quello scelto giallo */
+[data-theme='simpson'] .choice--count .choice-body {
+  border: 3px solid var(--s-ink);
+  border-radius: 50%;
+  background: var(--s-paper);
+  color: var(--s-text);
+  font-family: var(--s-display);
+  font-size: 1.75rem;
+  text-shadow: none;
+  box-shadow: var(--s-shadow-small);
+  image-rendering: auto;
+}
+
+[data-theme='simpson'] .choice--count input:checked + .choice-body {
+  background: var(--s-yellow);
+  color: var(--s-ink);
+  text-shadow: none;
+  box-shadow: var(--s-shadow);
+  translate: 0 -4px;
+}
+
+[data-theme='simpson'] .choice input:focus-visible + .choice-body {
+  outline: 3px solid var(--s-orange);
+}
+
+/* Nomi: campi bianchi a pastiglia */
+[data-theme='simpson'] .name-field {
+  border: 3px solid var(--s-ink);
+  border-radius: 999px;
+  background: var(--s-paper);
+  box-shadow: var(--s-shadow-small);
+}
+
+[data-theme='simpson'] .name-field:focus-within {
+  border-color: var(--player);
+  outline: 3px solid var(--s-orange);
+}
+
+[data-theme='simpson'] .player-cap {
+  border: 2px solid var(--s-ink);
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+[data-theme='simpson'] .name-field input {
+  color: var(--s-text);
+  font-weight: 700;
+}
+
+[data-theme='simpson'] .name-field input::placeholder {
+  color: var(--s-text-soft);
+}
+
+/* Livello: niente tubi, ma una, due o tre ciambelle */
+[data-theme='simpson'] .pipe-choices {
+  align-items: stretch;
+  padding-bottom: 0;
+}
+
+[data-theme='simpson'] .pipe-choices::after,
+[data-theme='simpson'] .pipe,
+[data-theme='simpson'] .pipe-marker {
+  display: none;
+}
+
+[data-theme='simpson'] .choice--pipe .choice-body {
+  height: 100%;
+  padding: 12px 8px;
+  border: 3px solid var(--s-ink);
+  border-radius: var(--s-radius);
+  background: var(--s-paper);
+  box-shadow: var(--s-shadow-small);
+}
+
+[data-theme='simpson'] .choice--pipe .choice-body::before {
+  content: '';
+  width: calc(28px * var(--donuts));
+  height: 28px;
+  background: var(--coin) 0 0 / 28px 28px repeat-x;
+}
+
+[data-theme='simpson'] .choice--pipe:nth-child(1) { --donuts: 1; }
+[data-theme='simpson'] .choice--pipe:nth-child(2) { --donuts: 2; }
+[data-theme='simpson'] .choice--pipe:nth-child(3) { --donuts: 3; }
+
+[data-theme='simpson'] .choice--pipe input:checked + .choice-body {
+  background: var(--s-yellow);
+  box-shadow: var(--s-shadow);
+  translate: 0 -4px;
+}
+
+[data-theme='simpson'] .pipe-size {
+  font-family: var(--s-display);
+  font-size: 1.375rem;
+  color: var(--s-text);
+  text-shadow: none;
+}
+
+[data-theme='simpson'] .choice--pipe input:checked + .choice-body .pipe-size,
+[data-theme='simpson'] .choice--pipe input:checked + .choice-body .pipe-sub {
+  color: var(--s-ink);
+}
+
+[data-theme='simpson'] .pipe-sub {
+  color: var(--s-text-soft);
+  font-weight: 700;
+}
+
+/* ---------- Partita ---------- */
+
+[data-theme='simpson'] .score {
+  border: 3px solid var(--s-ink);
+  border-radius: var(--s-radius);
+  background: var(--s-paper);
+  color: var(--s-text);
+  box-shadow: var(--s-shadow-small);
+}
+
+[data-theme='simpson'] .score.is-current {
+  background: var(--player);
+  border-color: var(--s-ink);
+  color: #ffffff;
+  text-shadow: none;
+  box-shadow: var(--s-shadow);
+}
+
+[data-theme='simpson'] .score .player-cap {
+  border: 2px solid var(--s-ink);
+  border-radius: 50%;
+}
+
+[data-theme='simpson'] .score-name {
+  font-weight: 900;
+}
+
+[data-theme='simpson'] .score-coins,
+[data-theme='simpson'] .score-turn {
+  font-family: var(--s-display);
+  letter-spacing: 0.03em;
+}
+
+[data-theme='simpson'] .coin-icon {
+  width: 22px;
+  height: 22px;
+}
+
+[data-theme='simpson'] .status {
+  border: 3px solid var(--s-ink);
+  border-radius: var(--s-radius);
+  background: var(--s-paper);
+  color: var(--s-text);
+  font-weight: 800;
+  box-shadow: var(--s-shadow-small);
+}
+
+/* Le carte: il dorso è una ciambella su fondo giallo */
+[data-theme='simpson'] .card-face {
+  border: 3px solid var(--s-ink);
+  border-radius: 14px;
+}
+
+[data-theme='simpson'] .card-back {
+  background:
+    var(--coin) center / 62% no-repeat,
+    radial-gradient(circle at 30% 25%, #fff3a6 0 18%, transparent 19%),
+    var(--s-yellow);
+  box-shadow: inset -4px -5px 0 rgb(0 0 0 / 0.12);
+}
+
+[data-theme='simpson'] .card-back::after {
+  content: none; /* niente "?" del tema 8-bit */
+}
+
+/* Un piccolo giro della ciambella passandoci sopra */
+@media (hover: hover) {
+  [data-theme='simpson'] .card:not(.is-flipped):hover .card-back {
+    background-color: #ffe34d;
+  }
+}
+
+[data-theme='simpson'] .card.is-flipped {
+  animation: donut-bounce 300ms ease;
+}
+
+@keyframes donut-bounce {
+  40% { scale: 1.06; }
+}
+
+[data-theme='simpson'] .card-front {
+  background: radial-gradient(circle at 50% 35%, #ffffff, #dff3ff);
+  box-shadow: none;
+}
+
+[data-theme='simpson'] .card-name {
+  border-top: 3px solid var(--s-ink);
+  background: var(--s-yellow);
+  color: var(--s-ink);
+  font-family: var(--s-display);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
+/* Coppia trovata: la carta prende il colore di chi l'ha trovata */
+[data-theme='simpson'] .card.is-matched .card-front {
+  background: radial-gradient(circle at 50% 35%, #ffffff, color-mix(in srgb, var(--player) 25%, #ffffff));
+  box-shadow: none;
+}
+
+[data-theme='simpson'] .card.is-matched .card-name {
+  background: var(--player);
+  color: #ffffff;
+}
+
+/* Le carte restano chiare anche di notte, come cartoncini */
+[data-theme='simpson'][data-mode='dark'] .card-front {
+  color: #1b1b1b;
+}
+
+[data-theme='simpson'] .coin-pop {
+  width: 34%;
+  aspect-ratio: 1;
+  image-rendering: auto;
+}
+
+/* Scintille: codette colorate */
+[data-theme='simpson'] .spark {
+  border-radius: 3px;
+  background: var(--s-pink);
+  box-shadow: 0 0 0 2px var(--s-ink);
+}
+
+[data-theme='simpson'] .spark:nth-child(3n + 1) { background: var(--s-blue); }
+[data-theme='simpson'] .spark:nth-child(3n + 2) { background: var(--s-yellow); }
+
+[data-theme='simpson'] .point-fly {
+  color: var(--s-orange);
+  font-family: var(--s-display);
+  font-size: 1.75rem;
+  text-shadow:
+    2px 0 0 var(--s-ink),
+    -2px 0 0 var(--s-ink),
+    0 2px 0 var(--s-ink),
+    0 -2px 0 var(--s-ink),
+    3px 3px 0 var(--s-ink);
+}
+
+/* Cambio turno: una striscia gialla da titolo di cartone */
+[data-theme='simpson'] .turn-banner {
+  background: var(--s-yellow);
+  border-block: 4px solid var(--s-ink);
+  box-shadow: 0 6px 0 var(--s-ink);
+}
+
+[data-theme='simpson'] .turn-banner-name {
+  font-family: var(--s-display);
+  font-size: clamp(2rem, 9vw, 3.25rem);
+  line-height: 1.1;
+  color: #ffffff;
+  text-shadow:
+    3px 0 0 var(--s-ink),
+    -3px 0 0 var(--s-ink),
+    0 3px 0 var(--s-ink),
+    0 -3px 0 var(--s-ink),
+    3px 3px 0 var(--s-ink),
+    -3px -3px 0 var(--s-ink),
+    3px -3px 0 var(--s-ink),
+    -3px 3px 0 var(--s-ink),
+    5px 6px 0 var(--player, var(--s-orange));
+}
+
+/* ---------- Fine partita ---------- */
+
+[data-theme='simpson'] .results-title {
+  font-size: clamp(2.25rem, 11vw, 4rem);
+}
+
+[data-theme='simpson'] .results-summary {
+  font-weight: 800;
+}
+
+[data-theme='simpson'] .ranking-item {
+  border: 3px solid var(--s-ink);
+  border-radius: var(--s-radius);
+  background: var(--s-paper);
+  color: var(--s-text);
+  box-shadow: var(--s-shadow-small);
+}
+
+[data-theme='simpson'] .ranking-item.is-winner {
+  background: var(--s-yellow);
+  border-color: var(--s-ink);
+  color: var(--s-ink);
+  box-shadow: var(--s-shadow);
+}
+
+[data-theme='simpson'] .ranking-rank,
+[data-theme='simpson'] .ranking-score {
+  font-family: var(--s-display);
+  font-size: 1.125rem;
+  letter-spacing: 0.03em;
+}
+
+[data-theme='simpson'] .ranking-item .player-cap {
+  border: 2px solid var(--s-ink);
+  border-radius: 50%;
+}
+
+[data-theme='simpson'] .results-record {
+  border: 3px solid var(--s-ink);
+  border-radius: 999px;
+  background: var(--s-paper);
+  color: var(--s-text);
+  font-weight: 800;
+  box-shadow: var(--s-shadow-small);
+}
+
+[data-theme='simpson'] .results-record.is-new {
+  background: var(--s-pink);
+  color: var(--s-ink);
+}
+
 /* Telefoni molto stretti: barra in alto più compatta, così stanno tutti i pulsanti */
 @media (max-width: 400px) {
   .topbar {
