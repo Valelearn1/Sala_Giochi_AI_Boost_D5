@@ -1,7 +1,7 @@
 # 🍄 Sala giochi 🍄
 
 > ⚠️ **Disclaimer — progetto didattico, senza scopo di lucro.**
-> Questa sala giochi è un esercizio scolastico del corso, realizzato solo per imparare e non per guadagnare. Super Mario e i suoi personaggi appartengono a **Nintendo**. Black Clover e i suoi personaggi appartengono a **Yuki Tabata / Shueisha**. Nella repo **non ci sono immagini, musiche o sprite ufficiali**: grafica, effetti sonori e melodie sono originali e generati da codice.
+> Questa sala giochi è un esercizio scolastico del corso, realizzato solo per imparare e non per guadagnare. Super Mario e i suoi personaggi appartengono a **Nintendo**. Black Clover e i suoi personaggi appartengono a **Yuki Tabata / Shueisha**. I Simpson e i loro personaggi appartengono a **Matt Groening / 20th Television**. Nella repo **non ci sono immagini, musiche o sprite ufficiali**: grafica, effetti sonori e melodie sono originali e generati da codice.
 
 🧱🧱🧱🟨🧱🧱🧱🟨🧱🧱🧱🟨🧱🧱🧱
 
@@ -34,29 +34,30 @@ git clone https://github.com/Valelearn1/Sala_Giochi_AI_Boost_D5.git
 
 ## 🗺️ Mappa del mondo
 
-| Livello | Gioco | ⭐ Versione classica | ✨ Versione anime |
-| --- | --- | --- | --- |
-| 🟨 **1-1** | [Memory](memory/) | personaggi di Super Mario, blocchi "?" | personaggi di Black Clover, grimori |
-| 🍄 **1-2** | [Flipper](pinball/) | "Regno dei Funghi": mattoni e Super Funghi | "Sfera Anti-Magia": sigilli e rune |
-| 🟢 **1-3…** | [Giochi dei compagni](giochi/LEGGIMI.md) | arrivano dal tubo del bibliotecario | |
+| Livello | Gioco | ⭐ Versione classica | ✨ Versione anime | 🍩 Versione Simpson |
+| --- | --- | --- | --- | --- |
+| 🟨 **1-1** | [Memory](memory/) | personaggi di Super Mario, blocchi "?" | personaggi di Black Clover, grimori | abitanti di Springfield, carte a ciambella |
+| 🍄 **1-2** | [Flipper](pinball/) | "Regno dei Funghi": mattoni e Super Funghi | "Sfera Anti-Magia": sigilli e rune | "Centrale Nucleare": ciambelle e uranio |
+| 🟢 **1-3…** | [Giochi dei compagni](giochi/LEGGIMI.md) | arrivano dal tubo del bibliotecario | | |
 
 ---
 
-## ⭐ Power-up: due versioni della stessa sala
+## ⭐ Power-up: tre versioni della stessa sala
 
-È un solo sito con due "vesti". Regole, turni e fisica sono gli stessi: cambia solo la grafica.
+È un solo sito con tre "vesti". Regole, turni e fisica sono gli stessi: cambia solo la grafica.
 
 - ⭐ **Classica** (predefinita): platform a 8 bit a tema Super Mario.
 - ✨ **Anime**: tema Black Clover, ricavato dalle schermate generate con Google Stitch. Ha fondo scuro, cremisi, oro, smeraldo e grimori con un trifoglio d'oro.
+- 🍩 **Simpson**: Springfield come in un cartone animato. Cielo con le nuvole, giallo Simpson, ciambelle rosa, contorni neri spessi. Di sera (modalità scura) Springfield di notte, con le stelle. Font a fumetto Luckiest Guy e Nunito, suoni da cartone (xilofono, fischietti, "boing").
 
 **Come si cambia versione**
-- Nella pagina iniziale c'è il pulsante fisso in basso a destra **"Prova la versione anime"**, che poi diventa **"Torna alla versione classica"**.
-- Nei giochi c'è il pulsante **Anime / Classica** nella barra in alto.
+- Nella pagina iniziale c'è il pulsante fisso in basso a destra **"Versione: …"**: apre un menu con **Classica**, **Anime** e **Simpson**.
+- Nei giochi lo stesso menu si apre dal pulsante con il nome della versione, nella barra in alto.
 - La scelta vale per tutte le pagine e il browser se la ricorda.
 
 🌙 **Livello sotterraneo**: nella versione classica, se il computer o il telefono è in **modalità scura**, pagina iniziale e Memory passano al sotterraneo, con fondo nero e mattoni blu. Per provarlo senza cambiare il sistema, in Chrome apri gli strumenti per sviluppatori, poi ⋮ → *More tools* → *Rendering* → *prefers-color-scheme: dark*.
 
-🔧 **Come funziona**: `assets/tema.js` scrive la versione su `<html data-theme="classica|anime">` prima che la pagina venga disegnata, e i fogli di stile usano `[data-theme='anime']`. Il tavolo del flipper, disegnato con JavaScript, cambia tema tramite l'evento `sala-tema`.
+🔧 **Come funziona**: `assets/tema.js` scrive la versione su `<html data-theme="classica|anime|simpson">` prima che la pagina venga disegnata, e i fogli di stile usano `[data-theme='anime']` e `[data-theme='simpson']` (lo stile comune dei Simpson è in `assets/simpson.css`). I testi propri di una versione stanno in `<span class="only-classica">`, `only-anime` o `only-simpson`; quelli uguali per classica e Simpson in `not-anime`. Il tavolo del flipper, disegnato con JavaScript, cambia tema tramite l'evento `sala-tema`.
 
 ---
 
@@ -187,7 +188,8 @@ Dettagli in [`giochi/LEGGIMI.md`](giochi/LEGGIMI.md).
 ├── .claude/agents/         l'agente bibliotecario
 ├── strumenti/              verifica.js (controllo dei giochi) e i suoi test
 ├── assets/
-│   ├── tema.js             versione della sala (classica / anime)
+│   ├── tema.js             versione della sala (classica / anime / simpson) e menu
+│   ├── simpson.css         stile comune della versione Simpson
 │   ├── sala.js             mostra nella pagina iniziale i giochi di giochi.json
 │   ├── barre-anime.js      versione anime: barra in alto e navigazione in basso
 │   ├── icone.js            versione anime: icone a linee in SVG
@@ -252,7 +254,7 @@ Ogni push su `main` aggiorna il sito. Tutti i percorsi sono relativi, quindi fun
 1. 📁 Crea una cartella, per esempio `scacchi/`, con `index.html`, `style.css` e `js/`. Per lo stile 8-bit carica prima `../assets/sala-giochi.css`.
 2. 🗺️ Nella pagina iniziale aggiungi un `<li>` con `<a class="level" href="scacchi/">`, copiando la scheda del Memory (livello "1-3").
 3. ↩️ Metti il link per tornare all'elenco: `<a href="../">‹ Tutti i giochi</a>`.
-4. ✨ Per le due versioni: nel `<head>` carica `../assets/tema.js` e `../assets/temi.css`, metti un pulsante `<button data-theme-toggle="short"><span data-theme-label></span></button>` e scrivi gli stili anime sotto `[data-theme='anime']`. Per la cornice anime (barra in alto e in basso) aggiungi `<script type="module" src="../assets/barre-anime.js"></script>` e sul `<body>` gli attributi `data-pagina` e `data-titolo-anime`.
+4. ✨ Per le versioni: nel `<head>` carica `../assets/tema.js` e `../assets/temi.css`, metti un pulsante `<button data-theme-toggle="short"><span data-theme-label></span></button>` e scrivi gli stili anime sotto `[data-theme='anime']`. Per la cornice anime (barra in alto e in basso) aggiungi `<script type="module" src="../assets/barre-anime.js"></script>` e sul `<body>` gli attributi `data-pagina` e `data-titolo-anime`.
 5. ✅ Aggiungi `'scacchi'` all'elenco `GIOCHI_INTERNI` in `strumenti/verifica.js` (così può usare `assets/` e non serve la provenienza), poi controlla con `node strumenti/verifica.js scacchi`.
 
 ---

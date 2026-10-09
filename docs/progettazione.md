@@ -20,7 +20,7 @@ Una raccolta di minigiochi da browser per un progetto di corso, da giocare in 1�
 /
 ├── index.html, style.css     pagina iniziale (elenco dei giochi, pulsante di cambio versione)
 ├── assets/
-│   ├── tema.js               versione della sala: classica / anime
+│   ├── tema.js               versione della sala: classica / anime / simpson
 │   ├── sala-giochi.css       stile 8-bit comune (cielo, mattoni, pulsanti, font pixel)
 │   ├── temi.css              stile comune della versione anime, pulsanti di versione e audio
 │   ├── suoni.js              effetti e musica generati (Web Audio API), diversi per versione
@@ -75,24 +75,25 @@ Scelte di fisica:
 - **Alette a rotazione controllata**: corpi statici ruotati a ogni passo attorno al perno con `Body.setAngle(…, true)` e `Body.setPosition(…, true)`, così Matter trasmette la velocità alla pallina.
 - **Kicker in alto sui lati**: senza, dopo il lancio la pallina scendeva lungo la parete sinistra dritta nella corsia di uscita.
 
-## Due versioni della sala
+## Tre versioni della sala
 
-Un solo sito con due "vesti":
+Un solo sito con tre "vesti":
 
 - **classica** (predefinita): Super Mario;
-- **anime**: Black Clover, dalle schermate di Google Stitch.
+- **anime**: Black Clover, dalle schermate di Google Stitch;
+- **simpson**: Springfield in stile cartone (stile comune in `assets/simpson.css`).
 
 `assets/tema.js` è uno script classico nel `<head>` di ogni pagina, e funziona così:
 
 1. Legge la versione salvata (`localStorage`, chiave `sala-versione`) e la scrive su `<html data-theme="…">` prima che la pagina venga disegnata.
-2. Collega ogni pulsante `[data-theme-toggle]`: il pulsante fisso in basso a destra nella pagina iniziale e il pulsante corto (`="short"`) nella barra dei giochi.
+2. Accanto a ogni pulsante `[data-theme-toggle]` crea il menu delle versioni (Classica, Anime, Simpson): il pulsante fisso in basso a destra nella pagina iniziale e quello corto (`="short"`) nella barra dei giochi. Il menu si chiude con Esc o toccando fuori.
 3. Al cambio di versione lancia l'evento `sala-tema`. Il flipper lo usa per ridisegnare il tavolo, il Memory per avvisare che i nuovi personaggi arrivano con la partita successiva.
 
-Il CSS di ogni pagina ha una sezione `[data-theme='anime']`. Il flipper ridefinisce anche le proprie variabili (`--panel`, `--text`, `--pixel`…) per ciascuna versione.
+Il CSS di ogni pagina ha una sezione `[data-theme='anime']` e una `[data-theme='simpson']`. La versione Simpson parte dalla base classica e ne ridefinisce le variabili (cielo, pannelli, oro, font, moneta → ciambella). Il flipper ridefinisce anche le proprie variabili (`--panel`, `--text`, `--pixel`…) per ciascuna versione.
 
 ## Suoni
 
-`assets/suoni.js` è un modulo comune: `play('bumper')` sceglie la "ricetta" della versione attiva (`CLASSICA` 8-bit o `ANIME` magica) e la genera con oscillatori, rumore filtrato e un'eco condivisa. In `FILE_AUDIO` si può indicare un file al posto di un suono generato. La preferenza audio è salvata con la chiave `sala-audio`; al cambio di versione la musica passa da sola all'altro tema.
+`assets/suoni.js` è un modulo comune: `play('bumper')` sceglie la "ricetta" della versione attiva (`CLASSICA` 8-bit, `ANIME` magica o `SIMPSON` da cartone) e la genera con oscillatori, rumore filtrato e un'eco condivisa. In `FILE_AUDIO` si può indicare un file al posto di un suono generato. La preferenza audio è salvata con la chiave `sala-audio`; al cambio di versione la musica passa da sola all'altro tema.
 
 ## Come si testa
 

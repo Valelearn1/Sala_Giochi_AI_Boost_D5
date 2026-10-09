@@ -75,3 +75,4 @@ Una voce per ogni scelta importante: cosa si è deciso e perché. Tutte le decis
 
 **Decisione:** i commit sono firmati Valelearn1, senza righe di co-autore, e il push lo fa l'utente.
 **Motivo:** richiesta esplicita dell'utente: il lavoro va consegnato a suo nome.
+- **Terza versione Simpson**: scelta per completezza (grafica, Memory, flipper e suoni). Il pulsante della versione è diventato un menu a tre voci, perché un pulsante che alterna non funziona più con tre scelte. Come per le altre versioni: nessuna immagine, sigla o voce ufficiale; personaggi solo con nome ed emoji, musica originale. Font con licenze libere in locale (Luckiest Guy, Apache 2.0; Nunito, OFL). Il flipper si chiama "Centrale Nucleare": bumper a ciambella, barre e pallina d'uranio, torri di raffreddamento sullo sfondo.

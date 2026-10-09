@@ -1,6 +1,6 @@
 ---
 name: Sala giochi
-description: Minigiochi "passa e gioca" nel browser, in due versioni grafiche — classica (platform 8-bit) e anime (grimori).
+description: Minigiochi "passa e gioca" nel browser, in tre versioni grafiche — classica (platform 8-bit), anime (grimori) e Simpson (Springfield a cartone).
 colors:
   sky: "#5c94fc"
   ink: "#0b1238"
@@ -223,7 +223,8 @@ La versione attiva vive su `<html data-theme="classica|anime">`, scritta da `ass
 La densità è da gioco su telefono tenuto in mano: bersagli da almeno 40–48px, pochi elementi per schermata, il tavolo/la griglia sempre interi nell'altezza dello schermo. Tutti i disegni (nuvole, mattoni, moneta, trifoglio, sigillo) sono SVG scritti a mano nei CSS o disegnati sul canvas: nessuna immagine da scaricare.
 
 **Key Characteristics:**
-- Due vesti sullo stesso markup, scelte dall'utente e persistite; classica predefinita.
+- Tre vesti sullo stesso markup, scelte dall'utente da un menu e persistite; classica predefinita.
+- Simpson: cielo azzurro con nuvole soffici (di notte blu con stelle), cartoncini bianchi con contorno nero 3px, ombre nette 4px, angoli 16px e pulsanti a pastiglia; giallo #ffd90f, arancio #f26b21, rosa ciambella #f48fb1; Luckiest Guy per i titoli (gialli con contorno nero), Nunito per i testi.
 - Classica: angoli vivi, bordi 3px, smussi inset al posto delle ombre, Press Start 2P con contorno nero.
 - Anime: fondo #151218 a puntini dorati, scala di superfici tonali, raggi 4–8px con ombre nette spostate (come le schermate di Stitch), barra in alto e barra di navigazione fisse, icone a linee in SVG, Syne + Plus Jakarta Sans.
 - Colore del giocatore come segnale principale del turno, in entrambe le versioni.
