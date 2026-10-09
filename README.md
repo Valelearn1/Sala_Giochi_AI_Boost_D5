@@ -86,6 +86,9 @@ Il contatore **Mosse** conta quante volte sono state girate due carte, per tutti
 - 📖 **Anime**: carte come grimori con il trifoglio d'oro, livelli come "tomi".
 - 👾 **Personaggi**: 18 per versione (`memory/js/characters.js`), con nome ed emoji. Le immagini si possono aggiungere in locale, vedi [`assets/personaggi/LEGGIMI.md`](assets/personaggi/LEGGIMI.md).
 - 🔊 **Audio**: effetti e musichetta originali, generati dal browser (`assets/suoni.js`). Nella classica sono suoni 8-bit. Nell'anime sono pagine di grimorio, fendenti, rintocchi e un tema epico in Re minore. L'audio parte spento: si accende con **AUDIO** in alto.
+- ✨ **Effetti**: a ogni coppia trovata le carte sprizzano scintille, un "+1" vola fino al punteggio e il telefono vibra un attimo. Nell'anime il cambio turno entra con un colpo di spada. Fra impostazioni, partita e classifica c'è una dissolvenza.
+- 🏆 **Record**: il miglior tempo di ogni livello resta salvato nel browser (`memory/js/records.js`); in classifica compare "Nuovo record del dispositivo!" e la pagina iniziale lo mostra sulla scheda del gioco.
+- 🧘 Con **"riduci movimento"** attivo nel sistema, scintille, colpo di spada e dissolvenze non partono.
 
 ### ♿ Accessibilità
 
@@ -131,6 +134,8 @@ Flipper in tempo reale, multiplayer a turni: da 1 a 4 giocatori, **3 palline a t
 - ⚙️ `js/physics.js`: costruisce il mondo di Matter.js e segnala gli urti con eventi (`{ type: 'bumper', id: 2 }`).
 - 🧠 `js/rules.js` e `js/turns.js`: **logica pura**, testata in `pinball/tests/`.
 - 🖌️ `js/render.js`, `js/hud.js`, `js/input.js`: disegno del tavolo, pannello, tastiera e touch. `js/main.js` collega tutto.
+- 🏆 `js/records.js`: il punteggio più alto del dispositivo, salvato nel browser e mostrato in classifica e nella pagina iniziale.
+- ✨ **Effetti** (in `js/render.js`): scia dietro la sfera, onda d'urto sui bumper colpiti, scossa del tavolo quando completi una missione o perdi la pallina. Con "riduci movimento" la scia e la scossa non ci sono.
 
 **Scelte di fisica**, per chi vuole capirle:
 - ⏱️ **passo fisso** di 1/240 s, uguale a qualunque frame rate;
