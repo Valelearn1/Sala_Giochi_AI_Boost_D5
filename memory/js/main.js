@@ -90,7 +90,6 @@ function passTurn() {
 
 function showResults() {
   pendingTimer = null;
-  // Prima mostriamo la schermata: un elemento nascosto non può ricevere il focus.
   ui.showScreen('results');
   const durationMs = Date.now() - startTime;
   // Record del livello su questo dispositivo: vale il tempo più basso

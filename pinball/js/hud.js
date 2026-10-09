@@ -44,10 +44,33 @@ let messageTimer = null;
 
 // --- Schermate ---------------------------------------------------------------
 
+/** Si risolve quando l'ultimo cambio di schermata è finito (vedi showScreen). */
+let screenReady = Promise.resolve();
+
+/**
+ * Mostra una sola schermata ('setup', 'game' o 'results') e nasconde le altre.
+ * Dove il browser lo permette, il passaggio è una dissolvenza (View Transitions API):
+ * il browser "fotografa" la pagina, cambia schermata e sfuma dall'una all'altra.
+ * Il cambio vero avviene un attimo dopo, quindi il focus va spostato con afterScreenChange.
+ */
 export function showScreen(name) {
-  for (const [screenName, screen] of Object.entries(elements.screens)) {
-    screen.hidden = screenName !== name;
+  const update = () => {
+    for (const [screenName, screen] of Object.entries(elements.screens)) {
+      screen.hidden = screenName !== name;
+    }
+  };
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!document.startViewTransition || reduceMotion || document.hidden) {
+    update();
+    screenReady = Promise.resolve();
+  } else {
+    screenReady = document.startViewTransition(update).updateCallbackDone.catch(() => {}); // se il cambio fallisce, la promessa non resta mai "rotta"
   }
+}
+
+/** Esegue `action` quando la schermata nuova è visibile (un elemento nascosto non può ricevere il focus). */
+export function afterScreenChange(action) {
+  screenReady.then(action);
 }
 
 // --- Impostazioni --------------------------------------------------------------
@@ -137,7 +160,7 @@ export function showTurnOverlay({ match, lastBall }) {
     ? `${lastBall.name}: bonus fine pallina +${formatScore(lastBall.bonus)}`
     : '';
   elements.turnOverlay.hidden = false;
-  elements.turnStart.focus();
+  afterScreenChange(() => elements.turnStart.focus());
 }
 
 export function hideTurnOverlay() {
@@ -183,7 +206,7 @@ export function renderResults(match, record = null) {
       ? `🏆 Nuovo record del dispositivo: ${formatScore(record.best.score)} punti`
       : `Record del dispositivo: ${formatScore(record.best.score)} · ${record.best.name}`;
   }
-  elements.resultsTitle.focus();
+  afterScreenChange(() => elements.resultsTitle.focus());
 }
 
 /** ['Anna', 'Bruno', 'Carla'] → "Anna, Bruno e Carla" */

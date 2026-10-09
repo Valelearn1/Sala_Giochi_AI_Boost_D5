@@ -80,7 +80,7 @@ function startMatch(newSettings) {
   match = createMatch({ playerNames: settings.playerNames, ballsPerPlayer: RULES.ballsPerPlayer });
   hud.hidePauseOverlay();
   hud.showScreen('game');
-  fitTable();
+  hud.afterScreenChange(fitTable); // il tavolo si misura quando la schermata è visibile
   beginTurn(null);
 }
 

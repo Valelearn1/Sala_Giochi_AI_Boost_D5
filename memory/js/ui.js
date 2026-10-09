@@ -49,11 +49,33 @@ const elements = {
 
 // --- Schermate ---------------------------------------------------------------
 
-/** Mostra una sola schermata ('setup', 'game' o 'results') e nasconde le altre. */
+/** Si risolve quando l'ultimo cambio di schermata è finito (vedi showScreen). */
+let screenReady = Promise.resolve();
+
+/**
+ * Mostra una sola schermata ('setup', 'game' o 'results') e nasconde le altre.
+ * Dove il browser lo permette, il passaggio è una dissolvenza (View Transitions API):
+ * il browser "fotografa" la pagina, cambia schermata e sfuma dall'una all'altra.
+ * Il cambio vero avviene un attimo dopo, quindi il focus va spostato con afterScreenChange.
+ */
 export function showScreen(name) {
-  for (const [screenName, screen] of Object.entries(elements.screens)) {
-    screen.hidden = screenName !== name;
+  const update = () => {
+    for (const [screenName, screen] of Object.entries(elements.screens)) {
+      screen.hidden = screenName !== name;
+    }
+  };
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!document.startViewTransition || reduceMotion || document.hidden) {
+    update();
+    screenReady = Promise.resolve();
+  } else {
+    screenReady = document.startViewTransition(update).updateCallbackDone.catch(() => {}); // se il cambio fallisce, la promessa non resta mai "rotta"
   }
+}
+
+/** Esegue `action` quando la schermata nuova è visibile (un elemento nascosto non può ricevere il focus). */
+function afterScreenChange(action) {
+  screenReady.then(action);
 }
 
 // --- Impostazioni --------------------------------------------------------------
@@ -317,7 +339,7 @@ export function hideTurnBanner() {
 
 /** Sposta il focus sulla prima carta: comodo per chi gioca da tastiera. */
 export function focusFirstCard() {
-  elements.board.querySelector('.card')?.focus();
+  afterScreenChange(() => elements.board.querySelector('.card')?.focus());
 }
 
 // --- Fine partita --------------------------------------------------------------
@@ -354,7 +376,7 @@ export function renderResults(game, { durationMs = 0, record = null } = {}) {
   renderRecord(record);
 
   elements.ranking.replaceChildren(...getRanking(game).map(createRankingItem));
-  elements.resultsTitle.focus();
+  afterScreenChange(() => elements.resultsTitle.focus());
 }
 
 function createRankingItem(entry) {

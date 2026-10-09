@@ -665,6 +665,35 @@
   flex: none;
 }
 
+/* ---------- Passaggio fra le schermate dei giochi (View Transitions API) ----------
+   La schermata vecchia sfuma, la nuova sale di poco. Le barre fisse hanno un nome
+   proprio, così restano ferme invece di sfumare insieme alla pagina. */
+
+.topbar,
+.anime-appbar {
+  view-transition-name: sala-barra;
+}
+
+.anime-nav {
+  view-transition-name: sala-nav;
+}
+
+@keyframes sala-esci {
+  to { opacity: 0; }
+}
+
+@keyframes sala-entra {
+  from { opacity: 0; translate: 0 14px; }
+}
+
+::view-transition-old(root) {
+  animation: sala-esci 160ms ease-in both;
+}
+
+::view-transition-new(root) {
+  animation: sala-entra 280ms cubic-bezier(0.2, 0.7, 0.3, 1) 60ms both;
+}
+
 /* ---------- Pezzi comuni ai giochi (Memory e Flipper) ---------- */
 
 /* Scheda d'apertura delle impostazioni: pastiglia, titolo e testo, su fondo a puntini */
