@@ -5,6 +5,7 @@
 
 export const RULES = {
   ballsPerPlayer: 3,
+  ballSaveMs: 10000, // se la pallina cade entro 10 s dal lancio, torna sul lanciatore (una volta per pallina)
   maxPlayers: 4,
 
   multiplierMax: 5, // accendere le 3 corsie fa salire il moltiplicatore fino a ×5

@@ -46,6 +46,7 @@ export function createPhysics({ layout, config, onEvent }) {
 
   Composite.add(engine.world, [
     ...layout.WALLS.flatMap((wall) => createWall(wall, config)),
+    ...layout.POSTS.map((post) => createPost(post, config)),
     createPlunger(layout.SHOOTER, config),
     shooterGate,
     drain,
@@ -274,6 +275,16 @@ function createWall(wall, config) {
   }
 
   return bodies;
+}
+
+/** Paletto: piccolo cerchio fisso molto elastico. */
+function createPost(data, config) {
+  return Bodies.circle(data.x, data.y, data.radius, {
+    isStatic: true,
+    restitution: config.postRestitution,
+    friction: 0,
+    plugin: { kind: 'post' },
+  });
 }
 
 /** Bumper: cerchio fisso che respinge la pallina (la spinta è in handleBallCollision). */

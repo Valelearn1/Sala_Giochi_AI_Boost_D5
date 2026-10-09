@@ -66,8 +66,9 @@ export const WALLS = [
 
 // restAngle / upAngle: angolo dell'aletta a riposo e alzata (radianti, positivo = senso orario)
 export const FLIPPERS = [
-  { id: 'left', pivot: [186, 960], length: 78, baseRadius: 13, tipRadius: 7, restAngle: 0.52, upAngle: -0.5 },
-  { id: 'right', pivot: [mirrorX(186), 960], length: 78, baseRadius: 13, tipRadius: 7, restAngle: Math.PI - 0.52, upAngle: Math.PI + 0.5 },
+// Lunghezza 82: tra le punte a riposo resta uno spazio appena più largo della pallina
+  { id: 'left', pivot: [186, 960], length: 82, baseRadius: 13, tipRadius: 7, restAngle: 0.52, upAngle: -0.5 },
+  { id: 'right', pivot: [mirrorX(186), 960], length: 82, baseRadius: 13, tipRadius: 7, restAngle: Math.PI - 0.52, upAngle: Math.PI + 0.5 },
 ];
 
 /* --- Bumper (respingenti rotondi) ----------------------------------------- */
@@ -76,6 +77,18 @@ export const BUMPERS = [
   { id: 0, x: 216, y: 300, radius: 32, points: 100 },
   { id: 1, x: 336, y: 300, radius: 32, points: 100 },
   { id: 2, x: 276, y: 395, radius: 32, points: 100 },
+  // Due bumper a metà campo, uno per lato: tengono la pallina in alto più a lungo
+  { id: 3, x: 128, y: 500, radius: 26, points: 100 },
+  { id: 4, x: mirrorX(128), y: 500, radius: 26, points: 100 },
+];
+
+/* --- Paletti di rimbalzo (non danno punti) -------------------------------- */
+
+export const POSTS = [
+  { x: 120, y: 330, radius: 9 },
+  { x: mirrorX(120), y: 330, radius: 9 },
+  { x: 205, y: 660, radius: 8 },
+  { x: mirrorX(205), y: 660, radius: 8 },
 ];
 
 /* --- Slingshot (triangoli sopra le alette) -------------------------------- */
@@ -84,6 +97,10 @@ export const BUMPERS = [
 export const SLINGSHOTS = [
   { id: 'left', a: [110, 770], b: [110, 880], c: [165, 905], points: 50 },
   { id: 'right', a: [mirrorX(110), 770], b: [mirrorX(110), 880], c: [mirrorX(165), 905], points: 50 },
+  // Kicker in alto sui lati: la pallina che scende lungo le pareti viene rispedita verso i bumper
+  // (senza, dopo il lancio cadeva dritta nella corsia di uscita sinistra)
+  { id: 'upper-left', a: [20, 330], b: [20, 430], c: [78, 430], points: 50 },
+  { id: 'upper-right', a: [mirrorX(20), 330], b: [mirrorX(20), 430], c: [mirrorX(78), 430], points: 50 },
 ];
 
 /* --- Bersagli abbattibili ------------------------------------------------- */

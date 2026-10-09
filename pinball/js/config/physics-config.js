@@ -17,7 +17,7 @@ export const PHYSICS = {
   maxFrameMs: 50, // se un fotogramma tarda (es. cambio scheda), non recuperiamo più di così
 
   /* --- Mondo --- */
-  gravityY: 1.1, // inclinazione del tavolo: più alto = la pallina scende più in fretta
+  gravityY: 0.85, // inclinazione del tavolo: più alto = la pallina scende più in fretta
 
   /* --- Pallina --- */
   ballRadius: 11,
@@ -27,7 +27,7 @@ export const PHYSICS = {
   // (a 240 passi/s la pallina si sposta al massimo di 8,5 unità per passo: meno di raggio + metà parete)
 
   /* --- Pareti --- */
-  wallRestitution: 0.45,
+  wallRestitution: 0.6, // quanto rimbalzano le pareti (0 = niente, 1 = rimbalzo perfetto)
 
   /* --- Alette (flipper) --- */
   flipperUpSpeed: 0.14, // radianti per passo quando si alzano (≈ 30 ms per tutta la corsa)
@@ -40,11 +40,12 @@ export const PHYSICS = {
   launchMaxSpeed: 32,
 
   /* --- Elementi --- */
-  bumperKick: 13, // velocità con cui il bumper respinge la pallina
+  bumperKick: 17, // velocità con cui il bumper respinge la pallina
   bumperRestitution: 0.6,
-  slingshotKick: 11,
+  slingshotKick: 15,
   slingshotRestitution: 0.6,
-  targetRestitution: 0.5,
+  targetRestitution: 0.6,
+  postRestitution: 0.75, // paletti di rimbalzo
 
   /* --- Pallina incastrata --- */
   stuckSpeed: 0.15, // sotto questa velocità la pallina è "ferma"
