@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Una raccolta di minigiochi fatti in HTML, CSS e JavaScript." />
+    <meta name="theme-color" content="#5c94fc" />
+    <title>Sala giochi</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍄</text></svg>"
+    />
+    <link rel="preload" href="assets/fonts/PressStart2P-Regular.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="stylesheet" href="assets/sala-giochi.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="intro">
+        <h1 class="title pixel-text">Sala<br />giochi</h1>
+        <p class="lead">Minigiochi da fare con gli amici, nel browser. Scegli un livello per iniziare.</p>
+      </header>
+
+      <!-- Per aggiungere un gioco: copia un <li>, cambia link, numero del livello e testi -->
+      <ul class="levels">
+        <li>
+          <a class="level" href="memory/">
+            <span class="level-block level-block--gold" aria-hidden="true"></span>
+            <span class="level-text">
+              <span class="level-title"><span class="level-world">1-1</span> Memory</span>
+              <span class="level-desc">Trova le coppie a turno. Da 2 a 4 giocatori sullo stesso dispositivo.</span>
+            </span>
+            <span class="level-cta" aria-hidden="true">
+              Gioca
+              <svg class="pixel-icon" viewBox="0 0 6 8" width="9" height="12">
+                <path fill="currentColor" d="M1 0h1v1h1v1h1v1h1v2h-1v1h-1v1h-1v1H1z" />
+              </svg>
+            </span>
+          </a>
+        </li>
+
+        <li>
+          <div class="level level--locked">
+            <span class="level-block level-block--locked" aria-hidden="true">
+              <svg class="pixel-icon" viewBox="0 0 10 12" width="30" height="36">
+                <path fill="currentColor" fill-rule="evenodd" d="M3 0h4v1h1v4h1v7H1V5h1V1h1zM3 2v3h4V2zM4 7v3h2V7z" />
+              </svg>
+            </span>
+            <span class="level-text">
+              <span class="level-title"><span class="level-world">1-2</span> Peggle</span>
+              <span class="level-desc">Pinball con pioli da colpire. Prendi la mira e libera il tavolo.</span>
+            </span>
+            <span class="badge">In arrivo</span>
+          </div>
+        </li>
+      </ul>
+    </main>
+
+    <div class="ground" aria-hidden="true"></div>
+  </body>
+</html>

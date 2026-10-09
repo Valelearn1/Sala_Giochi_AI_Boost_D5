@@ -1,0 +1,190 @@
+/* Stile della pagina iniziale (selezione dei livelli).
+   Colori, font, cielo, terreno e icone arrivano da assets/sala-giochi.css. */
+
+:root {
+  --gold-block:
+    linear-gradient(var(--gold-dark) 0 0) 9% 9% / 10% 10% no-repeat,
+    linear-gradient(var(--gold-dark) 0 0) 91% 9% / 10% 10% no-repeat,
+    linear-gradient(var(--gold-dark) 0 0) 9% 91% / 10% 10% no-repeat,
+    linear-gradient(var(--gold-dark) 0 0) 91% 91% / 10% 10% no-repeat,
+    var(--gold);
+}
+
+.page {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: clamp(40px, 9vw, 88px) 16px 48px;
+}
+
+.title {
+  margin: 0 0 18px;
+  font-size: clamp(2.25rem, 10vw, 4rem);
+  line-height: 1.15;
+  text-shadow:
+    3px 0 0 var(--black),
+    -3px 0 0 var(--black),
+    0 3px 0 var(--black),
+    0 -3px 0 var(--black),
+    6px 6px 0 var(--brick);
+}
+
+.lead {
+  max-width: 40ch;
+  margin: 0 0 40px;
+  color: var(--ink);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.levels {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.level {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 18px;
+  background: var(--panel);
+  border: var(--border) solid var(--white);
+  color: var(--panel-text);
+  text-decoration: none;
+  transition: translate 120ms steps(3);
+}
+
+a.level:hover {
+  translate: 0 -4px;
+}
+
+a.level:hover .level-block--gold {
+  animation: block-bump 260ms cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+
+.level-block {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border: var(--border) solid var(--black);
+}
+
+.level-block--gold {
+  background: var(--gold-block);
+  box-shadow:
+    inset 4px 4px 0 var(--gold-light),
+    inset -4px -4px 0 var(--gold-dark);
+}
+
+.level-block--gold::after {
+  content: '?';
+  font-family: var(--pixel);
+  font-size: 1.75rem;
+  color: #fff6dc;
+  text-shadow: 3px 3px 0 var(--gold-dark);
+}
+
+.level-block--locked {
+  background: #3a3a48;
+  color: #9a9aac;
+  box-shadow:
+    inset 4px 4px 0 #5a5a6c,
+    inset -4px -4px 0 #24242e;
+}
+
+.level-text {
+  flex: 1;
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.level-title {
+  font-family: var(--pixel);
+  font-size: 1.125rem;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+/* Numero del livello, come "1-1" nei giochi a piattaforme */
+.level-world {
+  color: var(--gold);
+}
+
+.level-desc {
+  color: var(--panel-muted);
+  font-size: 0.95rem;
+}
+
+.level-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--player-0);
+  border: var(--border) solid var(--black);
+  font-family: var(--pixel);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow:
+    inset 3px 3px 0 rgb(255 255 255 / 0.45),
+    inset -3px -3px 0 rgb(0 0 0 / 0.35);
+}
+
+.level--locked {
+  border-style: dashed;
+  border-color: #9a9aac;
+}
+
+.level--locked .level-world,
+.level--locked .level-title {
+  color: #9a9aac;
+}
+
+.badge {
+  padding: 8px 10px;
+  border: 2px solid #9a9aac;
+  color: #c8c8d4;
+  font-family: var(--pixel);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@keyframes block-bump {
+  40% { translate: 0 -10px; }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --ground-height: 32px;
+  }
+
+  .level {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .level-text {
+    flex-basis: calc(100% - 82px);
+  }
+
+  .level-cta,
+  .badge {
+    margin-left: 82px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .level,
+  a.level:hover .level-block--gold {
+    transition: none;
+    animation: none;
+  }
+}
