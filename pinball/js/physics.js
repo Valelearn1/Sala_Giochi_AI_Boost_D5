@@ -209,7 +209,8 @@ export function createPhysics({ layout, config, onEvent }) {
     }
     stillMs += config.stepMs;
     if (stillMs > config.stuckMs) {
-      const direction = Math.random() < 0.5 ? -1 : 1;
+      // Spinta verso il centro del tavolo (una spinta a caso potrebbe rimandarla dov'era)
+      const direction = ball.position.x < layout.TABLE_WIDTH / 2 ? 1 : -1;
       Body.setVelocity(ball, { x: direction * config.stuckNudge, y: -config.stuckNudge });
       stillMs = 0;
     }
@@ -357,10 +358,13 @@ function createPlunger(shooter, config) {
   });
 }
 
-/** Il cancello che chiude la corsia di lancio dopo il lancio (all'inizio non urta nulla). */
+/** Il cancello in diagonale che chiude la corsia di lancio dopo il lancio (all'inizio non urta nulla). */
 function createShooterGate(shooter) {
-  return Bodies.rectangle(shooter.laneX - 4, shooter.gateY, shooter.laneRight - shooter.laneLeft + 24, 10, {
+  const [x1, y1] = shooter.gate.from;
+  const [x2, y2] = shooter.gate.to;
+  return Bodies.rectangle((x1 + x2) / 2, (y1 + y2) / 2, Math.hypot(x2 - x1, y2 - y1), 8, {
     isStatic: true,
+    angle: Math.atan2(y2 - y1, x2 - x1),
     restitution: 0.3,
     plugin: { kind: 'gate' },
     collisionFilter: { category: CATEGORY_DEFAULT, mask: COLLIDE_WITH_NOTHING },

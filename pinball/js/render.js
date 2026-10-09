@@ -558,15 +558,15 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
   }
 
   function drawGate() {
-    const { laneLeft, laneRight, gateY } = layout.SHOOTER;
+    const { from, to } = layout.SHOOTER.gate;
     ctx.strokeStyle = colors.gate;
     ctx.lineWidth = 4;
     ctx.lineCap = 'round';
     ctx.shadowColor = colors.gate;
     ctx.shadowBlur = 8;
     ctx.beginPath();
-    ctx.moveTo(laneLeft - 14, gateY);
-    ctx.lineTo(laneRight + 2, gateY);
+    ctx.moveTo(...from);
+    ctx.lineTo(...to);
     ctx.stroke();
     ctx.shadowBlur = 0;
   }

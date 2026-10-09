@@ -140,7 +140,11 @@ export const SHOOTER = {
   laneRight: 580,
   ballStartY: 1040, // dove appare la pallina nuova
   plungerTopY: 1052, // superficie del pistone
-  gateY: 290, // in alto: dopo il lancio si chiude, così la pallina non rientra
+  gateY: 290, // sotto questa altezza la pallina è "nella corsia di lancio"
+  // Chiusura della corsia dopo il lancio: in DIAGONALE, dalla parete destra verso il campo.
+  // Se fosse orizzontale, una pallina che torna giù lungo la parete ci resterebbe appoggiata sopra;
+  // inclinata, la pallina rotola via verso il centro del tavolo.
+  gate: { from: [584, 248], to: [538, 296] },
 };
 
 // Sensore in fondo: quando la pallina lo tocca, è persa
