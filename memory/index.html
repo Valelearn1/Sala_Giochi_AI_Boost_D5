@@ -16,9 +16,11 @@
     <link rel="stylesheet" href="../assets/sala-giochi.css" />
     <link rel="stylesheet" href="../assets/temi.css" />
     <link rel="stylesheet" href="style.css" />
+    <!-- Versione anime: barra in alto, barra di navigazione e icone (come le schermate di Stitch) -->
+    <script type="module" src="../assets/barre-anime.js"></script>
     <script type="module" src="js/main.js"></script>
   </head>
-  <body>
+  <body data-pagina="memory" data-titolo-anime="Grimoire Memory" data-radice="../">
     <header class="topbar">
       <a class="back-link" href="../">
         <svg class="pixel-icon" viewBox="0 0 6 8" width="9" height="12" aria-hidden="true">
@@ -37,14 +39,17 @@
         <svg class="mode-icon-sun" viewBox="0 0 10 10" width="16" height="16" aria-hidden="true" shape-rendering="crispEdges">
           <path fill="currentColor" d="M4 3h2v1h1v2H6v1H4V6H3V4h1zM4 0h2v2H4zM4 8h2v2H4zM0 4h2v2H0zM8 4h2v2H8zM1 1h1v1H1zM8 1h1v1H8zM1 8h1v1H1zM8 8h1v1H8z" />
         </svg>
-        <span class="mode-word" data-mode-label>Scuro</span>
+        <span class="icona-anime icona-luna" data-icona="luna"></span>
+          <span class="icona-anime icona-sole" data-icona="sole"></span>
+          <span class="mode-word" data-mode-label>Scuro</span>
       </button>
       <!-- Cambia versione della sala: classica (platform 8-bit) o anime -->
       <button type="button" class="theme-toggle" data-theme-toggle="short">
         <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
           <path fill="currentColor" d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9zM19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" />
         </svg>
-        <span data-theme-label>Anime</span>
+        <span class="icona-anime" data-icona="scintilla" data-misura="18"></span>
+          <span data-theme-label>Anime</span>
       </button>
       <button type="button" id="sound-toggle" class="sound-toggle" aria-pressed="false">
         <svg class="pixel-icon" viewBox="0 0 12 10" width="24" height="20" aria-hidden="true">
@@ -52,7 +57,9 @@
           <path class="sound-waves" fill="currentColor" d="M8 3h1v4H8zM10 1h1v8h-1z" />
           <path class="sound-mute" fill="currentColor" d="M8 3h1v1H8zM10 3h1v1h-1zM9 4h1v2H9zM8 6h1v1H8zM10 6h1v1h-1z" />
         </svg>
-        <span class="sound-word">Audio</span>
+        <span class="icona-anime icona-audio" data-icona="audio"></span>
+          <span class="icona-anime icona-muto" data-icona="muto"></span>
+          <span class="sound-word">Audio</span>
         <span class="sound-state" aria-hidden="true"></span>
       </button>
       </div>
@@ -64,53 +71,84 @@
         <h1 id="setup-title" class="game-title pixel-text">Memory</h1>
         <p class="game-tagline">Trova le coppie a turno, passandovi lo stesso schermo.</p>
 
+        <!-- Versione anime: scheda d'apertura come nella schermata "Grimoire Memory" di Stitch -->
+        <div class="setup-hero only-anime">
+          <span class="anime-chip"><span data-icona="bacchetta" data-misura="14"></span> Antico rito di sfida</span>
+          <p class="setup-hero-title" aria-hidden="true">Preparazione del duello magico</p>
+          <p class="setup-hero-text">Scegli quanti maghi giocano e scrivi i vostri nomi: poi trovate le coppie a turno, passandovi lo stesso schermo.</p>
+        </div>
+
         <form id="setup-form" class="setup-form">
           <fieldset class="field">
-            <legend class="field-label pixel-text">Giocatori</legend>
+            <legend class="field-label pixel-text">
+              <span class="only-classica">Giocatori</span>
+              <span class="field-head only-anime"><span data-icona="gruppo"></span> Numero di maghi</span>
+              <span class="field-extra only-anime" data-partecipanti>2 partecipanti</span>
+            </legend>
             <div class="count-choices">
               <label class="choice choice--count">
                 <input type="radio" name="player-count" value="2" checked />
-                <span class="choice-body">2</span>
+                <span class="choice-body">2<span class="choice-sub only-anime"><span data-icona="fiamma" data-misura="12"></span> Duello</span></span>
               </label>
               <label class="choice choice--count">
                 <input type="radio" name="player-count" value="3" />
-                <span class="choice-body">3</span>
+                <span class="choice-body">3<span class="choice-sub only-anime"><span data-icona="fiamma" data-misura="12"></span> Triade</span></span>
               </label>
               <label class="choice choice--count">
                 <input type="radio" name="player-count" value="4" />
-                <span class="choice-body">4</span>
+                <span class="choice-body">4<span class="choice-sub only-anime"><span data-icona="fiamma" data-misura="12"></span> Fazione</span></span>
               </label>
             </div>
           </fieldset>
 
           <fieldset class="field">
-            <legend class="field-label pixel-text">Nomi <span class="field-hint">facoltativi</span></legend>
+            <legend class="field-label pixel-text">
+              <span class="only-classica">Nomi <span class="field-hint">facoltativi</span></span>
+              <span class="field-head only-anime"><span data-icona="scudo"></span> Profili dei maghi</span>
+              <span class="field-extra only-anime">Nomi facoltativi</span>
+            </legend>
             <div class="names">
               <label class="name-field" data-player="0">
                 <span class="player-cap" aria-hidden="true"></span>
+                <span class="name-head only-anime" aria-hidden="true"><span class="name-num">1</span> Primo mago <span class="name-ready">Pronto</span></span>
+                <span class="name-label only-anime" aria-hidden="true">Nome guerriero</span>
                 <span class="visually-hidden">Nome del giocatore 1</span>
+                <span class="name-pencil only-anime" data-icona="matita" data-misura="18"></span>
                 <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 1" autocomplete="off" />
               </label>
               <label class="name-field" data-player="1">
                 <span class="player-cap" aria-hidden="true"></span>
+                <span class="name-head only-anime" aria-hidden="true"><span class="name-num">2</span> Secondo mago <span class="name-ready">Pronto</span></span>
+                <span class="name-label only-anime" aria-hidden="true">Nome guerriero</span>
                 <span class="visually-hidden">Nome del giocatore 2</span>
+                <span class="name-pencil only-anime" data-icona="matita" data-misura="18"></span>
                 <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 2" autocomplete="off" />
               </label>
               <label class="name-field" data-player="2" hidden>
                 <span class="player-cap" aria-hidden="true"></span>
+                <span class="name-head only-anime" aria-hidden="true"><span class="name-num">3</span> Terzo mago <span class="name-ready">Pronto</span></span>
+                <span class="name-label only-anime" aria-hidden="true">Nome guerriero</span>
                 <span class="visually-hidden">Nome del giocatore 3</span>
+                <span class="name-pencil only-anime" data-icona="matita" data-misura="18"></span>
                 <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 3" autocomplete="off" />
               </label>
               <label class="name-field" data-player="3" hidden>
                 <span class="player-cap" aria-hidden="true"></span>
+                <span class="name-head only-anime" aria-hidden="true"><span class="name-num">4</span> Quarto mago <span class="name-ready">Pronto</span></span>
+                <span class="name-label only-anime" aria-hidden="true">Nome guerriero</span>
                 <span class="visually-hidden">Nome del giocatore 4</span>
+                <span class="name-pencil only-anime" data-icona="matita" data-misura="18"></span>
                 <input type="text" name="player-name" maxlength="16" placeholder="Giocatore 4" autocomplete="off" />
               </label>
             </div>
           </fieldset>
 
           <fieldset class="field">
-            <legend class="field-label pixel-text">Livello</legend>
+            <legend class="field-label pixel-text">
+              <span class="only-classica">Livello</span>
+              <span class="field-head only-anime"><span data-icona="libro"></span> Spessore del grimorio</span>
+              <span class="field-extra field-extra--gold only-anime">Difficoltà</span>
+            </legend>
             <!-- Ogni livello è un tubo: più è alto, più è difficile -->
             <div class="pipe-choices">
               <label class="choice choice--pipe">
@@ -119,10 +157,14 @@
                   <svg class="pipe-marker pixel-icon" viewBox="0 0 8 4" width="24" height="12" aria-hidden="true">
                     <path fill="currentColor" d="M0 0h8v1h-1v1h-1v1h-1v1H3V3H2V2H1V1H0z" />
                   </svg>
+                  <span class="tome-icon tome-icon--facile only-anime" aria-hidden="true"><span class="tome-leaves">3☘</span><span data-icona="libro" data-misura="22"></span></span>
                   <span class="pipe-label">
                     <span class="pipe-size">4×4</span>
                     <span class="pipe-sub">Facile · 8 coppie</span>
+                    <span class="tome-title only-anime">Tomo a 3 foglie (4×4) <span class="tome-badge tome-badge--facile">Facile</span></span>
+                    <span class="tome-sub only-anime">16 carte arcane • 8 coppie gemelle</span>
                   </span>
+                  <span class="tome-radio only-anime" aria-hidden="true"></span>
                   <span class="pipe pipe--short" aria-hidden="true"></span>
                 </span>
               </label>
@@ -132,10 +174,14 @@
                   <svg class="pipe-marker pixel-icon" viewBox="0 0 8 4" width="24" height="12" aria-hidden="true">
                     <path fill="currentColor" d="M0 0h8v1h-1v1h-1v1h-1v1H3V3H2V2H1V1H0z" />
                   </svg>
+                  <span class="tome-icon tome-icon--medio only-anime" aria-hidden="true"><span class="tome-leaves">4☘</span><span data-icona="libro" data-misura="22"></span></span>
                   <span class="pipe-label">
                     <span class="pipe-size">4×5</span>
                     <span class="pipe-sub">Medio · 10 coppie</span>
+                    <span class="tome-title only-anime">Tomo rilegato (4×5) <span class="tome-badge tome-badge--medio">Medio</span></span>
+                    <span class="tome-sub only-anime">20 carte arcane • 10 coppie gemelle</span>
                   </span>
+                  <span class="tome-radio only-anime" aria-hidden="true"></span>
                   <span class="pipe pipe--medium" aria-hidden="true"></span>
                 </span>
               </label>
@@ -145,27 +191,51 @@
                   <svg class="pipe-marker pixel-icon" viewBox="0 0 8 4" width="24" height="12" aria-hidden="true">
                     <path fill="currentColor" d="M0 0h8v1h-1v1h-1v1h-1v1H3V3H2V2H1V1H0z" />
                   </svg>
+                  <span class="tome-icon tome-icon--esperto only-anime" aria-hidden="true"><span class="tome-leaves">5☘</span><span data-icona="libro" data-misura="22"></span></span>
                   <span class="pipe-label">
                     <span class="pipe-size">6×6</span>
                     <span class="pipe-sub">Difficile · 18 coppie</span>
+                    <span class="tome-title only-anime">Grimorio nero (6×6) <span class="tome-badge tome-badge--esperto">Esperto</span></span>
+                    <span class="tome-sub only-anime">36 carte proibite • 18 coppie sigillate</span>
                   </span>
+                  <span class="tome-radio only-anime" aria-hidden="true"></span>
                   <span class="pipe pipe--tall" aria-hidden="true"></span>
                 </span>
               </label>
             </div>
           </fieldset>
 
-          <button type="submit" class="button button--primary button--large start-button">Inizia la partita</button>
+          <!-- Versione anime: la regola del gioco in breve -->
+          <p class="setup-info only-anime">
+            <span data-icona="info"></span>
+            A ogni turno il mago gira due carte: se i personaggi sono uguali la coppia è sua e gioca ancora, altrimenti tocca al mago successivo.
+          </p>
+
+          <button type="submit" class="button button--primary button--large start-button">
+            <span class="only-anime" data-icona="bacchetta" data-misura="22"></span>
+            <span>Inizia la partita</span>
+            <span class="only-anime" data-icona="freccia" data-misura="22"></span>
+          </button>
         </form>
       </section>
 
       <!-- SCHERMATA 2: la partita -->
       <section id="game-screen" class="screen screen--game" aria-label="Partita in corso" hidden>
         <div class="hud">
+          <!-- Versione anime: intestazione "Tavolo degli incanti" con le mosse -->
+          <div class="board-head only-anime" aria-hidden="true">
+            <span class="board-head-icon" data-icona="bacchetta" data-misura="26"></span>
+            <span class="board-head-title">Tavolo degli incanti</span>
+            <span class="board-head-moves">Mosse <span data-mosse>0</span></span>
+          </div>
           <ul id="scoreboard" class="scoreboard" aria-label="Punteggi"></ul>
           <div class="hud-row">
             <p class="moves pixel-text">Mosse <span id="moves-count">0</span></p>
-            <button type="button" id="quit-button" class="button button--secondary button--small">Nuova partita</button>
+            <p class="hud-pairs only-anime"><span data-icona="carte" data-misura="18"></span> Coppie <span data-coppie>0/8</span></p>
+            <button type="button" id="quit-button" class="button button--secondary button--small">
+              <span class="only-anime" data-icona="rigioca" data-misura="18"></span>
+              Nuova partita
+            </button>
           </div>
           <p id="status" class="status" role="status" aria-live="polite"></p>
         </div>
@@ -178,13 +248,42 @@
 
       <!-- SCHERMATA 3: fine partita -->
       <section id="results-screen" class="screen screen--results" aria-labelledby="results-title" hidden>
+        <span class="anime-chip results-pill only-anime"><span data-icona="trofeo" data-misura="14"></span> Fine duello arcano • Memory</span>
         <h2 id="results-title" class="results-title pixel-text" tabindex="-1"></h2>
         <p id="results-summary" class="results-summary"></p>
+
+        <!-- Versione anime: tempo, mosse e precisione della partita appena finita -->
+        <dl class="results-stats only-anime">
+          <div class="results-stat">
+            <dt><span data-icona="orologio" data-misura="16"></span> Tempo</dt>
+            <dd data-statistica="tempo">0s</dd>
+          </div>
+          <div class="results-stat">
+            <dt><span data-icona="mosse" data-misura="16"></span> Mosse</dt>
+            <dd data-statistica="mosse">0</dd>
+          </div>
+          <div class="results-stat">
+            <dt><span data-icona="bersaglio" data-misura="16"></span> Precisione</dt>
+            <dd data-statistica="precisione">0%</dd>
+          </div>
+        </dl>
+
+        <div class="ranking-head only-anime">
+          <span class="ranking-head-title"><span data-icona="trofeo" data-misura="22"></span> Classifica cavalieri</span>
+          <span class="ranking-head-count"><span data-sfidanti>2</span> sfidanti</span>
+        </div>
         <ol id="ranking" class="ranking"></ol>
         <div class="results-actions">
-          <button type="button" id="replay-button" class="button button--primary button--large">Rigioca</button>
-          <button type="button" id="settings-button" class="button button--secondary">Cambia impostazioni</button>
+          <button type="button" id="replay-button" class="button button--primary button--large">
+            <span class="only-anime" data-icona="libro" data-misura="20"></span>
+            <span class="only-classica">Rigioca</span><span class="only-anime">Rigioca duello</span>
+          </button>
+          <button type="button" id="settings-button" class="button button--secondary">
+            <span class="only-anime" data-icona="bacchetta" data-misura="20"></span>
+            Cambia impostazioni
+          </button>
         </div>
+        <a class="results-home only-anime" href="../"><span data-icona="gamepad" data-misura="18"></span> Torna alla sala giochi</a>
       </section>
     </main>
 

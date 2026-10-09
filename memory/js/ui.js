@@ -8,6 +8,7 @@
 
 import { DIFFICULTIES } from './cards.js';
 import { getRanking, getWinners } from './game.js';
+import { icona } from '../../assets/icone.js';
 
 /** Punteggi mostrati l'ultima volta: servono per animare quello che sale. */
 let previousScores = [];
@@ -24,11 +25,21 @@ const elements = {
   board: document.querySelector('#board'),
   scoreboard: document.querySelector('#scoreboard'),
   movesCount: document.querySelector('#moves-count'),
+  // Versione anime: copie delle mosse e delle coppie nell'intestazione del tavolo
+  movesMirror: document.querySelector('[data-mosse]'),
+  pairsCount: document.querySelector('[data-coppie]'),
+  participants: document.querySelector('[data-partecipanti]'),
   status: document.querySelector('#status'),
   turnBanner: document.querySelector('#turn-banner'),
   resultsTitle: document.querySelector('#results-title'),
   resultsSummary: document.querySelector('#results-summary'),
   ranking: document.querySelector('#ranking'),
+  challengers: document.querySelector('[data-sfidanti]'),
+  stats: {
+    time: document.querySelector('[data-statistica="tempo"]'),
+    moves: document.querySelector('[data-statistica="mosse"]'),
+    accuracy: document.querySelector('[data-statistica="precisione"]'),
+  },
   quitButton: document.querySelector('#quit-button'),
   soundToggle: document.querySelector('#sound-toggle'),
   replayButton: document.querySelector('#replay-button'),
@@ -51,6 +62,7 @@ export function updateNameFields(playerCount) {
   elements.nameFields.forEach((field, index) => {
     field.hidden = index >= playerCount;
   });
+  elements.participants.textContent = `${playerCount} partecipanti`;
 }
 
 /**
@@ -128,6 +140,9 @@ export function renderGame(game) {
   renderCards(game);
   renderScoreboard(game);
   elements.movesCount.textContent = game.moves;
+  elements.movesMirror.textContent = game.moves;
+  const foundPairs = game.cards.filter((card) => card.isMatched).length / 2;
+  elements.pairsCount.textContent = `${foundPairs}/${game.cards.length / 2}`;
 }
 
 function renderCards(game) {
@@ -167,12 +182,13 @@ function renderScoreboard(game) {
 
     item.innerHTML = `
       <span class="player-cap" aria-hidden="true"></span>
+      <span class="score-avatar" aria-hidden="true">${icona('persona', 18)}</span>
       <span class="score-name"></span>
       <span class="score-coins">
         <span class="coin-icon" aria-hidden="true"></span>
         <span class="score-times" aria-hidden="true">×</span>
         <span class="score-points"></span>
-        <span class="score-turn">${isCurrent ? 'Tocca a te' : ''}</span>
+        <span class="score-turn">${isCurrent ? 'Tocca a te!' : ''}</span>
       </span>`;
     // textContent (e non innerHTML) per i nomi: così un nome come "<b>" non diventa HTML.
     item.querySelector('.score-name').textContent = player.name;
@@ -207,7 +223,11 @@ export function showStatus(text) {
 export function showTurnBanner(game) {
   const banner = elements.turnBanner;
   // Il nome è in un <strong> a parte: nella versione anime è dorato e sottolineato
-  banner.innerHTML = '<span class="turn-banner-name">Tocca a <strong></strong></span>';
+  // Nella versione anime è una scheda: "Cambio turno", il nome e una frase
+  banner.innerHTML = `
+    <span class="turn-banner-pill">${icona('rigioca', 14)} Cambio turno</span>
+    <span class="turn-banner-name">Tocca a <strong></strong></span>
+    <span class="turn-banner-quote">«Gira due carte e trova i personaggi gemelli.»</span>`;
   banner.querySelector('strong').textContent = game.players[game.currentPlayerIndex].name;
   banner.dataset.player = game.currentPlayerIndex;
 
@@ -229,7 +249,15 @@ export function focusFirstCard() {
 
 // --- Fine partita --------------------------------------------------------------
 
-export function renderResults(game) {
+/** 134000 ms → "2m 14s" */
+function formatDuration(milliseconds) {
+  const seconds = Math.round(milliseconds / 1000);
+  const minutes = Math.floor(seconds / 60);
+  return minutes > 0 ? `${minutes}m ${seconds % 60}s` : `${seconds}s`;
+}
+
+/** `durationMs`: quanto è durata la partita (la misura main.js). */
+export function renderResults(game, { durationMs = 0 } = {}) {
   const winners = getWinners(game);
   const isTie = winners.length > 1;
 
@@ -240,6 +268,13 @@ export function renderResults(game) {
   elements.resultsSummary.textContent = isTie
     ? `${formatNameList(winners.map((player) => player.name))} a pari merito · ${game.moves} mosse`
     : `Partita finita: tutte le coppie trovate in ${game.moves} mosse`;
+
+  // Versione anime: statistiche della partita. Precisione = coppie trovate / mosse.
+  const pairCount = game.cards.length / 2;
+  elements.stats.time.textContent = formatDuration(durationMs);
+  elements.stats.moves.textContent = game.moves;
+  elements.stats.accuracy.textContent = `${Math.round((pairCount / Math.max(game.moves, 1)) * 100)}%`;
+  elements.challengers.textContent = game.players.length;
 
   elements.ranking.replaceChildren(...getRanking(game).map(createRankingItem));
   elements.resultsTitle.focus();
@@ -253,7 +288,11 @@ function createRankingItem(entry) {
   item.innerHTML = `
     <span class="ranking-rank">${entry.rank}°</span>
     <span class="player-cap" aria-hidden="true"></span>
-    <span class="ranking-name"></span>
+    <span class="ranking-avatar" aria-hidden="true">${icona(entry.rank === 1 ? 'trofeo' : 'scudo', 22)}</span>
+    <span class="ranking-who">
+      <span class="ranking-name"></span>
+      <span class="ranking-pairs" aria-hidden="true">${entry.score} ${entry.score === 1 ? 'coppia trovata' : 'coppie trovate'}</span>
+    </span>
     <span class="ranking-score">
       <span class="coin-icon" aria-hidden="true"></span>
       <span aria-hidden="true">×</span>${entry.score}

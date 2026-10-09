@@ -746,6 +746,13 @@
   font-size: 0.875rem;
 }
 
+.ranking-who {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
 .ranking-name {
   flex: 1;
   min-width: 0;
@@ -1039,173 +1046,491 @@
 
 /* =====================================================================
    VERSIONE ANIME (segue le schermate di Stitch "Grimoire Memory")
-   Stessa pagina e stessi elementi: cambiano solo colori, forme e font.
+   Le schede in più (intestazioni, statistiche…) sono nell'HTML con la
+   classe only-anime; qui ci sono colori, forme e impaginazione.
    I colori --g-* e il trifoglio --g-clover sono in ../assets/temi.css.
    ===================================================================== */
 
-/* ---------- Barra in alto ---------- */
+/* Elementi creati da ui.js che servono solo alla versione anime */
+:root:not([data-theme='anime']) :is(.score-avatar, .ranking-avatar, .ranking-pairs, .turn-banner-pill, .turn-banner-quote) {
+  display: none;
+}
 
-/* ---------- Impostazioni ---------- */
-
+/* Il titolo pixel resta per i lettori di schermo; si vede quello della scheda */
 [data-theme='anime'] .game-title {
-  margin-top: 12px;
-  font-size: clamp(2.5rem, 12vw, 4.5rem);
-  text-transform: uppercase;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 [data-theme='anime'] .game-tagline {
-  color: var(--g-text-soft);
-  font-weight: 500;
+  display: none;
 }
 
+/* ---------- Impostazioni ---------- */
+
+[data-theme='anime'] .setup-form {
+  gap: 28px;
+}
+
+/* Titoli dei gruppi: icona d'oro a sinistra, dettaglio a destra */
 [data-theme='anime'] .field-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin: 0 0 14px;
   font-family: var(--g-display);
   font-size: 1.25rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: none;
+  letter-spacing: 0;
 }
 
-[data-theme='anime'] .field-hint {
-  font-family: var(--g-body);
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--g-muted);
+/* Numero di maghi: tre riquadri larghi, quello scelto cremisi */
+[data-theme='anime'] .count-choices {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
 [data-theme='anime'] .choice--count .choice-body {
-  width: 72px;
-  height: 64px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  width: 100%;
+  height: 72px;
   border: 0;
-  border-radius: 12px;
+  border-radius: var(--g-radius);
   background: var(--g-surface-high);
   color: var(--g-text);
   font-family: var(--g-display);
-  font-weight: 800;
+  font-size: 1.5rem;
+  font-weight: 700;
   text-shadow: none;
-  box-shadow: none;
+  box-shadow: var(--g-shadow);
   translate: none;
+}
+
+.choice-sub {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--g-body);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 [data-theme='anime'] .choice--count input:checked + .choice-body {
   background: var(--g-crimson);
-  color: #ffffff;
+  color: #ffc3c2;
   text-shadow: none;
-  box-shadow: 0 8px 22px rgb(179 18 46 / 0.4);
+  box-shadow: 0 0 18px rgb(179 18 46 / 0.45), var(--g-shadow);
+  translate: none;
+}
+
+[data-theme='anime'] .choice input:focus-visible + .choice-body {
+  outline: 2px solid var(--g-gold);
+  outline-offset: 3px;
+}
+
+/* Profili dei maghi: una scheda per giocatore */
+[data-theme='anime'] .names {
+  grid-template-columns: 1fr;
+  gap: 16px;
 }
 
 [data-theme='anime'] .name-field {
-  border: 1px solid var(--g-line);
-  border-radius: 12px;
-  background: var(--g-surface-lowest);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'head head'
+    'label label'
+    'pencil input';
+  gap: 10px 0;
+  padding: 18px;
+  border: 0;
+  border-radius: var(--g-radius);
+  background: var(--g-surface);
+  box-shadow: var(--g-shadow);
+  text-align: left;
 }
 
 [data-theme='anime'] .name-field:focus-within {
-  border-color: var(--player);
   outline: none;
 }
 
-[data-theme='anime'] .player-cap {
+[data-theme='anime'] .name-field .player-cap {
+  display: none;
+}
+
+.name-head {
+  grid-area: head;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  font-family: var(--g-display);
+  font-size: 0.9375rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--g-text);
+}
+
+.name-num {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  box-shadow: none;
+  background: var(--player);
+  color: #ffffff;
+  font-family: var(--g-body);
+  font-size: 0.75rem;
+  letter-spacing: 0;
+}
+
+.name-ready {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  font-family: var(--g-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--g-emerald);
+}
+
+.name-ready::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.name-label {
+  grid-area: label;
+  color: var(--g-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.name-pencil {
+  grid-area: pencil;
+  display: grid;
+  place-items: center;
+  padding: 0 4px 0 14px;
+  border-radius: var(--g-radius-sm) 0 0 var(--g-radius-sm);
+  background: var(--g-surface-lowest);
+  color: var(--g-muted);
+}
+
+[data-theme='anime'] .name-field input {
+  grid-area: input;
+  padding: 14px 12px;
+  border-radius: 0 var(--g-radius-sm) var(--g-radius-sm) 0;
+  background: var(--g-surface-lowest);
+  color: var(--g-text);
+  font-size: 1.0625rem;
+}
+
+/* Il bordo del colore del giocatore attorno al campo, quando si scrive */
+[data-theme='anime'] .name-field:focus-within .name-pencil,
+[data-theme='anime'] .name-field:focus-within input {
+  box-shadow: 0 -2px 0 var(--player) inset;
 }
 
 [data-theme='anime'] .name-field input::placeholder {
   color: var(--g-muted);
 }
 
-/* I tubi diventano "tomi": tre schede, quella scelta bordata d'oro */
+/* Spessore del grimorio: tre righe, quella scelta con il segno di spunta */
 [data-theme='anime'] .pipe-choices {
-  gap: 10px;
+  grid-template-columns: 1fr;
+  gap: 12px;
   padding-bottom: 0;
 }
 
 [data-theme='anime'] .pipe-choices::after,
 [data-theme='anime'] .pipe,
-[data-theme='anime'] .pipe-marker {
+[data-theme='anime'] .pipe-marker,
+[data-theme='anime'] .pipe-size,
+[data-theme='anime'] .pipe-sub {
   display: none;
 }
 
 [data-theme='anime'] .choice--pipe .choice-body {
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 56px 1fr 26px;
+  align-items: center;
+  gap: 14px;
   height: 100%;
-  padding: 14px 10px;
-  border: 2px solid transparent;
-  border-radius: 14px;
-  background: var(--g-surface-high);
-}
-
-/* Icona del tomo: il trifoglio dei grimori */
-[data-theme='anime'] .choice--pipe .choice-body::before {
-  content: '';
-  width: 34px;
-  aspect-ratio: 1;
-  background: var(--g-clover) center / contain no-repeat;
-  opacity: 0.55;
+  padding: 16px;
+  border: 0;
+  border-radius: var(--g-radius);
+  background: var(--g-surface);
+  box-shadow: var(--g-shadow);
+  text-align: left;
 }
 
 [data-theme='anime'] .choice--pipe input:checked + .choice-body {
-  border-color: var(--g-gold);
-  background: var(--g-surface-highest);
+  background: var(--g-surface-high);
 }
 
-[data-theme='anime'] .choice--pipe input:checked + .choice-body::before {
-  opacity: 1;
+[data-theme='anime'] .pipe-label {
+  display: grid;
+  gap: 4px;
 }
 
-[data-theme='anime'] .pipe-size {
-  font-family: var(--g-display);
-  font-weight: 800;
-  color: var(--g-text);
-  text-shadow: none;
-}
-
-[data-theme='anime'] .choice--pipe input:checked + .choice-body .pipe-size {
+.tome-icon {
+  position: relative;
+  display: grid;
+  place-items: end center;
+  width: 56px;
+  height: 56px;
+  padding-bottom: 8px;
+  border-bottom: 3px solid currentColor;
+  border-radius: var(--g-radius-sm);
+  background: var(--g-surface-lowest);
   color: var(--g-gold);
 }
 
-[data-theme='anime'] .pipe-sub {
+.tome-icon--medio { color: var(--g-emerald); }
+.tome-icon--esperto { color: var(--g-crimson-soft); }
+
+.tome-leaves {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 0.6875rem;
+  font-weight: 800;
+}
+
+.tome-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  font-family: var(--g-display);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--g-text);
+}
+
+.tome-badge {
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-family: var(--g-body);
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tome-badge--facile { background: #00b56b; color: #00210f; }
+.tome-badge--medio { background: var(--g-surface-highest); color: var(--g-text-soft); }
+.tome-badge--esperto { background: var(--g-crimson); color: #ffffff; }
+
+.tome-sub {
   color: var(--g-text-soft);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+/* Il cerchio a destra: vuoto, oppure cremisi con la spunta */
+.tome-radio {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--g-surface-highest);
+}
+
+.choice--pipe input:checked + .choice-body .tome-radio {
+  background: var(--g-crimson);
+}
+
+.choice--pipe input:checked + .choice-body .tome-radio::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 9px;
+  width: 6px;
+  height: 11px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  rotate: 45deg;
+}
+
+.setup-info {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 16px;
+  border-radius: var(--g-radius);
+  background: var(--g-surface-lowest);
+  color: var(--g-text-soft);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.setup-info .icona {
+  margin-top: 2px;
+  color: var(--g-gold);
 }
 
 [data-theme='anime'] .start-button {
-  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 72px;
+  padding: 0 24px;
+  border-radius: var(--g-radius);
   background: var(--g-crimson);
   color: #ffffff;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
+  letter-spacing: 0.08em;
+  box-shadow: 0 0 24px rgb(179 18 46 / 0.35), var(--g-shadow);
 }
 
 [data-theme='anime'] .start-button:hover {
   background: #cf1a3a;
 }
 
-/* ---------- Partita: pannello ---------- */
+/* Il testo sta al centro, fra la bacchetta e la freccia, e può andare a capo */
+[data-theme='anime'] .start-button > span:not([data-icona]) {
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+}
+
+/* ---------- Partita: intestazione, punteggi, messaggi ---------- */
+
+[data-theme='anime'] .hud {
+  gap: 12px;
+}
+
+.board-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--g-radius);
+  background: var(--g-surface);
+  box-shadow: var(--g-shadow);
+}
+
+.board-head-icon {
+  color: var(--g-gold);
+}
+
+.board-head-title {
+  flex: 1;
+  font-family: var(--g-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--g-gold);
+}
+
+.board-head-moves {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--g-text-soft);
+  white-space: nowrap;
+}
+
+.board-head-moves span {
+  min-width: 2.2ch;
+  padding: 4px 10px;
+  border-radius: 2px;
+  background: var(--g-surface-highest);
+  color: var(--g-emerald);
+  font-family: var(--g-display);
+  font-size: 1.25rem;
+  font-weight: 700; /* a 800 le cifre di Syne ("1", "0") si leggono male */
+  letter-spacing: 0;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-theme='anime'] .scoreboard {
+  gap: 10px;
+  padding-top: 12px; /* spazio per la pastiglia "Tocca a te!" */
+}
 
 [data-theme='anime'] .score {
+  position: relative;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'avatar name'
+    'coins coins';
+  gap: 10px;
+  padding: 12px;
+  border: 0;
+  border-radius: var(--g-radius);
+  background: var(--g-surface);
+  box-shadow: var(--g-shadow);
   color: var(--g-text);
-  border: 2px solid transparent;
-  border-radius: 14px;
-  background: var(--g-surface-high);
   translate: none;
 }
 
 [data-theme='anime'] .score.is-current {
-  border-color: var(--g-gold);
-  background: var(--g-surface-highest);
-  box-shadow: 0 0 0 4px rgb(236 194 70 / 0.12);
+  background: var(--g-surface-high);
+  box-shadow: 0 0 0 2px rgb(236 194 70 / 0.5), 0 0 22px rgb(236 194 70 / 0.22);
   text-shadow: none;
 }
 
-[data-theme='anime'] .score.is-current .player-cap {
-  background: var(--player);
+[data-theme='anime'] .score .player-cap {
+  display: none;
+}
+
+.score-avatar {
+  grid-area: avatar;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--player) 22%, var(--g-surface-high));
+  color: var(--player);
 }
 
 [data-theme='anime'] .score-name {
   font-family: var(--g-display);
-  font-size: 1.05rem;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
-/* Niente monete nella versione anime: "Punti" e il numero in oro */
+/* Riquadro "PUNTI 6": niente monete nella versione anime */
+[data-theme='anime'] .score-coins {
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: 2px;
+  background: var(--g-surface-lowest);
+}
+
 [data-theme='anime'] .score .coin-icon,
 [data-theme='anime'] .score-times {
   display: none;
@@ -1216,29 +1541,39 @@
   font-family: var(--g-body);
   font-size: 0.75rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--g-muted);
+  color: var(--g-text-soft);
 }
 
 [data-theme='anime'] .score-points {
-  margin-left: auto;
   font-family: var(--g-display);
   font-size: 1.5rem;
-  font-weight: 800;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--g-text);
+}
+
+[data-theme='anime'] .score.is-current .score-points {
   color: var(--g-gold);
 }
 
+/* "Tocca a te!": pastiglia cremisi sopra la scheda di chi gioca */
 [data-theme='anime'] .score-turn {
-  order: -1;
-  margin: 0 6px 0 0;
-  padding: 3px 8px;
-  border-radius: 999px;
+  position: absolute;
+  top: -11px;
+  left: 8px;
+  display: inline-flex;
+  margin: 0;
+  padding: 3px 10px;
+  border-radius: 12px;
   background: var(--g-crimson);
   color: #ffffff;
-  font-family: var(--g-display);
-  font-size: 0.75rem;
+  font-family: var(--g-body);
+  font-size: 0.6875rem;
   font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 [data-theme='anime'] .score-turn:empty {
@@ -1246,61 +1581,130 @@
 }
 
 [data-theme='anime'] .moves {
-  font-family: var(--g-display);
-  font-weight: 800;
-  color: var(--g-text-soft);
-  text-shadow: none;
+  display: none; /* le mosse sono nell'intestazione */
 }
 
-[data-theme='anime'] .moves span {
-  padding: 2px 8px;
-  border-radius: 6px;
-  background: var(--g-surface-high);
+.hud-pairs {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: var(--g-radius-sm);
+  background: var(--g-surface);
+  color: var(--g-text-soft);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.hud-pairs .icona,
+.hud-pairs span {
   color: var(--g-emerald);
 }
 
-[data-theme='anime'] .status {
-  border: 0;
-  border-radius: 14px;
-  background: var(--g-surface);
-  color: var(--g-text);
+[data-theme='anime'] #quit-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--g-radius-sm);
+  background: var(--g-surface-highest);
+  box-shadow: var(--g-shadow);
+  font-family: var(--g-body);
+  letter-spacing: 0.1em;
 }
 
-/* ---------- Carte: grimori con il trifoglio d'oro ---------- */
+/* Messaggi con il fulmine d'oro */
+[data-theme='anime'] .status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: var(--g-radius);
+  background: var(--g-surface);
+  box-shadow: var(--g-shadow);
+  color: var(--g-text);
+  text-align: left;
+}
+
+[data-theme='anime'] .status::before {
+  content: '';
+  flex: none;
+  width: 22px;
+  height: 22px;
+  background: var(--g-gold);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'%3E%3Cpath d='M13 2 4.5 13.5H11L10 22l8.5-11.5H12z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* ---------- Carte: dorso con il trifoglio e "III foglie" ---------- */
 
 [data-theme='anime'] .card-face {
-  border: 2px solid var(--g-surface-highest);
-  border-radius: 12px;
-  box-shadow: none;
+  border: 0;
+  border-radius: var(--g-radius-sm);
+  box-shadow: var(--g-shadow);
 }
 
+/* Le carte restano scure anche in modalità chiara, come grimori */
 [data-theme='anime'] .card-back {
-  background:
-    var(--g-clover) center / 50% no-repeat,
-    linear-gradient(160deg, #2c292f, #1a171d);
-  border-color: #3b3236;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6%;
+  background: linear-gradient(160deg, #2c292f, #1d1b20);
+}
+
+[data-theme='anime'] .card-back::before {
+  content: '';
+  width: 34%;
+  aspect-ratio: 1;
+  background: var(--g-clover) center / contain no-repeat;
 }
 
 [data-theme='anime'] .card-back::after {
-  content: none; /* niente "?" del tema 8-bit */
+  content: 'III foglie';
+  color: #e3bebd;
+  font-family: var(--g-display);
+  font-size: 14cqi;
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: none;
+  translate: none;
+  white-space: nowrap;
+}
+
+/* Carte piccole: basta il trifoglio */
+@container (max-width: 64px) {
+  [data-theme='anime'] .card-back::after {
+    content: none;
+  }
+
+  [data-theme='anime'] .card-back::before {
+    width: 50%;
+  }
 }
 
 [data-theme='anime'] .card-front {
+  border: 3px solid var(--g-gold);
   background: radial-gradient(circle at 50% 35%, #3b383e, #211f24);
-  border-color: var(--g-gold);
 }
 
+/* Carta girata (non ancora in coppia): fascia d'oro come nella schermata Stitch */
 [data-theme='anime'] .card-name {
-  background: rgb(15 13 18 / 0.85);
-  color: #e7e0e8; /* le carte restano scure anche in modalità chiara */
+  background: #ecc246;
+  color: #241a00;
   font-family: var(--g-display);
+  font-weight: 800;
   letter-spacing: 0.04em;
 }
 
 [data-theme='anime'] .card.is-matched .card-front {
+  border-color: var(--player);
   background: radial-gradient(circle at 50% 35%, #3b383e, #211f24);
-  border: 3px solid var(--player);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--player) 35%, transparent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--player) 40%, transparent);
 }
 
 [data-theme='anime'] .card.is-matched .card-name {
@@ -1312,9 +1716,21 @@
   color: #ffffff; /* i colori dei giocatori sono più scuri in modalità chiara */
 }
 
+/* Coppia trovata: il cerchio con la spunta in alto a destra */
+[data-theme='anime'] .card.is-matched .card-front::before {
+  content: '';
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  width: 18%;
+  aspect-ratio: 1;
+  background: var(--g-emerald);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM8 12.5l3 3 5-6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
 @media (hover: hover) {
   [data-theme='anime'] .card:not(.is-flipped):hover .card-back {
-    border-color: var(--g-gold);
+    box-shadow: 0 0 0 2px var(--g-gold), var(--g-shadow);
   }
 }
 
@@ -1325,62 +1741,258 @@
   background: var(--g-clover) center / contain no-repeat;
 }
 
-/* ---------- Banda "Tocca a …" ---------- */
+/* ---------- Cambio turno: una scheda al centro ---------- */
 
 [data-theme='anime'] .turn-banner {
-  background: linear-gradient(100deg, #3a0711, #1d1b20 60%);
-  border-block: 0;
-  box-shadow: 0 20px 50px rgb(0 0 0 / 0.6);
+  top: 50%;
+  left: 16px;
+  right: 16px;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  border: 0;
+  border-radius: var(--g-radius);
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 0%, rgb(179 18 46 / 0.45), transparent 70%),
+    #1d1b20;
+  box-shadow: 0 0 0 1px rgb(179 18 46 / 0.6), 0 24px 60px rgb(0 0 0 / 0.7);
+  translate: 0 -50%;
+}
+
+.turn-banner-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: rgb(179 18 46 / 0.3);
+  color: #ffb3b3;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 [data-theme='anime'] .turn-banner-name {
   font-family: var(--g-display);
-  font-size: clamp(1.75rem, 8vw, 3rem);
+  font-size: clamp(1.75rem, 8vw, 2.75rem);
   font-weight: 800;
-  color: #ffffff;
+  line-height: 1.2;
+  color: #ffffff; /* la scheda è sempre scura */
   text-shadow: none;
 }
 
 [data-theme='anime'] .turn-banner-name strong {
-  color: #ecc246; /* la banda è sempre scura */
+  color: #ecc246;
   text-decoration: underline;
   text-decoration-color: var(--g-crimson);
   text-decoration-thickness: 5px;
   text-underline-offset: 6px;
 }
 
-/* ---------- Classifica ---------- */
+[data-theme='anime'] .turn-banner-name strong::after {
+  content: '!';
+}
+
+.turn-banner-quote {
+  max-width: 32ch;
+  color: #e3bebd;
+  font-size: 0.9375rem;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* ---------- Fine partita ---------- */
 
 [data-theme='anime'] .results-title {
-  font-size: clamp(2rem, 9vw, 3.25rem);
+  margin: 18px 0 10px;
+  font-size: clamp(2rem, 10vw, 3.5rem);
+  line-height: 1.05;
   text-transform: uppercase;
+  color: var(--g-gold);
+  text-shadow: 0 0 28px rgb(236 194 70 / 0.35);
+}
+
+/* Barretta d'oro sotto il vincitore */
+[data-theme='anime'] .results-title::after {
+  content: '';
+  display: block;
+  width: 120px;
+  height: 4px;
+  margin: 16px auto 0;
+  border-radius: 2px;
+  background: var(--g-gold);
 }
 
 [data-theme='anime'] .results-summary {
+  margin-bottom: 28px;
   color: var(--g-text-soft);
 }
 
+.results-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+  margin: 0 0 32px;
+}
+
+.results-stat {
+  padding: 14px 6px;
+  border-radius: var(--g-radius-sm);
+  background: var(--g-surface);
+  box-shadow: var(--g-shadow);
+}
+
+.results-stat dt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--g-text-soft);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.results-stat dd {
+  margin: 8px 0 0;
+  font-family: var(--g-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--g-text);
+}
+
+.ranking-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.ranking-head-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--g-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--g-text);
+}
+
+.ranking-head-title .icona {
+  color: var(--g-gold);
+}
+
+.ranking-head-count {
+  color: var(--g-text-soft);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+[data-theme='anime'] .ranking {
+  gap: 12px;
+}
+
 [data-theme='anime'] .ranking-item {
-  border: 2px solid transparent;
-  border-radius: 14px;
-  background: var(--g-surface-high);
+  position: relative;
+  gap: 14px;
+  padding: 16px;
+  border: 0;
+  border-radius: var(--g-radius);
+  background: var(--g-surface);
+  box-shadow: var(--g-shadow);
   color: var(--g-text);
 }
 
 [data-theme='anime'] .ranking-item.is-winner {
-  border-color: var(--g-gold);
-  background: var(--g-surface-highest);
-  box-shadow: none;
+  background: linear-gradient(100deg, rgb(236 194 70 / 0.12), transparent 60%), var(--g-surface-high);
+  box-shadow: var(--g-shadow);
   color: var(--g-text);
 }
 
-[data-theme='anime'] .ranking-rank,
-[data-theme='anime'] .ranking-score {
-  font-family: var(--g-display);
+[data-theme='anime'] .ranking-item .player-cap {
+  display: none;
+}
+
+/* Posizione: un numerino sull'angolo dell'avatar */
+[data-theme='anime'] .ranking-rank {
+  position: absolute;
+  top: 8px;
+  left: 56px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--g-surface-highest);
+  color: var(--g-text);
+  font-family: var(--g-body);
+  font-size: 0.6875rem;
   font-weight: 800;
 }
 
-[data-theme='anime'] .ranking-item.is-winner .ranking-rank,
+[data-theme='anime'] .ranking-item.is-winner .ranking-rank {
+  background: var(--g-crimson);
+  color: #ffffff;
+}
+
+.ranking-avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--g-radius-sm);
+  background: var(--g-surface-highest);
+  color: var(--g-text-soft);
+}
+
+.ranking-item.is-winner .ranking-avatar {
+  background: var(--g-gold);
+  color: #241a00;
+}
+
+[data-theme='anime'] .ranking-name {
+  font-family: var(--g-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.ranking-pairs {
+  color: var(--g-text-soft);
+  font-size: 0.875rem;
+}
+
+.ranking-item.is-winner .ranking-pairs {
+  color: var(--g-emerald);
+  font-weight: 700;
+}
+
+[data-theme='anime'] .ranking-score {
+  display: grid;
+  justify-items: end;
+  font-family: var(--g-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+[data-theme='anime'] .ranking-score::after {
+  content: 'Punti';
+  font-family: var(--g-body);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--g-text-soft);
+}
+
 [data-theme='anime'] .ranking-item.is-winner .ranking-score {
   color: var(--g-gold);
 }
@@ -1390,8 +2002,87 @@
   display: none;
 }
 
-[data-theme='anime'] .ranking-score::after {
-  content: ' pt';
+[data-theme='anime'] .results-actions {
+  display: grid;
+  width: 100%;
+  gap: 12px;
+}
+
+[data-theme='anime'] .results-actions .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 60px;
+  border-radius: var(--g-radius-sm);
+  letter-spacing: 0.1em;
+  box-shadow: var(--g-shadow);
+}
+
+[data-theme='anime'] #settings-button {
+  font-size: 0.9375rem;
+}
+
+[data-theme='anime'] #replay-button {
+  background: var(--g-crimson);
+  color: #ffffff;
+}
+
+[data-theme='anime'] #replay-button:hover {
+  background: #cf1a3a;
+}
+
+/* ---------- Telefono ---------- */
+
+@media (max-width: 480px) {
+  /* Con 3 o 4 maghi le schede dei punti sono strette: niente avatar, nome sopra e punti sotto */
+  [data-theme='anime'] .screen--game[data-players='3'] .score,
+  [data-theme='anime'] .screen--game[data-players='4'] .score {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'name'
+      'coins';
+    gap: 6px;
+    padding: 8px;
+  }
+
+  [data-theme='anime'] .screen--game[data-players='3'] .score-avatar,
+  [data-theme='anime'] .screen--game[data-players='4'] .score-avatar {
+    display: none;
+  }
+
+  [data-theme='anime'] .screen--game[data-players='3'] .score-name,
+  [data-theme='anime'] .screen--game[data-players='4'] .score-name {
+    font-size: 0.875rem;
+  }
+
+  [data-theme='anime'] .screen--game[data-players='3'] .score-coins,
+  [data-theme='anime'] .screen--game[data-players='4'] .score-coins {
+    justify-content: center;
+    padding: 4px;
+  }
+
+  [data-theme='anime'] .screen--game[data-players='4'] .score-turn {
+    left: 4px;
+    padding: 2px 6px;
+    font-size: 0.5625rem;
+  }
+
+  .board-head-title {
+    font-size: 1rem;
+  }
+
+  [data-theme='anime'] .start-button {
+    min-height: 64px;
+    padding: 0 18px;
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+  }
+
+  .name-head {
+    font-size: 0.8125rem;
+    letter-spacing: 0.06em;
+  }
 }
 
 /* Telefoni molto stretti: barra in alto più compatta, così stanno tutti i pulsanti */

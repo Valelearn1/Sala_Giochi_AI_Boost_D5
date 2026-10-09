@@ -22,6 +22,7 @@ let game = null; // la partita in corso
 let settings = null; // ultime impostazioni scelte, servono per "Rigioca"
 let pendingTimer = null; // timer in attesa, da annullare se si esce dalla partita
 let isPlaying = false; // true mentre è visibile la schermata della partita (per la musica)
+let startTime = 0; // quando è iniziata la partita, per il "Tempo" nella classifica
 
 function startGame(newSettings) {
   cancelPendingTimer();
@@ -40,6 +41,7 @@ function startGame(newSettings) {
   ui.showTurnBanner(game);
   ui.focusFirstCard();
 
+  startTime = Date.now();
   isPlaying = true;
   sound.startMusic();
   sound.play('turn');
@@ -86,7 +88,7 @@ function showResults() {
   pendingTimer = null;
   // Prima mostriamo la schermata: un elemento nascosto non può ricevere il focus.
   ui.showScreen('results');
-  ui.renderResults(game);
+  ui.renderResults(game, { durationMs: Date.now() - startTime });
 
   isPlaying = false;
   sound.stopMusic();
@@ -105,12 +107,7 @@ function goToSetup() {
 /** Accende o spegne l'audio; la musica suona solo durante la partita. */
 function toggleSound() {
   sound.setSoundOn(!sound.isSoundOn());
-  // Cambio di versione durante una partita: le carte restano quelle, i nuovi personaggi arrivano dalla prossima
-window.addEventListener('sala-tema', () => {
-  if (isPlaying) ui.showStatus('I personaggi della nuova versione arrivano con la prossima partita');
-});
-
-ui.renderSoundToggle(sound.isSoundOn());
+  ui.renderSoundToggle(sound.isSoundOn());
 
   if (sound.isSoundOn()) {
     sound.play('toggleOn');
@@ -127,6 +124,11 @@ function cancelPendingTimer() {
 
 ui.renderSoundToggle(sound.isSoundOn());
 ui.onSoundToggle(toggleSound);
+
+// Cambio di versione durante una partita: le carte restano quelle, i nuovi personaggi arrivano dalla prossima
+window.addEventListener('sala-tema', () => {
+  if (isPlaying) ui.showStatus('I personaggi della nuova versione arrivano con la prossima partita');
+});
 
 // Il browser può ricordare la scelta del modulo dopo un "indietro": allineiamo i campi.
 ui.updateNameFields(ui.readSettings().playerNames.length);
