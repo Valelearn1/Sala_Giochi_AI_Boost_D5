@@ -1,150 +1,185 @@
-# Sala giochi
+# 🍄 Sala giochi 🍄
 
-Una raccolta di minigiochi per il browser, fatti in **HTML, CSS e JavaScript vanilla**: niente framework, niente dipendenze e nessun build step. Si pubblica su GitHub Pages così com'è. Progetto scolastico, senza scopo di lucro.
+> ⚠️ **Disclaimer — progetto didattico, senza scopo di lucro.**
+> Questa sala giochi è un esercizio scolastico del corso, realizzato solo per imparare e non per guadagnare. Super Mario e i suoi personaggi appartengono a **Nintendo**. Black Clover e i suoi personaggi appartengono a **Yuki Tabata / Shueisha**. Nella repo **non ci sono immagini, musiche o sprite ufficiali**: grafica, effetti sonori e melodie sono originali e generati da codice.
 
-| Gioco | Versione classica | Versione anime |
-| --- | --- | --- |
-| 🃏 [Memory](memory/) | personaggi di Super Mario, stile 8-bit | personaggi di Black Clover, grimori |
-| 🎯 [Flipper](pinball/) | "Regno dei Funghi" | "Sfera Anti-Magia" |
+🧱🧱🧱🟨🧱🧱🧱🟨🧱🧱🧱🟨🧱🧱🧱
 
-## Due versioni della stessa sala
+Minigiochi da fare con gli amici, nel browser, passandosi lo stesso telefono o computer. Tutto è scritto in **HTML, CSS e JavaScript vanilla**: niente framework, niente dipendenze e nessun build step. Si pubblica su GitHub Pages così com'è.
 
-Un solo sito con due "vesti": **classica** (predefinita, a tema Super Mario) e **anime** (a tema Black Clover, ricavata dalle schermate di Google Stitch). Regole, turni e fisica sono gli stessi: cambia solo la grafica.
+---
 
-- Nella pagina iniziale il pulsante fisso in basso a destra **"Prova la versione anime"** passa all'altra versione e, da lì, **"Torna alla versione classica"**.
-- Nei giochi c'è un pulsante nella barra in alto (**Anime** / **Classica**), perché in basso a destra c'è già il pulsante Lancia del flipper.
+## 🗺️ Mappa del mondo
+
+| Livello | Gioco | ⭐ Versione classica | ✨ Versione anime |
+| --- | --- | --- | --- |
+| 🟨 **1-1** | [Memory](memory/) | personaggi di Super Mario, blocchi "?" | personaggi di Black Clover, grimori |
+| 🍄 **1-2** | [Flipper](pinball/) | "Regno dei Funghi": mattoni e Super Funghi | "Sfera Anti-Magia": sigilli e rune |
+| 🟢 **1-3…** | [Giochi dei compagni](giochi/LEGGIMI.md) | arrivano dal tubo del bibliotecario | |
+
+---
+
+## ⭐ Power-up: due versioni della stessa sala
+
+È un solo sito con due "vesti". Regole, turni e fisica sono gli stessi: cambia solo la grafica.
+
+- ⭐ **Classica** (predefinita): platform a 8 bit a tema Super Mario.
+- ✨ **Anime**: tema Black Clover, ricavato dalle schermate generate con Google Stitch. Ha fondo scuro, cremisi, oro, smeraldo e grimori con un trifoglio d'oro.
+
+**Come si cambia versione**
+- Nella pagina iniziale c'è il pulsante fisso in basso a destra **"Prova la versione anime"**, che poi diventa **"Torna alla versione classica"**.
+- Nei giochi c'è il pulsante **Anime / Classica** nella barra in alto.
 - La scelta vale per tutte le pagine e il browser se la ricorda.
 
-Come funziona: `assets/tema.js` scrive la versione su `<html data-theme="classica|anime">` prima che la pagina venga disegnata, e i fogli di stile usano `[data-theme='anime']`. Le parti comuni della versione anime (font Syne e Plus Jakarta Sans, colori, trifoglio d'oro) sono in `assets/temi.css`. Il tavolo del flipper, disegnato con JavaScript, cambia tema tramite l'evento `sala-tema`.
+🌙 **Livello sotterraneo**: nella versione classica, se il computer o il telefono è in **modalità scura**, pagina iniziale e Memory passano al sotterraneo, con fondo nero e mattoni blu. Per provarlo senza cambiare il sistema, in Chrome apri gli strumenti per sviluppatori, poi ⋮ → *More tools* → *Rendering* → *prefers-color-scheme: dark*.
+
+🔧 **Come funziona**: `assets/tema.js` scrive la versione su `<html data-theme="classica|anime">` prima che la pagina venga disegnata, e i fogli di stile usano `[data-theme='anime']`. Il tavolo del flipper, disegnato con JavaScript, cambia tema tramite l'evento `sala-tema`.
 
 ---
 
-## 🃏 Memory
+## 🟨 Mondo 1-1 · Memory
 
-Memory a turni, multiplayer "passa e gioca": da 2 a 4 persone sullo stesso dispositivo, che si passano il telefono o il computer a ogni turno.
+Memory a turni, multiplayer "passa e gioca": da 2 a 4 persone sullo stesso dispositivo.
 
-### Regole
+### 📜 Regole
 
-1. Prima di iniziare si sceglie il numero di giocatori (2, 3 o 4). I nomi sono facoltativi: se un nome resta vuoto si usa "Giocatore 1", "Giocatore 2", …
-2. Si sceglie la difficoltà:
-   - **4 × 4** – facile, 8 coppie
-   - **4 × 5** – medio, 10 coppie
-   - **6 × 6** – difficile, 18 coppie
-3. A ogni partita le carte vengono mescolate (algoritmo di Fisher-Yates).
-4. Al proprio turno il giocatore gira **due carte**:
-   - se sono **uguali** restano scoperte, il giocatore prende **1 punto** e **gioca di nuovo**;
-   - se sono **diverse** restano visibili per circa 1 secondo, poi si rigirano e il turno passa al giocatore successivo.
-5. Mentre si controllano due carte, i clic sulle altre vengono ignorati. Cliccare una carta già scoperta non fa nulla.
-6. La partita finisce quando sono state trovate tutte le coppie. Vince chi ne ha trovate di più, e a parità di punti è pareggio.
+1. 👥 Si sceglie il numero di giocatori (2, 3 o 4). I nomi sono facoltativi: chi non lo scrive diventa "Giocatore 1", "Giocatore 2", …
+2. 🟢 Si sceglie il livello, un tubo (o un tomo) più alto per ogni livello:
+   - **4 × 4**: facile, 8 coppie;
+   - **4 × 5**: medio, 10 coppie;
+   - **6 × 6**: difficile, 18 coppie.
+3. 🔀 A ogni partita le carte vengono mescolate (algoritmo di Fisher-Yates).
+4. 🟨 Al proprio turno si girano **due carte**:
+   - se sono **uguali** restano scoperte, salta fuori una 🪙 moneta, si prende **1 punto** e si **gioca ancora**;
+   - se sono **diverse** restano visibili per circa 1 secondo, poi si rigirano e tocca al giocatore successivo.
+5. ⏳ Mentre si controllano due carte, i clic sulle altre vengono ignorati. Cliccare una carta già scoperta non fa nulla.
+6. 🏁 Trovate tutte le coppie: classifica, vincitore o pareggio, e il pulsante **Rigioca**.
 
-Il contatore **Mosse** conta quante volte sono state girate due carte, sommando i turni di tutti i giocatori.
+Il contatore **Mosse** conta quante volte sono state girate due carte, per tutti i giocatori.
 
-### Grafica, personaggi e audio
+### 🎨 Grafica, personaggi e audio
 
-- **Versione classica**: un livello di un videogioco a piattaforme a 8 bit. Ci sono il cielo con le nuvole, il terreno di mattoni, le carte come blocchi "?", una moneta che salta fuori a ogni coppia e un tubo verde per ogni livello di difficoltà. Con il tema scuro del sistema si passa al "livello sotterraneo".
-- **Versione anime**: fondo scuro, cremisi, oro e smeraldo. Le carte sono grimori con un trifoglio d'oro e i livelli sono "tomi".
-- **Personaggi**: sulle carte ci sono i personaggi della versione scelta (18 per versione, in `memory/js/characters.js`), con nome ed emoji. Le immagini dei personaggi non sono incluse: per aggiungerle vedi `assets/personaggi/LEGGIMI.md`. I personaggi appartengono a Nintendo e a Yuki Tabata / Shueisha e sono usati solo per un progetto scolastico.
-- **Audio**: effetti e musichetta sono originali, generati dal browser con la Web Audio API (`assets/suoni.js`, comune a Memory e flipper), senza file audio. Nella versione classica sono suoni 8-bit. Nella versione anime sono suoni "magici": pagine di grimorio, fendenti, rintocchi, campanelle con eco e un tema epico in Re minore. L'audio parte spento: si accende con il pulsante **AUDIO** in alto e il browser si ricorda la scelta. Per usare file audio tuoi vedi `assets/suoni/LEGGIMI.md`.
+- 🧱 **Classica**: cielo con le nuvole, terreno di mattoni, carte come blocchi "?", tubi verdi per i livelli.
+- 📖 **Anime**: carte come grimori con il trifoglio d'oro, livelli come "tomi".
+- 👾 **Personaggi**: 18 per versione (`memory/js/characters.js`), con nome ed emoji. Le immagini si possono aggiungere in locale, vedi [`assets/personaggi/LEGGIMI.md`](assets/personaggi/LEGGIMI.md).
+- 🔊 **Audio**: effetti e musichetta originali, generati dal browser (`assets/suoni.js`). Nella classica sono suoni 8-bit. Nell'anime sono pagine di grimorio, fendenti, rintocchi e un tema epico in Re minore. L'audio parte spento: si accende con **AUDIO** in alto.
 
-### Accessibilità
+### ♿ Accessibilità
 
-- Le carte sono pulsanti: si raggiungono con **Tab** e si girano con **Invio** o **Spazio**.
-- Ogni carta ha un'etichetta per gli screen reader ("Carta 3, coperta" oppure "Carta 3: Luigi").
-- I messaggi ("Coppia trovata!", "Tocca a Giulia") vengono annunciati dagli screen reader.
-- Se nel sistema è attivo "riduci movimento", le animazioni vengono disattivate.
+- ⌨️ Le carte sono pulsanti: si raggiungono con **Tab** e si girano con **Invio** o **Spazio**.
+- 🗣️ Ogni carta ha un'etichetta per gli screen reader ("Carta 3, coperta" oppure "Carta 3: Luigi"), e i messaggi come "Tocca a Giulia" vengono annunciati.
+- 🐢 Con "riduci movimento" attivo nel sistema, le animazioni si spengono.
 
 ---
 
-## 🎯 Flipper: "Regno dei Funghi" / "Sfera Anti-Magia"
+## 🍄 Mondo 1-2 · Flipper
 
-Flipper in tempo reale, multiplayer a turni: da 1 a 4 giocatori sullo stesso dispositivo. Nella versione classica il tavolo ha pareti di mattoni, Super Funghi e monete; nella versione anime ha cerchi magici, scintille di mana e un trifoglio inciso. La disposizione è originale, ispirata alla densità di tavoli come *3D Pinball Space Cadet*, ed è disegnata da codice su Canvas. La fisica è di [Matter.js](https://brm.io/matter-js/), salvato in locale in `pinball/lib/`, quindi funziona anche offline.
+Flipper in tempo reale, multiplayer a turni: da 1 a 4 giocatori, **3 palline a testa**. La disposizione è originale, ispirata alla densità di tavoli come *3D Pinball Space Cadet*. La fisica è di [Matter.js](https://brm.io/matter-js/), salvato in locale in `pinball/lib/`, quindi funziona anche offline.
 
-### Regole
+### 📜 Regole
 
-1. Prima di iniziare si sceglie il numero di giocatori (da 1 a 4) con nomi facoltativi.
-2. Ogni giocatore ha **3 palline**. Quando la pallina esce dal fondo, il turno passa al giocatore successivo, e compare la schermata **"Tocca a [nome] – premi per lanciare"** per passarsi il dispositivo.
-3. Elementi del tavolo e punti base:
-   - **5 bumper** (Super Funghi / cerchi magici): 100 punti, respingono la pallina;
-   - **2 slingshot** sopra le alette e **2 kicker** in alto sui lati: 50 punti; i kicker rispediscono verso i bumper la pallina che scende lungo le pareti;
-   - **4 paletti** di rimbalzo (senza punti);
-   - **4 bersagli abbattibili** (le monete / le rune d'oro): 250 punti l'uno; abbatterli tutti dà un **bonus di 2.000** e li rialza;
-   - **3 corsie superiori** con luci: 150 punti; accenderle tutte e tre fa salire il **moltiplicatore** (fino a ×5);
-   - **corsie laterali di uscita**: 500 punti, ma portano verso lo scolo.
-4. **Pallina salvata**: se la pallina cade entro 10 secondi dal lancio, torna sul lanciatore (una volta per pallina).
-5. Il moltiplicatore vale su tutti i punti e si azzera a ogni pallina persa.
-6. A fine pallina arriva un **bonus** in base agli elementi colpiti.
-7. Finite le palline di tutti: classifica, vincitore o pareggio, e il pulsante **Rigioca**.
+1. 👥 Si sceglie il numero di giocatori (da 1 a 4).
+2. 🔁 Quando la pallina cade dal fondo tocca al giocatore successivo, con la schermata **"Tocca a [nome] – premi per lanciare"** per passarsi il dispositivo.
+3. 🎯 Elementi e punti:
+   - 🍄 **5 bumper** (Super Funghi / cerchi magici): 100 punti;
+   - ⚡ **2 slingshot** sopra le alette e **2 kicker** in alto sui lati: 50 punti;
+   - 📍 **4 paletti** di rimbalzo e **2 deviatori** sopra le corsie di uscita, che rimandano la pallina verso le alette;
+   - 🪙 **4 bersagli abbattibili**: 250 punti l'uno; abbatterli tutti dà un **bonus di 2.000** e li rialza;
+   - 💡 **3 corsie in alto** con le luci: 150 punti; accenderle tutte e tre fa salire il **moltiplicatore** (fino a ×5);
+   - 🕳️ **corsie laterali di uscita**: 500 punti, ma portano verso lo scolo.
+4. 🛡️ **Pallina salvata**: se cade entro 10 secondi dal lancio torna sul lanciatore, una volta per pallina.
+5. ✖️ Il moltiplicatore si azzera a ogni pallina persa. A fine pallina arriva un **bonus** per gli elementi colpiti.
+6. 🏆 Finite le palline: classifica, vincitore o pareggio, **Rigioca**.
 
-### Controlli
+### 🎮 Controlli
 
-| Azione | Tastiera | Telefono / tablet |
+| Azione | ⌨️ Tastiera | 📱 Telefono / tablet |
 | --- | --- | --- |
 | Aletta sinistra | **Z** oppure **←** | tocca la metà sinistra del tavolo |
 | Aletta destra | **M** oppure **→** | tocca la metà destra del tavolo |
-| Lancio | tieni premuto **Spazio**: più a lungo = più forte | tieni premuto **Lancia** |
+| Lancio | tieni premuto **Spazio** (più a lungo = più forte) | tieni premuto **Lancia** |
 | Pausa | **P** | pulsante **Pausa** |
 
-Il gioco va in pausa da solo se cambi scheda o blocchi il telefono. Su telefono in orizzontale il pannello si sposta di lato, ma il tavolo è più grande in verticale. Il pulsante **AUDIO** in alto accende effetti e musica (le alette suonano come un colpo, i bumper rimbalzano, le missioni completate hanno una fanfara).
+⏸️ Il gioco va in pausa da solo se cambi scheda o blocchi il telefono. 📱 In orizzontale il pannello si sposta di lato, ma il tavolo è più grande in verticale.
 
-### Com'è organizzato il codice
+### 🔧 Com'è fatto
 
-- `js/config/table-layout.js` (DATI): dove sta ogni elemento del tavolo. Fisica e disegno leggono da qui.
-- `js/config/physics-config.js` (DATI): gravità, rimbalzi, forza di alette e bumper, velocità massima. Per regolare il gioco basta cambiare questi numeri.
-- `js/config/rules-config.js` e `js/config/theme.js` (DATI): punteggi, bonus e pallina salvata; nome, colori e stile degli elementi di ogni tema (platform per la versione classica, grimori per quella anime, più un tema "abissi marini" pronto ma non usato).
-- `js/physics.js`: costruisce il mondo di Matter.js e lo fa avanzare. Quando la pallina colpisce qualcosa avvisa con un evento (`{ type: 'bumper', id: 2 }`).
-- `js/rules.js` e `js/turns.js`: logica pura, senza browser, con i test in `pinball/tests/`.
-- `js/render.js`, `js/hud.js`, `js/input.js`: disegno del tavolo, pannello HTML, tastiera e touch.
-- `js/main.js`: collega tutto e fa girare il ciclo di gioco.
+- 📐 `js/config/` (solo **dati**): `table-layout.js` dice dove sta ogni elemento, `physics-config.js` contiene gravità, rimbalzi e forze, `rules-config.js` punti e bonus, `theme.js` i temi del tavolo.
+- ⚙️ `js/physics.js`: costruisce il mondo di Matter.js e segnala gli urti con eventi (`{ type: 'bumper', id: 2 }`).
+- 🧠 `js/rules.js` e `js/turns.js`: **logica pura**, testata in `pinball/tests/`.
+- 🖌️ `js/render.js`, `js/hud.js`, `js/input.js`: disegno del tavolo, pannello, tastiera e touch. `js/main.js` collega tutto.
 
-Scelte di fisica, per chi vuole capirle:
-
-- **Passo fisso**: la simulazione avanza sempre di 1/240 di secondo, indipendentemente dal frame rate dello schermo.
-- **Niente pallina che attraversa le pareti**: la velocità è limitata, le pareti sono spesse e i passi sono piccoli, quindi in un passo la pallina si sposta meno di raggio + metà parete.
-- **Alette a rotazione controllata**: a ogni passo ruotano di un angolo fisso attorno al perno, così il colpo è reattivo e sempre uguale.
-- **Debug**: con `?debug` nell'indirizzo (`pinball/?debug`), fisica e stato sono raggiungibili dalla console del browser come `pinballDebug`.
+**Scelte di fisica**, per chi vuole capirle:
+- ⏱️ **passo fisso** di 1/240 s, uguale a qualunque frame rate;
+- 🧱 **la pallina non attraversa le pareti**: in un passo si sposta meno di raggio + metà parete;
+- 🦾 **alette a rotazione controllata**, così il colpo è sempre uguale;
+- 🐞 con `pinball/?debug` lo stato si raggiunge dalla console come `pinballDebug`.
 
 ---
 
-## Struttura della repo
+## 🟢 Mondo 1-3 · Il tubo dei compagni
+
+I giochi dei compagni entrano nella sala dal tubo verde, portati dall'agente **bibliotecario** (`.claude/agents/bibliotecario.md`). Con Claude Code basta scrivere:
+
+> Clona il gioco di https://github.com/compagno/sala-giochi
+
+Il bibliotecario:
+1. 📦 scarica la repo in una **cartella temporanea**, mai direttamente nella sala;
+2. 🔍 legge i file e cerca **codice sospetto** prima di eseguire qualunque cosa;
+3. 📂 copia solo il gioco in `giochi/<nome>/` e registra in [`giochi.json`](giochi.json) **da quale repository arriva**;
+4. ✅ lancia la verifica: se il gioco non passa, resta fuori e il bibliotecario dice perché;
+5. 💾 se passa, fa il commit. La pagina iniziale trova il gioco da sola e mostra "Arriva da …".
+
+La verifica è `node strumenti/verifica.js giochi/<nome>`, oppure `--tutti` per tutta la sala. Controlla che il gioco:
+- abbia un `index.html` e funzioni senza build step;
+- non carichi niente da Internet;
+- usi solo percorsi interni;
+- non contenga `eval`, invio di dati all'esterno o lettura dei cookie;
+- usi solo tipi di file ammessi;
+- dichiari da dove arriva.
+
+Dettagli in [`giochi/LEGGIMI.md`](giochi/LEGGIMI.md).
+
+---
+
+## 🚀 Livelli segreti (prove)
+
+- 🌌 **Flipper spaziale** (`prove/space-cadet/`): una prova grafica di un tavolo ispirato a *3D Pinball Space Cadet*, con tasca dei bumper, corsia curva, rosa di luci e stella viola. Non è collegata alla sala.
+- 🖼️ **Schermate Stitch originali** (`prove/stitch/`): le 6 schermate generate da Google Stitch, da aprire in locale per confrontarle con la versione anime. Restano fuori dai commit (vedi `.gitignore`) perché usano CDN e immagini dell'anime.
+
+---
+
+## 🏰 Com'è costruito il castello
 
 ```
 /
-├── index.html          pagina iniziale con l'elenco dei giochi
-├── style.css           stile della pagina iniziale
-├── .nojekyll           dice a GitHub Pages di pubblicare i file così come sono
-├── README.md
-├── PRODUCT.md          contesto del progetto (usato dagli strumenti di design)
-├── docs/               progettazione.md (come è fatto) e decisioni.md (perché è fatto così)
+├── index.html, style.css   pagina iniziale (mappa dei livelli)
+├── giochi.json             catalogo dei giochi dei compagni, con la provenienza
+├── README.md, PRODUCT.md, DESIGN.md
+├── docs/                   progettazione.md (come è fatto) e decisioni.md (perché è fatto così)
+├── .claude/agents/         l'agente bibliotecario
+├── strumenti/              verifica.js (controllo dei giochi) e i suoi test
 ├── assets/
-│   ├── tema.js         versione della sala (classica / anime) e pulsanti per cambiarla
-│   ├── sala-giochi.css stile comune 8-bit: colori, font, cielo, terreno, pulsanti
-│   ├── temi.css        stile comune della versione anime e del pulsante di cambio versione
-│   ├── suoni.js        effetti e musica per Memory e flipper, diversi per versione
-│   ├── suoni/          (facoltativo) file audio propri, vedi LEGGIMI.md
-│   ├── personaggi/     (facoltativo) immagini dei personaggi, vedi LEGGIMI.md
-│   └── fonts/          Press Start 2P, Syne, Plus Jakarta Sans e le loro licenze OFL
-├── pinball/            il flipper (vedi la sezione sopra)
-│   ├── lib/            Matter.js 0.20.0 e la sua licenza
-│   ├── js/config/      dati: tavolo, fisica, regole, tema
-│   ├── js/             fisica, regole, turni, disegno, pannello, input
+│   ├── tema.js             versione della sala (classica / anime)
+│   ├── sala.js             mostra nella pagina iniziale i giochi di giochi.json
+│   ├── sala-giochi.css     stile 8-bit comune
+│   ├── temi.css            stile della versione anime, pulsanti versione e audio
+│   ├── suoni.js            effetti e musica, diversi per versione
+│   ├── suoni/, personaggi/ file facoltativi (vedi i LEGGIMI.md)
+│   └── fonts/              Press Start 2P, Syne, Plus Jakarta Sans (licenze OFL)
+├── memory/                 🟨 il Memory
+│   ├── js/game.js          LOGICA: stato, regole, turni, classifica (senza DOM né timer)
+│   ├── js/ui.js, main.js   interfaccia e collegamenti
 │   └── tests/
-└── memory/
-    ├── index.html      le tre schermate: impostazioni, partita, classifica
-    ├── style.css       layout, carte con rotazione 3D, versione per telefono
-    ├── js/
-    │   ├── shuffle.js  mescolamento Fisher-Yates
-    │   ├── cards.js    livelli di difficoltà, creazione del mazzo
-    │   ├── characters.js personaggi delle due versioni (nome, emoji, immagine facoltativa)
-    │   ├── game.js     LOGICA: stato della partita, regole, turni, classifica
-    │   ├── ui.js       INTERFACCIA: tutto ciò che legge o modifica la pagina
-    │   └── main.js     collega interfaccia, logica e suoni (ed è l'unico file con timer)
-    └── tests/
-        └── game.test.js  test della logica
+├── pinball/                🍄 il flipper
+│   ├── lib/                Matter.js 0.20.0
+│   ├── js/config/          dati: tavolo, fisica, regole, temi
+│   └── tests/
+├── giochi/                 🟢 giochi importati dai compagni
+└── prove/                  🚀 prove grafiche
 ```
 
-### Logica separata dall'interfaccia
-
-`game.js` non usa mai `document` né `setTimeout`. Riceve azioni ("gira la carta 5") e aggiorna lo stato:
+🧠 **Logica separata dall'interfaccia**: `memory/js/game.js` riceve azioni ("gira la carta 5") e aggiorna lo stato, senza mai toccare la pagina:
 
 ```
 PLAYING ──(2ª carta diversa)──► CHECKING ──(endTurn)──► PLAYING
@@ -152,65 +187,55 @@ PLAYING ──(2ª carta diversa)──► CHECKING ──(endTurn)──► PLA
    └──(ultima coppia trovata)──► FINISHED
 ```
 
-`flipCard(game, id)` restituisce cosa è successo (`first-card`, `match`, `mismatch`, `game-over` oppure `ignored`). È `main.js` a decidere quando chiamare `endTurn(game)`, cioè dopo 1 secondo. Grazie a questa separazione la logica si può testare senza browser.
-
 ---
 
-## Avviarlo in locale
+## 🎮 Premi START: avviarlo in locale
 
-Il codice usa gli **ES modules** (`<script type="module">` e `import`). I browser li bloccano se apri `index.html` con un doppio clic (indirizzo `file://`), quindi serve un piccolo server statico. Va bene uno qualsiasi di questi:
+Il codice usa gli **ES modules**, che i browser bloccano se apri `index.html` con un doppio clic (`file://`). Serve un piccolo server statico:
 
-- **VS Code + Live Server**: installa l'estensione *Live Server*, apri la cartella della repo, poi clic destro su `index.html` → *Open with Live Server*.
-- **Node.js**, dalla cartella della repo:
-  ```bash
-  npx serve .
-  ```
-  e apri l'indirizzo che compare (di solito http://localhost:3000).
-- **Python**, dalla cartella della repo:
-  ```bash
-  python3 -m http.server 8000
-  ```
-  e apri http://localhost:8000.
+- 🧩 **VS Code + Live Server**: clic destro su `index.html` → *Open with Live Server*;
+- 🟩 **Node.js**: `npx serve .` e apri l'indirizzo che compare (di solito http://localhost:3000);
+- 🐍 **Python**: `python3 -m http.server 8000` e apri http://localhost:8000.
 
-### Eseguire i test
+### 🧪 Test
 
 Serve Node.js 22 o successivo e non c'è niente da installare:
 
 ```bash
-node --test memory/tests/*.test.js pinball/tests/*.test.js
+node --test memory/tests/*.test.js pinball/tests/*.test.js strumenti/tests/*.test.js
+node strumenti/verifica.js --tutti
 ```
 
 ---
 
-## Pubblicare su GitHub Pages
+## 🚩 Bandiera finale: pubblicare su GitHub Pages
 
 1. Fai il push della repo su GitHub (branch `main`).
-2. Su GitHub apri la repo, poi **Settings** → **Pages**.
-3. In **Build and deployment** → **Source** scegli **Deploy from a branch**.
-4. In **Branch** scegli `main` e la cartella `/ (root)`, poi **Save**.
-5. Dopo uno o due minuti il sito è online all'indirizzo
-   `https://<nome-utente>.github.io/<nome-repo>/`
-   (l'indirizzo esatto compare in cima alla pagina **Settings → Pages**).
+2. Su GitHub: **Settings** → **Pages** → **Deploy from a branch** → `main` / `(root)` → **Save**.
+3. Dopo un paio di minuti il sito è su `https://<nome-utente>.github.io/<nome-repo>/`.
 
-Ogni nuovo push su `main` aggiorna il sito in automatico. Tutti i percorsi nel codice sono relativi (`memory/`, `../`, `js/main.js`), quindi funzionano anche dentro la sottocartella `/<nome-repo>/`.
+Ogni push su `main` aggiorna il sito. Tutti i percorsi sono relativi, quindi funzionano anche dentro `/<nome-repo>/`.
+
+⚠️ Un sito GitHub Pages è **pubblico**, anche se la repo è privata: le immagini e i suoni dei personaggi, se li aggiungi, tienili solo in locale (vedi i `LEGGIMI.md` in `assets/`).
 
 ---
 
-## Aggiungere un nuovo gioco
+## 🔨 Costruisci un nuovo livello
 
-1. Crea una cartella, ad esempio `scacchi/`, con dentro il suo `index.html`, `style.css` e `js/`. Se vuoi lo stile 8-bit della sala, nell'HTML carica prima `../assets/sala-giochi.css` e poi il tuo `style.css`. Il flipper invece ha un tema tutto suo e usa solo il font pixel.
-2. Nella pagina iniziale (`/index.html`) aggiungi un `<li>` con un link `<a class="level" href="scacchi/">`, copiando la struttura della scheda del Memory (numero di livello successivo, es. "1-3").
-3. Nella pagina del gioco metti un link per tornare all'elenco: `<a href="../">← Tutti i giochi</a>`.
-4. Per le due versioni della sala: nel `<head>` carica `<script src="../assets/tema.js"></script>` e `../assets/temi.css`, metti un pulsante `<button data-theme-toggle="short"><span data-theme-label></span></button>` nella barra in alto e scrivi gli stili della versione anime sotto `[data-theme='anime']`.
+1. 📁 Crea una cartella, per esempio `scacchi/`, con `index.html`, `style.css` e `js/`. Per lo stile 8-bit carica prima `../assets/sala-giochi.css`.
+2. 🗺️ Nella pagina iniziale aggiungi un `<li>` con `<a class="level" href="scacchi/">`, copiando la scheda del Memory (livello "1-3").
+3. ↩️ Metti il link per tornare all'elenco: `<a href="../">‹ Tutti i giochi</a>`.
+4. ✨ Per le due versioni: nel `<head>` carica `../assets/tema.js` e `../assets/temi.css`, metti un pulsante `<button data-theme-toggle="short"><span data-theme-label></span></button>` e scrivi gli stili anime sotto `[data-theme='anime']`.
+5. ✅ Controlla con `node strumenti/verifica.js scacchi`.
 
 ---
 
-## Crediti
+## 🪙 Crediti
 
-- Font **Press Start 2P** © 2012 The Press Start 2P Project Authors, rilasciato con licenza SIL Open Font License 1.1 (vedi `assets/fonts/OFL.txt`).
-- **Matter.js** 0.20.0 © Liam Brummitt e contributori, licenza MIT (vedi `pinball/lib/LICENSE-matter.txt`).
-- Font **Syne** © 2017 The Syne Project Authors e **Plus Jakarta Sans** © 2020 The Plus Jakarta Sans Project Authors, licenza SIL Open Font License 1.1 (vedi `assets/fonts/OFL-*.txt`).
-- Disposizione e disegno dei tavoli del flipper, trifoglio, grafica pixel, melodie ed effetti sonori sono originali di questo progetto.
-- Personaggi di **Super Mario** © Nintendo; personaggi di **Black Clover** © Yuki Tabata / Shueisha. Usati solo a scopo didattico, senza scopo di lucro; nessuna immagine ufficiale è inclusa nella repo.
-- La grafica della versione anime è ricavata dalle schermate generate con Google Stitch (progetto "Black Clover Sala Giochi").
-- Grafica pixel (nuvole, mattoni, moneta, icone), melodie ed effetti sonori sono originali di questo progetto.
+- 🔤 Font **Press Start 2P** © 2012 The Press Start 2P Project Authors; **Syne** © 2017 The Syne Project Authors; **Plus Jakarta Sans** © 2020 The Plus Jakarta Sans Project Authors. Tutti con licenza SIL Open Font License 1.1 (vedi `assets/fonts/OFL*.txt`).
+- ⚙️ **Matter.js** 0.20.0 © Liam Brummitt e contributori, licenza MIT (vedi `pinball/lib/LICENSE-matter.txt`).
+- 🍄 Personaggi di **Super Mario** © Nintendo · 📖 personaggi di **Black Clover** © Yuki Tabata / Shueisha. Usati solo a scopo didattico, senza scopo di lucro, e senza immagini ufficiali nella repo.
+- 🖼️ La grafica della versione anime è ricavata dalle schermate generate con Google Stitch (progetto "Black Clover Sala Giochi").
+- 🎨 Disposizione e disegno dei tavoli del flipper, trifoglio, grafica pixel, melodie ed effetti sonori sono originali di questo progetto.
+
+🧱🧱🧱🟨🧱🧱🧱🟨🧱🧱🧱🟨🧱🧱🧱
