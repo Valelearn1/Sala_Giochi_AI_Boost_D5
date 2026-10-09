@@ -156,17 +156,80 @@ export const THEME_ANIME = {
   },
 };
 
+/** Versione Simpson: la centrale nucleare di Springfield (cielo, ciambelle e uranio). */
+export const THEME_SIMPSON = {
+  tableName: 'Centrale Nucleare',
+  bumperStyle: 'donut', // ciambelle rosa con le codette
+  paintFont: { family: '"Luckiest Guy", sans-serif', weight: 400 },
+  decor: 'springfield', // nuvole e torri di raffreddamento sullo sfondo
+  wallPattern: 'cartoon', // pareti piene con il contorno nero, senza alone
+  particleColor: '124, 252, 0', // puntini radioattivi verdi
+
+  colors: {
+    abyssTop: '#7fcbff', // cielo di Springfield
+    abyssBottom: '#4fb3f6',
+    light: '255, 255, 255',
+    wall: '#8e9aa6', // cemento della centrale
+    wallEdge: '#1b1b1b',
+    flipperLeft: '#f26b21', // arancio come la maglietta di Bart
+    flipperRight: '#2b6fd6', // blu come i capelli di Marge
+    flipperEdge: '#1b1b1b',
+    ball: '#7cfc00', // una pallina di uranio, verde e luminosa
+    ballCore: '#eaffd0',
+    ballRim: '#2e7d32',
+    ballGlow: 'rgba(124, 252, 0, 0.6)',
+    plunger: '#5f6b73',
+    gate: '#ffd90f',
+    bumper: '#f48fb1', // glassa rosa
+    bumperLight: '#ffd1e0',
+    bumperDark: '#c2185b',
+    bumperGlow: 'rgba(255, 255, 255, 0.45)',
+    dough: '#f4b860', // impasto della ciambella
+    trail: '124, 252, 0',
+    hitRing: '#ffffff',
+    slingshot: '#1b1b1b',
+    slingshotFillA: '#ffd90f',
+    slingshotFillB: '#f2c200',
+    target: '#7cfc00', // barre di uranio
+    targetDown: '#5f6b73',
+    laneOff: '#9fb3c8',
+    laneOn: '#ffd90f',
+    outlane: '#f26b21',
+    post: '#ffd90f',
+    paint: 'rgba(27, 27, 27, 0.16)',
+  },
+};
+
+/** Versione Simpson di notte: cielo blu scuro, la centrale illuminata. */
+export const THEME_SIMPSON_DARK = {
+  ...THEME_SIMPSON,
+  colors: {
+    ...THEME_SIMPSON.colors,
+    abyssTop: '#1b2a52',
+    abyssBottom: '#0f1a38',
+    light: '124, 252, 0',
+    wall: '#4d5866',
+    wallEdge: '#070b1a',
+    laneOff: '#33415f',
+    targetDown: '#33415f',
+    paint: 'rgba(255, 255, 255, 0.12)',
+  },
+};
+
 /** Il tema del tavolo per ogni versione della sala. */
 export const THEMES = {
   classica: THEME_PLATFORM,
   anime: THEME_ANIME,
+  simpson: THEME_SIMPSON,
 };
 
 /**
  * Il tema del tavolo per una versione e una modalità (chiara/scura).
- * Il tavolo anime è sempre scuro; quello classico ha il suo "sotterraneo".
+ * Il tavolo anime è sempre scuro; quello classico ha il suo "sotterraneo",
+ * quello dei Simpson la sua Springfield di notte.
  */
 export function getTheme(version, mode = 'light') {
+  if (version === 'simpson') return mode === 'dark' ? THEME_SIMPSON_DARK : THEME_SIMPSON;
   if (version !== 'anime' && mode === 'dark') return THEME_PLATFORM_DARK;
   return THEMES[version] ?? THEME_PLATFORM;
 }

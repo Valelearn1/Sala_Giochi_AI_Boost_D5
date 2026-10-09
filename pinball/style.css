@@ -1664,6 +1664,275 @@ canvas {
   }
 }
 
+/* =====================================================================
+   8. Versione Simpson ("Centrale Nucleare")
+   Colori, font, nuvole e pulsanti comuni in ../assets/simpson.css;
+   il tavolo (ciambelle, torri, uranio) è disegnato da js/render.js.
+   ===================================================================== */
+
+:root[data-theme='simpson'],
+:root[data-theme='simpson'][data-mode='dark'] {
+  --page-bg: var(--s-sky);
+  --panel: var(--s-paper);
+  --panel-edge: var(--s-ink);
+  --text: var(--s-text);
+  --muted: var(--s-text-soft);
+  --accent: var(--s-yellow);
+  --accent-ink: var(--s-yellow-dark);
+  --red: var(--s-orange);
+  --brick: var(--s-blue);
+  --pixel: var(--s-display);
+  --font: var(--s-body);
+  --radius: 16px;
+}
+
+[data-theme='simpson'] .topbar-name {
+  font-size: 1rem;
+  color: var(--s-yellow);
+  letter-spacing: 0.03em;
+  text-shadow:
+    2px 0 0 var(--s-ink),
+    -2px 0 0 var(--s-ink),
+    0 2px 0 var(--s-ink),
+    0 -2px 0 var(--s-ink),
+    3px 3px 0 var(--s-ink);
+}
+
+[data-theme='simpson'] .back-link {
+  font-weight: 800;
+}
+
+/* Titoli gialli a fumetto */
+[data-theme='simpson'] .title,
+[data-theme='simpson'] .results-title {
+  font-size: clamp(2.5rem, 13vw, 4.5rem);
+  line-height: 1;
+  color: var(--s-yellow);
+  letter-spacing: 0.02em;
+  text-shadow:
+    3px 0 0 var(--s-ink),
+    -3px 0 0 var(--s-ink),
+    0 3px 0 var(--s-ink),
+    0 -3px 0 var(--s-ink),
+    3px 3px 0 var(--s-ink),
+    -3px -3px 0 var(--s-ink),
+    3px -3px 0 var(--s-ink),
+    -3px 3px 0 var(--s-ink),
+    5px 6px 0 var(--s-ink);
+}
+
+[data-theme='simpson'] .tagline,
+[data-theme='simpson'] .results-summary {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+[data-theme='simpson'] .field-label {
+  font-size: 1.25rem;
+  color: var(--s-yellow);
+  text-shadow:
+    2px 0 0 var(--s-ink),
+    -2px 0 0 var(--s-ink),
+    0 2px 0 var(--s-ink),
+    0 -2px 0 var(--s-ink),
+    3px 3px 0 var(--s-ink);
+}
+
+[data-theme='simpson'] .field-hint {
+  font-family: var(--s-body);
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: var(--ink);
+  text-shadow: none;
+  text-transform: none;
+}
+
+[data-theme='simpson'] .choice span {
+  border: 3px solid var(--s-ink);
+  border-radius: 50%;
+  background: var(--s-paper);
+  color: var(--s-text);
+  font-size: 1.5rem;
+  text-shadow: none;
+  box-shadow: var(--s-shadow-small);
+}
+
+[data-theme='simpson'] .choice input:checked + span {
+  background: var(--s-yellow);
+  color: var(--s-ink);
+  text-shadow: none;
+  box-shadow: var(--s-shadow);
+  translate: 0 -4px;
+}
+
+[data-theme='simpson'] .name-field {
+  border: 3px solid var(--s-ink);
+  border-radius: 999px;
+  background: var(--s-paper);
+  box-shadow: var(--s-shadow-small);
+}
+
+[data-theme='simpson'] .name-field input {
+  font-weight: 700;
+}
+
+[data-theme='simpson'] .name-field input::placeholder {
+  color: var(--s-text-soft);
+}
+
+[data-theme='simpson'] .player-dot {
+  border: 2px solid var(--s-ink);
+  border-radius: 50%;
+}
+
+[data-theme='simpson'] .controls-help {
+  border: 3px solid var(--s-ink);
+  border-radius: var(--s-radius);
+  box-shadow: var(--s-shadow-small);
+}
+
+[data-theme='simpson'] .controls-help dt {
+  color: #b84a0c;
+}
+
+[data-theme='simpson'][data-mode='dark'] .controls-help dt {
+  color: var(--s-yellow);
+}
+
+/* Tavolo e pannello */
+[data-theme='simpson'] canvas {
+  border: 3px solid var(--s-ink);
+  border-radius: 18px;
+  box-shadow: var(--s-shadow);
+}
+
+[data-theme='simpson'] .launch-button {
+  border: 3px solid var(--s-ink);
+  border-radius: 999px;
+  background: var(--s-yellow);
+  color: var(--s-ink);
+  font-family: var(--s-display);
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-shadow: none;
+  box-shadow: var(--s-shadow-small);
+}
+
+[data-theme='simpson'] .launch-button:active {
+  background: #ffe34d;
+  translate: 2px 2px;
+  box-shadow: 1px 1px 0 var(--s-ink);
+}
+
+[data-theme='simpson'] .hud {
+  border: 3px solid var(--s-ink);
+  border-radius: var(--s-radius);
+  box-shadow: var(--s-shadow);
+}
+
+[data-theme='simpson'] .hud-player {
+  font-family: var(--s-display);
+  font-size: 1.375rem;
+  font-weight: 400;
+  color: var(--s-text);
+  letter-spacing: 0.03em;
+  text-shadow: none;
+}
+
+[data-theme='simpson'] .hud-multiplier strong {
+  display: inline-block;
+  padding: 2px 12px;
+  border: 3px solid var(--s-ink);
+  border-radius: 999px;
+  background: var(--s-yellow);
+  color: var(--s-ink);
+  text-shadow: none;
+}
+
+[data-theme='simpson'] .hud-score {
+  border: 2px solid transparent;
+}
+
+[data-theme='simpson'] .hud-score.is-current {
+  border: 3px solid var(--s-ink);
+  background: var(--player);
+  color: #ffffff;
+}
+
+[data-theme='simpson'] .hud-score-points {
+  font-family: var(--s-display);
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+}
+
+[data-theme='simpson'] .message {
+  border: 3px solid var(--s-ink);
+  background: var(--s-paper-soft);
+  color: var(--s-text);
+  font-weight: 800;
+}
+
+/* "Tocca a…", pausa e classifica: cartoncini bianchi */
+[data-theme='simpson'] .overlay {
+  background: rgb(127 203 255 / 0.6);
+}
+
+[data-theme='simpson'][data-mode='dark'] .overlay {
+  background: rgb(15 26 56 / 0.7);
+}
+
+[data-theme='simpson'] .overlay-card {
+  border: 4px solid var(--s-ink);
+  border-radius: var(--s-radius);
+  box-shadow: 6px 7px 0 var(--s-ink);
+}
+
+[data-theme='simpson'] .overlay-title {
+  font-size: clamp(1.75rem, 8vw, 2.5rem);
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  text-shadow:
+    3px 0 0 var(--s-ink),
+    -3px 0 0 var(--s-ink),
+    0 3px 0 var(--s-ink),
+    0 -3px 0 var(--s-ink),
+    3px 3px 0 var(--s-ink),
+    -3px -3px 0 var(--s-ink),
+    5px 6px 0 var(--player, var(--s-orange));
+}
+
+[data-theme='simpson'] .ranking-item {
+  border: 3px solid var(--s-ink);
+  box-shadow: var(--s-shadow-small);
+}
+
+[data-theme='simpson'] .ranking-item.is-winner {
+  border-color: var(--s-ink);
+  background: var(--s-yellow);
+  color: var(--s-ink);
+  box-shadow: var(--s-shadow);
+}
+
+[data-theme='simpson'] .ranking-rank,
+[data-theme='simpson'] .ranking-score {
+  font-size: 1.125rem;
+  letter-spacing: 0.03em;
+}
+
+[data-theme='simpson'] .results-record {
+  border: 3px solid var(--s-ink);
+  border-radius: 999px;
+  background: var(--s-paper);
+  color: var(--s-text);
+  font-weight: 800;
+  box-shadow: var(--s-shadow-small);
+}
+
+[data-theme='simpson'] .results-record.is-new {
+  background: var(--s-pink);
+  color: var(--s-ink);
+}
+
 /* Telefoni molto stretti: barra in alto più compatta, così stanno tutti i pulsanti */
 @media (max-width: 400px) {
   .topbar {

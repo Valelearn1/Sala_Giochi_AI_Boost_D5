@@ -86,6 +86,12 @@
   --s-ink: #070b1a;
   --ink: #ffffff;
   --ink-soft: #c9d4f5;
+  /* Ridichiarate qui: il "sotterraneo" della classica le cambierebbe di notte */
+  --sky: var(--s-sky);
+  --panel: var(--s-paper);
+  --panel-text: var(--s-text);
+  --panel-muted: var(--s-text-soft);
+  --ceiling-height: 0px;
   --cloud: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 90'%3E%3Cpath d='M30 80c-16 0-24-18-12-28-4-18 18-30 32-20 6-20 36-24 46-6 14-14 40-6 40 14 18-4 32 12 24 28-2 8-10 12-18 12z' fill='%23324274'/%3E%3C/svg%3E");
 }
 

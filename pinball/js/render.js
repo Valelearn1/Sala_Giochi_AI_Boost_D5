@@ -126,6 +126,7 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
     drawPosts();
     if (theme.bumperStyle === 'sigil') drawSigilBumpers(time);
     else if (theme.bumperStyle === 'mushroom') drawMushroomBumpers();
+    else if (theme.bumperStyle === 'donut') drawDonutBumpers();
     else drawBumpers(time);
     drawPlunger(view.charge);
     drawRings();
@@ -209,6 +210,8 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
       drawEngravedClover(c);
     } else if (theme.decor === 'platform') {
       drawHillsAndClouds(c);
+    } else if (theme.decor === 'springfield') {
+      drawSpringfield(c);
     } else if (theme.decor === 'sonar') {
       drawSonarRings(c);
     }
@@ -244,6 +247,39 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
       const shape = [[2, 0, 4], [1, 1, 7], [0, 2, 9], [0, 3, 9]]; // [colonna di partenza, riga, larghezza] in "pixel"
       for (const [startX, row, width] of shape) {
         c.fillRect(x + startX * size, y + row * size, width * size, size);
+      }
+    }
+  }
+
+  /** Nuvole soffici e le due torri di raffreddamento della centrale (versione Simpson). */
+  function drawSpringfield(c) {
+    // Nuvole da cartone: tre cerchi uniti, con una base piatta
+    c.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    for (const [x, y, size] of [[110, 230, 1], [430, 190, 0.8], [250, 560, 0.7]]) {
+      c.beginPath();
+      c.arc(x, y, 22 * size, Math.PI, 0);
+      c.arc(x + 30 * size, y - 12 * size, 28 * size, Math.PI, 0);
+      c.arc(x + 62 * size, y, 22 * size, Math.PI, 0);
+      c.closePath();
+      c.fill();
+    }
+    // Torri di raffreddamento: strette in vita, più larghe in basso
+    for (const [x, height] of [[150, 300], [410, 240]]) {
+      const top = layout.TABLE_HEIGHT - height;
+      c.beginPath();
+      c.moveTo(x - 45, top);
+      c.quadraticCurveTo(x - 25, top + height * 0.55, x - 70, layout.TABLE_HEIGHT);
+      c.lineTo(x + 70, layout.TABLE_HEIGHT);
+      c.quadraticCurveTo(x + 25, top + height * 0.55, x + 45, top);
+      c.closePath();
+      c.fillStyle = 'rgba(27, 27, 27, 0.13)';
+      c.fill();
+      // Il fumo che esce dalla cima
+      c.fillStyle = 'rgba(255, 255, 255, 0.35)';
+      for (const [dx, dy, r] of [[0, -18, 20], [-18, -40, 16], [12, -58, 22]]) {
+        c.beginPath();
+        c.arc(x + dx, top + dy, r, 0, Math.PI * 2);
+        c.fill();
       }
     }
   }
@@ -353,7 +389,7 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
       c.strokeStyle = colors.wallEdge;
       c.lineWidth = 2;
       c.shadowColor = colors.wallEdge;
-      c.shadowBlur = bricks ? 0 : 10;
+      c.shadowBlur = bricks || theme.wallPattern === 'cartoon' ? 0 : 10; // il cartone ha contorni netti
       c.stroke();
       c.shadowBlur = 0;
     }
@@ -451,6 +487,62 @@ export function createRenderer({ canvas, layout, theme: initialTheme }) {
         ctx.arc(x + dx * r, y + dy * r, size * r, 0, Math.PI * 2);
         ctx.fill();
       }
+    }
+  }
+
+  /** I bumper della versione Simpson: ciambelle con la glassa rosa e le codette. */
+  function drawDonutBumpers() {
+    const sprinkleColors = ['#ffd90f', '#2b6fd6', '#ffffff', '#3fa34d', '#f26b21'];
+    for (const bumper of layout.BUMPERS) {
+      const level = flashLevel('bumper', bumper.id);
+      const r = bumper.radius * (1 + level * 0.12);
+      const { x, y } = bumper;
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = colors.wallEdge;
+
+      // Impasto
+      ctx.fillStyle = colors.dough;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Glassa ondulata (più chiara quando viene colpita)
+      ctx.fillStyle = level > 0 ? colors.bumperLight : colors.bumper;
+      ctx.beginPath();
+      for (let step = 0; step <= 24; step++) {
+        const angle = (step / 24) * Math.PI * 2;
+        const wave = r * (0.8 + (step % 2 ? 0.06 : 0));
+        const px = x + Math.cos(angle) * wave;
+        const py = y + Math.sin(angle) * wave;
+        if (step === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.fill();
+
+      // Codette colorate (sempre nella stessa posizione per ogni ciambella)
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      for (let i = 0; i < 8; i++) {
+        const angle = i * 0.785 + bumper.id;
+        const distance = r * (i % 2 ? 0.62 : 0.5);
+        const sx = x + Math.cos(angle) * distance;
+        const sy = y + Math.sin(angle) * distance;
+        ctx.strokeStyle = sprinkleColors[(i + bumper.id) % sprinkleColors.length];
+        ctx.beginPath();
+        ctx.moveTo(sx - 3, sy - 2);
+        ctx.lineTo(sx + 3, sy + 2);
+        ctx.stroke();
+      }
+
+      // Il buco al centro, con il cielo che si vede attraverso
+      ctx.fillStyle = colors.abyssTop;
+      ctx.strokeStyle = colors.wallEdge;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(x, y, r * 0.28, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
     }
   }
 
