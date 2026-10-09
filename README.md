@@ -5,7 +5,7 @@ Una raccolta di minigiochi per il browser, fatti in **HTML, CSS e JavaScript van
 | Gioco | Stato |
 | --- | --- |
 | 🃏 [Memory](memory/) | Giocabile |
-| 🎯 Peggle (pinball con pioli) | In arrivo |
+| 🪼 [Profondità Zero](pinball/) (flipper) | Giocabile |
 
 ---
 
@@ -44,6 +44,54 @@ Il contatore **Mosse** conta quante volte sono state girate due carte, sommando 
 
 ---
 
+## 🪼 Profondità Zero (flipper)
+
+Flipper in tempo reale a tema abissi marini, multiplayer a turni: da 1 a 4 giocatori sullo stesso dispositivo. Il tavolo è originale e disegnato da codice su Canvas; la fisica è di [Matter.js](https://brm.io/matter-js/), salvato in locale in `pinball/lib/`, quindi funziona anche offline.
+
+### Regole
+
+1. Prima di iniziare si sceglie il numero di giocatori (da 1 a 4) con nomi facoltativi.
+2. Ogni giocatore ha **3 palline**. Quando la pallina esce dal fondo, il turno passa al giocatore successivo, e compare la schermata **"Tocca a [nome] – premi per lanciare"** per passarsi il dispositivo.
+3. Elementi del tavolo e punti base:
+   - **3 bumper** (le meduse): 100 punti, respingono la pallina;
+   - **2 slingshot** sopra le alette: 50 punti;
+   - **4 bersagli abbattibili** (le esche luminose): 250 punti l'uno; abbatterli tutti dà un **bonus di 2.000** e li rialza;
+   - **3 corsie superiori** con luci: 150 punti; accenderle tutte e tre fa salire il **moltiplicatore** (fino a ×5);
+   - **corsie laterali di uscita**: 500 punti, ma portano verso lo scolo.
+4. Il moltiplicatore vale su tutti i punti e si azzera a ogni pallina persa.
+5. A fine pallina arriva un **bonus** in base agli elementi colpiti.
+6. Finite le palline di tutti: classifica, vincitore o pareggio, e il pulsante **Rigioca**.
+
+### Controlli
+
+| Azione | Tastiera | Telefono / tablet |
+| --- | --- | --- |
+| Aletta sinistra | **Z** oppure **←** | tocca la metà sinistra del tavolo |
+| Aletta destra | **M** oppure **→** | tocca la metà destra del tavolo |
+| Lancio | tieni premuto **Spazio**: più a lungo = più forte | tieni premuto **Lancia** |
+| Pausa | **P** | pulsante **Pausa** |
+
+Il gioco va in pausa da solo se cambi scheda o blocchi il telefono.
+
+### Com'è organizzato il codice
+
+- `js/config/table-layout.js` (DATI): dove sta ogni elemento del tavolo. Fisica e disegno leggono da qui.
+- `js/config/physics-config.js` (DATI): gravità, rimbalzi, forza di alette e bumper, velocità massima. Per regolare il gioco basta cambiare questi numeri.
+- `js/config/rules-config.js` e `js/config/theme.js` (DATI): punteggi e bonus; nome, colori e testi del tema (sostituibile).
+- `js/physics.js`: costruisce il mondo di Matter.js e lo fa avanzare. Quando la pallina colpisce qualcosa avvisa con un evento (`{ type: 'bumper', id: 2 }`).
+- `js/rules.js` e `js/turns.js`: logica pura, senza browser, con i test in `pinball/tests/`.
+- `js/render.js`, `js/hud.js`, `js/input.js`: disegno del tavolo, pannello HTML, tastiera e touch.
+- `js/main.js`: collega tutto e fa girare il ciclo di gioco.
+
+Scelte di fisica, per chi vuole capirle:
+
+- **Passo fisso**: la simulazione avanza sempre di 1/240 di secondo, indipendentemente dal frame rate dello schermo.
+- **Niente pallina che attraversa le pareti**: la velocità è limitata, le pareti sono spesse e i passi sono piccoli, quindi in un passo la pallina si sposta meno di raggio + metà parete.
+- **Alette a rotazione controllata**: a ogni passo ruotano di un angolo fisso attorno al perno, così il colpo è reattivo e sempre uguale.
+- **Debug**: con `?debug` nell'indirizzo (`pinball/?debug`), fisica e stato sono raggiungibili dalla console del browser come `pinballDebug`.
+
+---
+
 ## Struttura della repo
 
 ```
@@ -56,6 +104,11 @@ Il contatore **Mosse** conta quante volte sono state girate due carte, sommando 
 ├── assets/
 │   ├── sala-giochi.css stile comune: colori, font, cielo, terreno, pulsanti
 │   └── fonts/          font pixel "Press Start 2P" e la sua licenza (OFL.txt)
+├── pinball/            il flipper "Profondità Zero" (vedi la sezione sopra)
+│   ├── lib/            Matter.js 0.20.0 e la sua licenza
+│   ├── js/config/      dati: tavolo, fisica, regole, tema
+│   ├── js/             fisica, regole, turni, disegno, pannello, input
+│   └── tests/
 └── memory/
     ├── index.html      le tre schermate: impostazioni, partita, classifica
     ├── style.css       layout, carte con rotazione 3D, versione per telefono
@@ -105,7 +158,7 @@ Il codice usa gli **ES modules** (`<script type="module">` e `import`). I browse
 Serve Node.js 22 o successivo e non c'è niente da installare:
 
 ```bash
-node --test memory/tests/*.test.js
+node --test memory/tests/*.test.js pinball/tests/*.test.js
 ```
 
 ---
@@ -126,8 +179,8 @@ Ogni nuovo push su `main` aggiorna il sito in automatico. Tutti i percorsi nel c
 
 ## Aggiungere un nuovo gioco
 
-1. Crea una cartella, ad esempio `peggle/`, con dentro il suo `index.html`, `style.css` e `js/`. Nell'HTML carica prima `../assets/sala-giochi.css` e poi il tuo `style.css`: così il gioco eredita colori, font, cielo e terreno.
-2. Nella pagina iniziale (`/index.html`) sostituisci la scheda "In arrivo" con un link `<a class="level" href="peggle/">`, copiando la struttura della scheda del Memory.
+1. Crea una cartella, ad esempio `scacchi/`, con dentro il suo `index.html`, `style.css` e `js/`. Se vuoi lo stile 8-bit della sala, nell'HTML carica prima `../assets/sala-giochi.css` e poi il tuo `style.css`. Il flipper invece ha un tema tutto suo e usa solo il font pixel.
+2. Nella pagina iniziale (`/index.html`) aggiungi un `<li>` con un link `<a class="level" href="scacchi/">`, copiando la struttura della scheda del Memory (numero di livello successivo, es. "1-3").
 3. Nella pagina del gioco metti un link per tornare all'elenco: `<a href="../">← Tutti i giochi</a>`.
 
 ---
@@ -135,4 +188,6 @@ Ogni nuovo push su `main` aggiorna il sito in automatico. Tutti i percorsi nel c
 ## Crediti
 
 - Font **Press Start 2P** © 2012 The Press Start 2P Project Authors, rilasciato con licenza SIL Open Font License 1.1 (vedi `assets/fonts/OFL.txt`).
+- **Matter.js** 0.20.0 © Liam Brummitt e contributori, licenza MIT (vedi `pinball/lib/LICENSE-matter.txt`).
+- Il tavolo "Profondità Zero" (disposizione, grafica e tema) è originale di questo progetto.
 - Grafica pixel (nuvole, mattoni, moneta, icone), melodie ed effetti sonori sono originali di questo progetto.

@@ -12,7 +12,7 @@ Compagni di corso e amici che giocano insieme nello stesso posto, passandosi un 
 
 ## Product Purpose
 
-"Sala giochi": una raccolta di minigiochi da browser per un progetto di corso. Il primo gioco è un Memory a turni da 2 a 4 giocatori; il secondo previsto è un pinball stile Peggle. Successo: una partita si avvia in pochi secondi, si capisce sempre di chi è il turno e quando passare il dispositivo, e il codice resta comprensibile per uno studente.
+"Sala giochi": una raccolta di minigiochi da browser per un progetto di corso. Giochi: un Memory a turni da 2 a 4 giocatori e un flipper in tempo reale a turni, "Profondità Zero", da 1 a 4 giocatori. Successo: una partita si avvia in pochi secondi, si capisce sempre di chi è il turno e quando passare il dispositivo, e il codice resta comprensibile per uno studente.
 
 ## Positioning
 
@@ -28,11 +28,13 @@ Partite brevi dal vivo, spesso da telefono tenuto in mano e passato tra persone;
 - Nessuna dipendenza esterna a runtime; le carte usano emoji, nessuna immagine da scaricare. File statici serviti dalla repo (es. un font con licenza libera) sono ammessi.
 - Logica di gioco (`memory/js/game.js`) separata dal DOM e testata con `node --test`.
 - Codice, commenti e README in italiano, con funzioni piccole e nomi chiari.
-- Ogni gioco vive nella sua cartella (`/memory/`, poi `/peggle/`) e la pagina iniziale li elenca.
+- Ogni gioco vive nella sua cartella (`/memory/`, `/pinball/`) e la pagina iniziale li elenca.
+- Il flipper usa Matter.js salvato in locale (`/pinball/lib/`), nessuna CDN.
 
 ## Brand Commitments
 
-- Tema visivo scelto dall'utente: mondo platform a 8 bit ispirato a Super Mario.
+- Tema visivo scelto dall'utente: mondo platform a 8 bit ispirato a Super Mario, per la pagina iniziale e il Memory.
+- Eccezione dichiarata: il flipper "Profondità Zero" ha un tema proprio, abissi marini blu/turchese con accenti luminosi, sostituibile da `pinball/js/config/theme.js`. Lo lega alla sala il font pixel Press Start 2P.
 - Il sito è pubblico: solo ispirazione. Niente personaggi, loghi, nome "Super Mario", sprite o musiche Nintendo.
 - Interfaccia in italiano.
 

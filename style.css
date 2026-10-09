@@ -89,12 +89,15 @@ a.level:hover .level-block--gold {
   text-shadow: 3px 3px 0 var(--gold-dark);
 }
 
-.level-block--locked {
-  background: #3a3a48;
-  color: #9a9aac;
+.level-block--abyss {
+  background: #04163a;
   box-shadow:
-    inset 4px 4px 0 #5a5a6c,
-    inset -4px -4px 0 #24242e;
+    inset 4px 4px 0 #12406b,
+    inset -4px -4px 0 #010614;
+}
+
+a.level:hover .level-block--abyss svg {
+  animation: block-bump 260ms cubic-bezier(0.3, 0.7, 0.4, 1);
 }
 
 .level-text {
@@ -137,26 +140,6 @@ a.level:hover .level-block--gold {
     inset -3px -3px 0 rgb(0 0 0 / 0.35);
 }
 
-.level--locked {
-  border-style: dashed;
-  border-color: #9a9aac;
-}
-
-.level--locked .level-world,
-.level--locked .level-title {
-  color: #9a9aac;
-}
-
-.badge {
-  padding: 8px 10px;
-  border: 2px solid #9a9aac;
-  color: #c8c8d4;
-  font-family: var(--pixel);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
 @keyframes block-bump {
   40% { translate: 0 -10px; }
 }
@@ -175,15 +158,15 @@ a.level:hover .level-block--gold {
     flex-basis: calc(100% - 82px);
   }
 
-  .level-cta,
-  .badge {
+  .level-cta {
     margin-left: 82px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .level,
-  a.level:hover .level-block--gold {
+  a.level:hover .level-block--gold,
+  a.level:hover .level-block--abyss svg {
     transition: none;
     animation: none;
   }

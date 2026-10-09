@@ -98,6 +98,7 @@ export function createInput({ touchArea, launchButton, pauseButton, onLaunchStar
 
   launchButton.addEventListener('pointerdown', (event) => {
     event.preventDefault();
+    event.stopPropagation(); // il pulsante sta sopra il tavolo: non deve azionare un'aletta
     capturePointer(launchButton, event.pointerId);
     startCharge();
   });

@@ -152,11 +152,10 @@ body {
 .button--primary {
   background: var(--glow);
   color: var(--abyss);
-  box-shadow: 0 0 0 0 rgb(47 227 211 / 0.5);
 }
 
 .button--primary:hover {
-  box-shadow: 0 0 24px rgb(47 227 211 / 0.45);
+  background: var(--glow-2);
 }
 
 .button--ghost {
@@ -364,11 +363,16 @@ body {
 .table-wrap {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   display: grid;
   place-items: center;
   touch-action: none; /* i tocchi azionano le alette, non scorrono la pagina */
   user-select: none;
   -webkit-user-select: none;
+}
+
+.table-frame {
+  position: relative;
 }
 
 canvas {
@@ -379,12 +383,12 @@ canvas {
 
 .launch-button {
   position: absolute;
-  right: 12px;
-  bottom: 12px;
+  right: 6px;
+  bottom: 10px;
   z-index: 2;
-  min-width: 92px;
-  min-height: 56px;
-  padding: 10px 16px;
+  min-width: 76px;
+  min-height: 48px;
+  padding: 8px 12px;
   border: 2px solid var(--gold);
   border-radius: 999px;
   background: rgb(4 22 58 / 0.85);
@@ -591,7 +595,7 @@ canvas {
 
 .ranking-item.is-winner {
   border-color: var(--player);
-  box-shadow: 0 0 20px rgb(47 227 211 / 0.2);
+  background: color-mix(in srgb, var(--player) 12%, var(--panel));
 }
 
 .ranking-rank {
@@ -624,6 +628,10 @@ canvas {
 
 /* Schermi stretti o in verticale: pannello SOPRA il tavolo, compatto */
 @media (max-width: 760px) {
+  :root {
+    --topbar-height: 40px;
+  }
+
   .screen--game {
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr);
@@ -639,24 +647,34 @@ canvas {
       'current multiplier pause'
       'scores scores scores'
       'message message message';
-    gap: 8px 12px;
+    gap: 6px 12px;
     align-items: center;
-    padding: 10px 12px;
+    padding: 8px 10px;
   }
 
-  .hud-current { grid-area: current; }
+  .hud-current { grid-area: current; gap: 0; }
+
+  /* Su telefono le etichette "Di turno" / "Molt." si capiscono dal contesto */
+  .hud .hud-label {
+    display: none;
+  }
   .hud-multiplier { grid-area: multiplier; text-align: right; }
   .pause-button { grid-area: pause; align-self: center; }
 
   .hud-scores {
     grid-area: scores;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(76px, 1fr));
     gap: 4px;
   }
 
   .hud-score {
-    padding: 4px 8px;
-    font-size: 0.85rem;
+    gap: 5px;
+    padding: 3px 6px;
+    font-size: 0.75rem;
+  }
+
+  .hud-score-points {
+    font-size: 0.6875rem;
   }
 
   .hud-player {
@@ -667,15 +685,24 @@ canvas {
     font-size: 1.1rem;
   }
 
+  /* Una riga sempre riservata: se il pannello cambiasse altezza, il tavolo cambierebbe misura */
   .message {
     grid-area: message;
-    min-height: 0;
+    min-height: calc(1.45em + 12px);
     padding: 6px 10px;
+    overflow: hidden;
     font-size: 0.85rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .message:empty {
-    display: none;
+  .launch-button {
+    right: 4px;
+    bottom: 6px;
+    min-width: 0;
+    min-height: 44px;
+    padding: 6px 10px;
+    font-size: 0.6875rem;
   }
 
   .names {

@@ -79,9 +79,12 @@
       <section id="game-screen" class="screen screen--game" aria-label="Partita in corso" hidden>
         <div class="table-area">
           <div id="table-wrap" class="table-wrap">
-            <canvas id="table" role="img" aria-label="Tavolo del flipper Profondità Zero"></canvas>
+            <!-- La cornice ha la stessa misura del canvas: il pulsante Lancia resta sempre sul tavolo -->
+            <div class="table-frame">
+              <canvas id="table" role="img" aria-label="Tavolo del flipper Profondità Zero"></canvas>
+              <button type="button" id="launch-button" class="launch-button">Lancia</button>
+            </div>
           </div>
-          <button type="button" id="launch-button" class="launch-button">Lancia</button>
 
           <!-- Tra un turno e l'altro: si passa il dispositivo -->
           <div id="turn-overlay" class="overlay" hidden>
