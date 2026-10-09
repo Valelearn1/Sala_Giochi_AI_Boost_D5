@@ -55,6 +55,12 @@ export const WALLS = [
   { id: 'left-guide', thickness: 16, points: [[60, 740], [60, 900], [178, 956]] },
   { id: 'right-guide', thickness: 16, points: [[mirrorX(60), 740], [mirrorX(60), 900], [mirrorX(178), 956]] },
 
+  // Deviatori sopra l'ingresso delle corsie di uscita: la pallina che scende lungo
+  // la parete viene spostata nella corsia di rientro, verso l'aletta.
+  // (Senza, metà dei lanci finiva in una corsia di uscita prima di arrivare alle alette.)
+  { id: 'left-outlane-deflector', thickness: 12, points: [[20, 660], [46, 705]] },
+  { id: 'right-outlane-deflector', thickness: 12, points: [[mirrorX(20), 660], [mirrorX(46), 705]] },
+
   // Guide delle tre corsie superiori
   { id: 'lane-guide-1', thickness: 12, points: [[186, 105], [186, 165]] },
   { id: 'lane-guide-2', thickness: 12, points: [[246, 105], [246, 165]] },
