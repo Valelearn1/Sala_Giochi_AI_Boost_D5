@@ -675,7 +675,7 @@
   line-height: 1.4;
   color: var(--white);
   text-transform: uppercase;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word; /* va a capo dentro una parola solo se non ci sta intera */
   text-wrap: balance;
   text-shadow: 4px 4px 0 var(--player);
 }
@@ -710,7 +710,7 @@
   font-size: clamp(1.5rem, 7vw, 2.5rem);
   line-height: 1.25;
   outline: none;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word; /* va a capo dentro una parola solo se non ci sta intera */
   text-wrap: balance;
 }
 
@@ -757,7 +757,7 @@
   flex: 1;
   min-width: 0;
   font-weight: 700;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word; /* va a capo dentro una parola solo se non ci sta intera */
 }
 
 .ranking-score {

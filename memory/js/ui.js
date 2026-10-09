@@ -57,6 +57,20 @@ export function showScreen(name) {
 
 // --- Impostazioni --------------------------------------------------------------
 
+/** "Giocatore" nella versione classica, "Mago" in quella anime. */
+function playerWord() {
+  return window.SalaTema?.get() === 'anime' ? 'Mago' : 'Giocatore';
+}
+
+/** Suggerimento nei campi nome: "Giocatore 1" o "Mago 1", secondo la versione. */
+function updatePlaceholders() {
+  document.querySelectorAll('input[name="player-name"]').forEach((input, index) => {
+    input.placeholder = `${playerWord()} ${index + 1}`;
+  });
+}
+updatePlaceholders();
+window.addEventListener('sala-tema', updatePlaceholders);
+
 /** Mostra tanti campi "nome" quanti sono i giocatori scelti. */
 export function updateNameFields(playerCount) {
   elements.nameFields.forEach((field, index) => {
@@ -67,7 +81,7 @@ export function updateNameFields(playerCount) {
 
 /**
  * Legge il modulo delle impostazioni.
- * I nomi lasciati vuoti diventano "Giocatore 1", "Giocatore 2", …
+ * I nomi lasciati vuoti diventano "Giocatore 1", "Giocatore 2", … ("Mago 1"… nella versione anime)
  */
 export function readSettings() {
   const data = new FormData(elements.setupForm);
@@ -76,7 +90,7 @@ export function readSettings() {
 
   return {
     difficulty: data.get('difficulty'),
-    playerNames: typedNames.map((name, index) => name.trim() || `Giocatore ${index + 1}`),
+    playerNames: typedNames.map((name, index) => name.trim() || `${playerWord()} ${index + 1}`),
   };
 }
 

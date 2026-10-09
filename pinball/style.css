@@ -467,7 +467,7 @@ canvas {
   font-size: 1.25rem;
   color: #ffffff;
   text-shadow: 2px 2px 0 var(--player);
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word; /* va a capo dentro una parola solo se non ci sta intera */
 }
 
 .hud-ball {
@@ -570,7 +570,7 @@ canvas {
   line-height: 1.4;
   color: #ffffff;
   text-shadow: 3px 3px 0 var(--player, var(--red));
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word; /* va a capo dentro una parola solo se non ci sta intera */
 }
 
 .overlay-text {
@@ -598,7 +598,7 @@ canvas {
   color: #ffffff;
   text-shadow: 3px 3px 0 #000000, 6px 6px 0 var(--brick);
   outline: none;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word; /* va a capo dentro una parola solo se non ci sta intera */
 }
 
 .results-summary {
@@ -644,7 +644,7 @@ canvas {
   flex: 1;
   min-width: 0;
   font-weight: 700;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word; /* va a capo dentro una parola solo se non ci sta intera */
 }
 
 .ranking-score {

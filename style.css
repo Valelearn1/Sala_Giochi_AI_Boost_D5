@@ -101,7 +101,7 @@ a.level:hover .level-block--gold {
   color: var(--gold);
   font-size: 0.8125rem;
   font-weight: 600;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word; /* va a capo dentro una parola solo se non ci sta intera */
 }
 
 [data-theme='anime'] .level-source {

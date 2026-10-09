@@ -51,18 +51,32 @@ export function showScreen(name) {
 
 // --- Impostazioni --------------------------------------------------------------
 
+/** "Giocatore" nella versione classica, "Mago" in quella anime. */
+function playerWord() {
+  return window.SalaTema?.get() === 'anime' ? 'Mago' : 'Giocatore';
+}
+
+/** Suggerimento nei campi nome: "Giocatore 1" o "Mago 1", secondo la versione. */
+function updatePlaceholders() {
+  document.querySelectorAll('input[name="player-name"]').forEach((input, index) => {
+    input.placeholder = `${playerWord()} ${index + 1}`;
+  });
+}
+updatePlaceholders();
+window.addEventListener('sala-tema', updatePlaceholders);
+
 export function updateNameFields(playerCount) {
   elements.nameFields.forEach((field, index) => {
     field.hidden = index >= playerCount;
   });
 }
 
-/** Legge le impostazioni; i nomi vuoti diventano "Giocatore 1", "Giocatore 2"… */
+/** Legge le impostazioni; i nomi vuoti diventano "Giocatore 1", "Giocatore 2"… ("Mago 1"… nell'anime) */
 export function readSettings() {
   const data = new FormData(elements.setupForm);
   const playerCount = Number(data.get('player-count'));
   const names = data.getAll('player-name').slice(0, playerCount);
-  return { playerNames: names.map((name, index) => name.trim() || `Giocatore ${index + 1}`) };
+  return { playerNames: names.map((name, index) => name.trim() || `${playerWord()} ${index + 1}`) };
 }
 
 // --- Pannello di gioco -------------------------------------------------------
