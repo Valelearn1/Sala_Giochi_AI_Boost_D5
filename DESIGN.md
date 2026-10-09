@@ -109,11 +109,11 @@ typography:
     letterSpacing: "0.08em"
 rounded:
   none: "0"
-  anime-tag: "6px"
-  anime-control: "12px"
-  anime-card: "14px"
-  anime-surface: "16px"
-  anime-pill: "999px"
+  anime-tag: "2px"
+  anime-control: "4px"
+  anime-card: "8px"
+  anime-surface: "8px"
+  anime-pill: "12px"
 spacing:
   xs: "6px"
   sm: "8px"
@@ -225,7 +225,7 @@ La densità è da gioco su telefono tenuto in mano: bersagli da almeno 40–48px
 **Key Characteristics:**
 - Due vesti sullo stesso markup, scelte dall'utente e persistite; classica predefinita.
 - Classica: angoli vivi, bordi 3px, smussi inset al posto delle ombre, Press Start 2P con contorno nero.
-- Anime: fondo #151218 a puntini dorati, scala di superfici tonali, raggi 12–16px, Syne 800 + Plus Jakarta Sans.
+- Anime: fondo #151218 a puntini dorati, scala di superfici tonali, raggi 4–8px con ombre nette spostate (come le schermate di Stitch), barra in alto e barra di navigazione fisse, icone a linee in SVG, Syne + Plus Jakarta Sans.
 - Colore del giocatore come segnale principale del turno, in entrambe le versioni.
 - Tutto vettoriale e locale; font self-hosted in `assets/fonts` (OFL).
 - "Riduci movimento" rispettato ovunque.
@@ -287,7 +287,7 @@ Con `prefers-color-scheme: dark` la classica di pagina iniziale e Memory diventa
 ### Named Rules
 **The Pixel Outline Rule.** Press Start 2P su sfondo libero è sempre bianco, maiuscolo, con contorno nero su quattro lati più un'ombra spostata (`.pixel-text`); non si usa per paragrafi.
 
-**The Weight Is the Voice Rule.** Nella versione anime display e pulsanti stanno a 800; non introdurre pesi intermedi per i titoli.
+**The Weight Is the Voice Rule.** Nella versione anime titoli grandi e pulsanti stanno a 800, titoli delle schede a 700. **Eccezione: i numeri** (punti, mosse, punteggio del flipper) stanno a 700, perché a 800 le cifre di Syne ("1", "0") diventano quasi illeggibili.
 
 ## Layout
 
@@ -314,18 +314,21 @@ La classica è piatta e dà profondità con smussi pixel interni: luce in alto a
 - **Bagliore cremisi** (`box-shadow: 0 8px 22px rgb(179 18 46 / 0.4)`): scelta del numero di giocatori nell'anime.
 - **Alone di turno** (`box-shadow: 0 0 0 4px rgb(236 194 70 / 0.12)`): punteggio del giocatore di turno nell'anime.
 - **Coppia trovata** (`box-shadow: 0 0 18px color-mix(in srgb, var(--player) 35%, transparent)`): carta abbinata nell'anime.
-- **Fluttuante anime** (`box-shadow: 0 10px 28px rgb(0 0 0 / 0.5)`; banda di turno `0 20px 50px rgb(0 0 0 / 0.6)`; canvas `0 0 0 1px var(--g-line), 0 18px 50px rgb(0 0 0 / 0.6)`).
+- **Ombra netta anime** (`--g-shadow: 3px 3px 0 #0d0b10`, in modalità chiara `rgb(29 20 24 / 0.18)`): tutte le schede, i riquadri e il canvas, come nelle schermate di Stitch; i pulsanti d'azione (CTA d'oro, FLIPPER SX/DX, pulsante fisso) usano `4px 4px 0` e quando si premono si spostano di 2px verso l'ombra.
+- **Scheda di turno anime** (`0 0 0 1px rgb(179 18 46 / 0.6), 0 24px 60px rgb(0 0 0 / 0.7)`): cambio turno del Memory e "Tocca a…" del flipper.
 
 ### Named Rules
 **The Bevel Not Blur Rule.** Nella classica la profondità è uno smusso inset o uno spostamento verticale; le ombre sfocate restano limitate al pulsante fisso e alla cornice del canvas.
 
-**The Tonal Ladder Rule.** Nell'anime una superficie selezionata o di turno sale a g-surface-highest e prende il bordo oro; a riposo è g-surface-high senza bordo visibile.
+**The Tonal Ladder Rule.** Nell'anime una superficie selezionata o di turno sale di un gradino nella scala g-surface e prende l'alone oro; a riposo è g-surface senza bordo visibile.
+
+**La cornice delle schermate Stitch (anime).** Ogni pagina ha una barra fissa in alto alta 80px (logo col trifoglio, "SALA GIOCHI •" in oro e il nome della pagina, pulsanti-icona da 44px) e una barra di navigazione fissa in basso alta 64px (Hub · Memory · Flipper, la voce attiva con il filo d'oro in alto). Le crea `assets/barre-anime.js`; le icone a linee sono in `assets/icone.js`. Con il telefono in orizzontale la barra in alto scende a 52px e quella in basso sparisce, per lasciare spazio ai giochi.
 
 ## Shapes
 
 Classica: angoli sempre vivi (`border-radius: 0`, `--radius: 0` nel flipper), bordi pieni da 3px — neri su blocchi e pulsanti colorati, bianchi su riquadri neri; il focus è un contorno tratteggiato 3px bianco (oro nel sotterraneo). Le forme ricorrenti sono quadrati: blocchi 64px con quattro rivetti negli angoli, cappello del giocatore 14px, tubi con bordo superiore più largo. Tutti i disegni sono pixel con `shape-rendering: crispEdges` / `image-rendering: pixelated`.
 
-Anime: raggi crescenti con la dimensione — 6px per tag e contatori, 12px per pulsanti, campi, toggle e facce delle carte, 14px per punteggi, stati, scelte e classifica, 16px per le schede gioco e i pannelli del flipper, 999px per pillole (pulsante fisso, "Tocca a te"). I pallini del giocatore diventano cerchi. Il focus è un contorno pieno 3px oro. I grimori della pagina iniziale hanno dorso asimmetrico (6px 14px 14px 6px) e sono ruotati di −5°.
+Anime (dalle schermate di Stitch): angoli piccoli — 2px per contatori e badge ("Facile", "Mosse"), 4px (`--g-radius-sm`) per pulsanti, campi, carte e riquadri interni, 8px (`--g-radius`) per schede e pannelli, 12px per le pastiglie ("Tocca a te!", "Cambio turno"). I pallini del giocatore diventano cerchi. Il focus è un contorno pieno 3px oro. I grimori della pagina iniziale hanno dorso asimmetrico (6px 14px 14px 6px) e sono ruotati di −5°.
 
 ## Components
 
