@@ -1,4 +1,5 @@
 import { shuffle } from './shuffle.js';
+import { getCharacters } from './characters.js';
 
 /**
  * Livelli di difficoltà: colonne × righe della griglia.
@@ -11,31 +12,10 @@ export const DIFFICULTIES = {
 };
 
 /**
- * I simboli delle carte, presi dal mondo dei giochi a piattaforme.
- * Il nome serve per l'accessibilità: uno screen reader leggerà "fungo"
- * invece del codice dell'emoji.
- * Ne servono almeno 18, cioè le coppie della griglia 6x6.
+ * Il mazzo predefinito: i personaggi della versione classica.
+ * Gli altri mazzi sono in characters.js.
  */
-export const SYMBOLS = [
-  { emoji: '🍄', name: 'fungo' },
-  { emoji: '⭐', name: 'stella' },
-  { emoji: '🪙', name: 'moneta' },
-  { emoji: '🐢', name: 'tartaruga' },
-  { emoji: '👻', name: 'fantasma' },
-  { emoji: '🔥', name: 'fuoco' },
-  { emoji: '🏰', name: 'castello' },
-  { emoji: '🚩', name: 'bandiera' },
-  { emoji: '👑', name: 'corona' },
-  { emoji: '🔑', name: 'chiave' },
-  { emoji: '💣', name: 'bomba' },
-  { emoji: '🌸', name: 'fiore' },
-  { emoji: '☁️', name: 'nuvola' },
-  { emoji: '🦖', name: 'dinosauro' },
-  { emoji: '🐟', name: 'pesce' },
-  { emoji: '🌋', name: 'vulcano' },
-  { emoji: '💎', name: 'gemma' },
-  { emoji: '🌵', name: 'cactus' },
-];
+export const SYMBOLS = getCharacters('classica');
 
 /**
  * Restituisce quante coppie servono per una difficoltà (es. '4x4' → 8).
@@ -49,7 +29,8 @@ export function getPairCount(difficultyKey) {
 }
 
 /**
- * Crea un mazzo mescolato con `pairCount` coppie.
+ * Crea un mazzo mescolato con `pairCount` coppie, prese da `symbols`
+ * (di solito i personaggi della versione scelta).
  *
  * 1. sceglie a caso quali simboli usare (così ogni partita è diversa);
  * 2. crea due carte per ogni simbolo;
@@ -57,12 +38,12 @@ export function getPairCount(difficultyKey) {
  *
  * Ogni carta ha un `id` unico, che corrisponde alla sua posizione sul tavolo.
  */
-export function createDeck(pairCount, random = Math.random) {
-  if (pairCount > SYMBOLS.length) {
-    throw new Error(`Servono ${pairCount} simboli, ma ce ne sono solo ${SYMBOLS.length}`);
+export function createDeck(pairCount, random = Math.random, symbols = SYMBOLS) {
+  if (pairCount > symbols.length) {
+    throw new Error(`Servono ${pairCount} simboli, ma ce ne sono solo ${symbols.length}`);
   }
 
-  const chosenSymbols = shuffle(SYMBOLS, random).slice(0, pairCount);
+  const chosenSymbols = shuffle(symbols, random).slice(0, pairCount);
   const pairs = chosenSymbols.flatMap((symbol) => [symbol, symbol]);
   const shuffledPairs = shuffle(pairs, random);
 
@@ -70,6 +51,7 @@ export function createDeck(pairCount, random = Math.random) {
     id: index,
     emoji: symbol.emoji,
     name: symbol.name,
+    image: symbol.image ?? null,
     isFlipped: false,
     isMatched: false,
     matchedBy: null, // indice del giocatore che ha trovato la coppia

@@ -13,9 +13,10 @@
 const FLASH_MS = 280;
 const PLANKTON_COUNT = 42;
 
-export function createRenderer({ canvas, layout, theme }) {
+export function createRenderer({ canvas, layout, theme: initialTheme }) {
   const ctx = canvas.getContext('2d');
-  const colors = theme.colors;
+  let theme = initialTheme;
+  let colors = theme.colors;
   const staticLayer = document.createElement('canvas');
   const staticCtx = staticLayer.getContext('2d');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -43,6 +44,13 @@ export function createRenderer({ canvas, layout, theme }) {
 
   // Il font pixel arriva dopo il primo disegno: quando è pronto rifacciamo lo strato statico
   document.fonts?.ready.then(() => drawStaticLayer());
+
+  /** Cambia tema al volo (es. passando alla versione anime della sala). */
+  function setTheme(newTheme) {
+    theme = newTheme;
+    colors = theme.colors;
+    drawStaticLayer();
+  }
 
   // --- Lampeggi -----------------------------------------------------------
 
@@ -78,7 +86,10 @@ export function createRenderer({ canvas, layout, theme }) {
     drawOutlanes();
     drawTargets(snapshot.targetsDown);
     drawSlingshots();
-    drawBumpers(time);
+    drawPosts();
+    if (theme.bumperStyle === 'sigil') drawSigilBumpers(time);
+    else if (theme.bumperStyle === 'mushroom') drawMushroomBumpers();
+    else drawBumpers(time);
     drawPlunger(view.charge);
     if (snapshot.gateClosed) drawGate();
     snapshot.flippers.forEach(drawFlipper);
@@ -103,14 +114,21 @@ export function createRenderer({ canvas, layout, theme }) {
 
     // Luce che filtra dall'alto
     const light = c.createRadialGradient(300, -80, 40, 300, -80, 760);
-    light.addColorStop(0, 'rgba(124, 249, 255, 0.22)');
-    light.addColorStop(1, 'rgba(124, 249, 255, 0)');
+    light.addColorStop(0, `rgba(${colors.light}, 0.22)`);
+    light.addColorStop(1, `rgba(${colors.light}, 0)`);
     c.fillStyle = light;
     c.fillRect(0, 0, layout.TABLE_WIDTH, layout.TABLE_HEIGHT);
 
-    drawSonarRings(c);
+    if (theme.decor === 'clover') {
+      drawDotTexture(c);
+      drawEngravedClover(c);
+    } else if (theme.decor === 'platform') {
+      drawHillsAndClouds(c);
+    } else {
+      drawSonarRings(c);
+    }
     drawTableName(c);
-    drawDepthMarks(c);
+    if (theme.decor === 'sonar') drawDepthMarks(c); // tacche di profondità: solo nel tema abissi
     drawWalls(c);
   }
 
@@ -125,12 +143,92 @@ export function createRenderer({ canvas, layout, theme }) {
     }
   }
 
+  /** Colline verdi e nuvole a blocchi, come nei vecchi giochi a piattaforme (versione classica). */
+  function drawHillsAndClouds(c) {
+    // Colline sullo sfondo, in basso
+    c.fillStyle = 'rgba(0, 120, 0, 0.35)';
+    for (const [x, y, w, h] of [[150, 1100, 260, 300], [400, 1100, 200, 200]]) {
+      c.beginPath();
+      c.ellipse(x, y, w / 2, h, 0, Math.PI, 0);
+      c.fill();
+    }
+    // Nuvole fatte di rettangoli, come i pixel
+    c.fillStyle = 'rgba(255, 255, 255, 0.85)';
+    for (const [x, y, size] of [[90, 250, 5], [400, 210, 4], [220, 560, 4], [440, 690, 3]]) {
+      const shape = [[2, 0, 4], [1, 1, 7], [0, 2, 9], [0, 3, 9]]; // [colonna di partenza, riga, larghezza] in "pixel"
+      for (const [startX, row, width] of shape) {
+        c.fillRect(x + startX * size, y + row * size, width * size, size);
+      }
+    }
+  }
+
+  /** Una piastrella di mattoni da usare come "pattern" per le pareti. */
+  function createBrickPattern(c) {
+    const tile = document.createElement('canvas');
+    tile.width = tile.height = 32;
+    const t = tile.getContext('2d');
+    t.fillStyle = colors.wall;
+    t.fillRect(0, 0, 32, 32);
+    t.fillStyle = '#fc9838'; // luce sul bordo alto dei mattoni
+    t.fillRect(0, 0, 32, 2);
+    t.fillRect(0, 16, 32, 2);
+    t.fillStyle = '#2a0e00'; // malta
+    t.fillRect(0, 14, 32, 2);
+    t.fillRect(0, 30, 32, 2);
+    t.fillRect(14, 0, 2, 14);
+    t.fillRect(30, 0, 2, 14);
+    t.fillRect(6, 16, 2, 14);
+    t.fillRect(22, 16, 2, 14);
+    return c.createPattern(tile, 'repeat');
+  }
+
+  /** Trama a puntini dorati, come le pagine di un grimorio (versione anime). */
+  function drawDotTexture(c) {
+    c.fillStyle = 'rgba(236, 194, 70, 0.08)';
+    for (let y = 12; y < layout.TABLE_HEIGHT; y += 22) {
+      for (let x = 12; x < layout.TABLE_WIDTH; x += 22) {
+        c.fillRect(x, y, 2, 2);
+      }
+    }
+  }
+
+  /** Un grande trifoglio inciso al centro del tavolo (versione anime). */
+  function drawEngravedClover(c) {
+    c.save();
+    c.translate(276, 470);
+    c.fillStyle = 'rgba(91, 64, 64, 0.35)';
+    c.strokeStyle = 'rgba(236, 194, 70, 0.12)';
+    c.lineWidth = 3;
+    for (let leaf = 0; leaf < 3; leaf++) {
+      c.save();
+      c.rotate((leaf * Math.PI * 2) / 3);
+      c.beginPath();
+      // Una foglia a cuore, con la punta al centro del trifoglio
+      c.moveTo(0, 0);
+      c.bezierCurveTo(-95, -30, -110, -150, -40, -165);
+      c.bezierCurveTo(-10, -170, 0, -140, 0, -120);
+      c.bezierCurveTo(0, -140, 10, -170, 40, -165);
+      c.bezierCurveTo(110, -150, 95, -30, 0, 0);
+      c.fill();
+      c.stroke();
+      c.restore();
+    }
+    // Stelo
+    c.beginPath();
+    c.moveTo(0, 0);
+    c.quadraticCurveTo(30, 110, -10, 200);
+    c.lineWidth = 14;
+    c.strokeStyle = 'rgba(91, 64, 64, 0.35)';
+    c.stroke();
+    c.restore();
+  }
+
   /** Il nome del tavolo "dipinto" sul campo di gioco. */
   function drawTableName(c) {
     const [first, ...rest] = theme.tableName.toUpperCase().split(' ');
     c.save();
     c.textAlign = 'center';
-    c.fillStyle = 'rgba(124, 249, 255, 0.14)';
+    c.fillStyle = colors.paint;
     c.font = '26px "Press Start 2P", monospace';
     c.fillText(first, 276, 690);
     c.font = '40px "Press Start 2P", monospace';
@@ -141,11 +239,11 @@ export function createRenderer({ canvas, layout, theme }) {
   /** Tacche di profondità accanto alla corsia di lancio (più giù = più profondo). */
   function drawDepthMarks(c) {
     c.save();
-    c.fillStyle = 'rgba(124, 249, 255, 0.28)';
+    c.fillStyle = `rgba(${colors.light}, 0.28)`;
     c.font = '9px "Press Start 2P", monospace';
     c.textAlign = 'right';
     for (let mark = 1; mark <= 3; mark++) {
-      const y = 320 + mark * 110;
+      const y = 440 + mark * 80;
       c.fillRect(526, y, 8, 2);
       c.fillText(`-${mark * 250}m`, 522, y + 4);
     }
@@ -153,21 +251,22 @@ export function createRenderer({ canvas, layout, theme }) {
   }
 
   function drawWalls(c) {
+    const bricks = theme.wallPattern === 'bricks' ? createBrickPattern(c) : null;
     c.lineCap = 'round';
     c.lineJoin = 'round';
     for (const wall of layout.WALLS) {
-      // Corpo della parete
+      // Corpo della parete (a mattoni nella versione classica)
       tracePolyline(c, wall.points);
-      c.strokeStyle = colors.wall;
+      c.strokeStyle = bricks ?? colors.wall;
       c.lineWidth = wall.thickness;
       c.stroke();
 
-      // Bordo luminoso con alone
+      // Bordo: nero e netto con i mattoni, luminoso con alone negli altri temi
       tracePolyline(c, wall.points);
       c.strokeStyle = colors.wallEdge;
       c.lineWidth = 2;
       c.shadowColor = colors.wallEdge;
-      c.shadowBlur = 10;
+      c.shadowBlur = bricks ? 0 : 10;
       c.stroke();
       c.shadowBlur = 0;
     }
@@ -184,7 +283,7 @@ export function createRenderer({ canvas, layout, theme }) {
       const y = ((speck.y - drift * speck.speed) % layout.TABLE_HEIGHT + layout.TABLE_HEIGHT) % layout.TABLE_HEIGHT;
       const x = speck.x + Math.sin(drift * 0.6 + speck.phase) * 6;
       const twinkle = 0.35 + 0.35 * Math.sin(drift * 1.7 + speck.phase);
-      ctx.fillStyle = `rgba(124, 249, 255, ${twinkle * speck.alpha})`;
+      ctx.fillStyle = `rgba(${theme.particleColor}, ${twinkle * speck.alpha})`;
       ctx.beginPath();
       ctx.arc(x, y, speck.size, 0, Math.PI * 2);
       ctx.fill();
@@ -210,9 +309,9 @@ export function createRenderer({ canvas, layout, theme }) {
 
       // Corpo
       const body = ctx.createRadialGradient(x - r * 0.3, y - r * 0.4, r * 0.1, x, y, r);
-      body.addColorStop(0, level > 0 ? '#ffffff' : '#ffc2dc');
+      body.addColorStop(0, level > 0 ? '#ffffff' : colors.bumperLight);
       body.addColorStop(0.55, colors.bumper);
-      body.addColorStop(1, '#8a1f57');
+      body.addColorStop(1, colors.bumperDark);
       ctx.fillStyle = body;
       ctx.beginPath();
       ctx.arc(x, y, r, 0, Math.PI * 2);
@@ -239,6 +338,103 @@ export function createRenderer({ canvas, layout, theme }) {
     }
   }
 
+  /** I bumper della versione classica: Super Funghi rossi a pois bianchi, visti dall'alto. */
+  function drawMushroomBumpers() {
+    for (const bumper of layout.BUMPERS) {
+      const level = flashLevel('bumper', bumper.id);
+      const r = bumper.radius * (1 + level * 0.12);
+      const { x, y } = bumper;
+
+      const cap = ctx.createRadialGradient(x - r * 0.3, y - r * 0.35, r * 0.1, x, y, r);
+      cap.addColorStop(0, level > 0 ? '#ffffff' : colors.bumperLight);
+      cap.addColorStop(0.6, colors.bumper);
+      cap.addColorStop(1, colors.bumperDark);
+      ctx.fillStyle = cap;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#000000';
+      ctx.stroke();
+
+      // Pois bianchi
+      ctx.fillStyle = '#ffffff';
+      for (const [dx, dy, size] of [[0, -0.45, 0.3], [-0.5, 0.15, 0.24], [0.5, 0.15, 0.24], [0, 0.55, 0.16]]) {
+        ctx.beginPath();
+        ctx.arc(x + dx * r, y + dy * r, size * r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+
+  /** I bumper della versione anime: cerchi magici d'oro che ruotano piano. */
+  function drawSigilBumpers(time) {
+    const spin = reducedMotion.matches ? 0 : time * 0.6;
+    for (const bumper of layout.BUMPERS) {
+      const level = flashLevel('bumper', bumper.id);
+      const r = bumper.radius * (1 + level * 0.1);
+      const { x, y } = bumper;
+
+      // Alone dorato
+      const halo = ctx.createRadialGradient(x, y, r * 0.5, x, y, r * (1.6 + level));
+      halo.addColorStop(0, colors.bumperGlow);
+      halo.addColorStop(1, 'rgba(236, 194, 70, 0)');
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(x, y, r * (1.6 + level), 0, Math.PI * 2);
+      ctx.fill();
+
+      // Disco cremisi
+      const disc = ctx.createRadialGradient(x, y - r * 0.3, r * 0.1, x, y, r);
+      disc.addColorStop(0, level > 0 ? '#ffffff' : colors.bumperLight);
+      disc.addColorStop(0.5, colors.bumper);
+      disc.addColorStop(1, colors.bumperDark);
+      ctx.fillStyle = disc;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Anello e stella a sei punte che ruotano
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(spin + bumper.id);
+      ctx.strokeStyle = level > 0 ? '#ffffff' : colors.wallEdge;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.82, 0, Math.PI * 2);
+      ctx.stroke();
+      for (const offset of [0, Math.PI]) {
+        ctx.beginPath();
+        for (let i = 0; i < 3; i++) {
+          const angle = offset + (i * Math.PI * 2) / 3 - Math.PI / 2;
+          const px = Math.cos(angle) * r * 0.72;
+          const py = Math.sin(angle) * r * 0.72;
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }
+
+  /** Paletti di rimbalzo. */
+  function drawPosts() {
+    for (const post of layout.POSTS) {
+      ctx.beginPath();
+      ctx.arc(post.x, post.y, post.radius, 0, Math.PI * 2);
+      ctx.fillStyle = colors.wall;
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = colors.post;
+      ctx.shadowColor = colors.post;
+      ctx.shadowBlur = 8;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+  }
+
   /** Slingshot: conchiglie con il lato attivo luminoso. */
   function drawSlingshots() {
     for (const sling of layout.SLINGSHOTS) {
@@ -249,8 +445,8 @@ export function createRenderer({ canvas, layout, theme }) {
       ctx.lineTo(...sling.c);
       ctx.closePath();
       const shell = ctx.createLinearGradient(sling.b[0], sling.b[1], sling.a[0], sling.a[1]);
-      shell.addColorStop(0, '#0b2e52');
-      shell.addColorStop(1, '#155a7e');
+      shell.addColorStop(0, colors.slingshotFillA);
+      shell.addColorStop(1, colors.slingshotFillB);
       ctx.fillStyle = shell;
       ctx.fill();
 
@@ -377,11 +573,12 @@ export function createRenderer({ canvas, layout, theme }) {
 
   function drawFlipper(flipper) {
     const points = flipper.vertices;
+    const color = flipper.id === 'left' ? colors.flipperLeft : colors.flipperRight;
     ctx.beginPath();
     points.forEach((point, index) => (index === 0 ? ctx.moveTo(point.x, point.y) : ctx.lineTo(point.x, point.y)));
     ctx.closePath();
-    ctx.fillStyle = colors.flipper;
-    ctx.shadowColor = colors.flipper;
+    ctx.fillStyle = color;
+    ctx.shadowColor = color;
     ctx.shadowBlur = 16;
     ctx.fill();
     ctx.shadowBlur = 0;
@@ -396,9 +593,9 @@ export function createRenderer({ canvas, layout, theme }) {
     ctx.shadowColor = colors.ballGlow;
     ctx.shadowBlur = 18;
     const pearl = ctx.createRadialGradient(x - radius * 0.35, y - radius * 0.4, radius * 0.1, x, y, radius);
-    pearl.addColorStop(0, '#ffffff');
+    pearl.addColorStop(0, colors.ballCore);
     pearl.addColorStop(0.6, colors.ball);
-    pearl.addColorStop(1, '#8fc9df');
+    pearl.addColorStop(1, colors.ballRim);
     ctx.fillStyle = pearl;
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
@@ -413,7 +610,7 @@ export function createRenderer({ canvas, layout, theme }) {
     ctx.roundRect(x, y, width, height, radius);
   }
 
-  return { resize, draw, flash };
+  return { resize, draw, flash, setTheme };
 }
 
 function tracePolyline(c, points) {

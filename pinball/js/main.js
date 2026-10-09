@@ -15,7 +15,7 @@
 import * as layout from './config/table-layout.js';
 import { PHYSICS } from './config/physics-config.js';
 import { RULES } from './config/rules-config.js';
-import { THEME } from './config/theme.js';
+import { getTheme } from './config/theme.js';
 import { createPhysics } from './physics.js';
 import { createBallState, applyHit, endOfBallBonus } from './rules.js';
 import { createMatch, getCurrentPlayer, addPoints, endBall } from './turns.js';
@@ -39,9 +39,13 @@ let match = null; // giocatori e punteggi (turns.js)
 let ballState = null; // regole della pallina in gioco (rules.js)
 let chargeStartedAt = null; // inizio della carica del lanciatore
 let betweenTimer = null;
+let launchedAt = null; // quando è partita la pallina (per il salvataggio)
+let ballSaveUsed = false; // il salvataggio vale una volta per pallina
 
 const physics = createPhysics({ layout, config: PHYSICS, onEvent: handlePhysicsEvent });
-const renderer = createRenderer({ canvas: elements.canvas, layout, theme: THEME });
+// Il tema del tavolo segue la versione della sala (classica = abissi, anime = grimori)
+const renderer = createRenderer({ canvas: elements.canvas, layout, theme: getTheme(window.SalaTema?.get()) });
+window.addEventListener('sala-tema', (event) => renderer.setTheme(getTheme(event.detail.theme)));
 const input = createInput({
   touchArea: elements.tableWrap,
   launchButton: elements.launchButton,
@@ -50,7 +54,10 @@ const input = createInput({
     chargeStartedAt = performance.now();
   },
   onLaunchRelease: () => {
-    if (phase === 'playing') physics.launch(currentCharge());
+    if (phase === 'playing' && physics.launch(currentCharge())) {
+      launchedAt = performance.now();
+      if (!ballSaveUsed) hud.showMessage(`Pallina salvata per ${RULES.ballSaveMs / 1000} secondi`);
+    }
     chargeStartedAt = null;
   },
   onPause: togglePause,
@@ -75,6 +82,8 @@ function beginTurn(lastBall) {
   physics.removeBall();
   physics.resetTargets();
   ballState = createBallState({ laneCount: layout.TOP_LANES.length, targetCount: layout.TARGETS.length });
+  launchedAt = null;
+  ballSaveUsed = false;
   hud.renderHud(match, ballState.multiplier);
   hud.showMessage('', { sticky: true });
   hud.showTurnOverlay({ match, lastBall });
@@ -94,7 +103,11 @@ function handlePhysicsEvent(event) {
   if (phase !== 'playing') return;
 
   if (event.type === 'drain') {
-    loseBall();
+    if (isBallSaveActive()) {
+      saveBall();
+    } else {
+      loseBall();
+    }
     return;
   }
 
@@ -106,6 +119,19 @@ function handlePhysicsEvent(event) {
   }
   if (result.message) hud.showMessage(result.message);
   hud.renderHud(match, ballState.multiplier);
+}
+
+/** Vero se la pallina è caduta da poco dopo il lancio e il salvataggio non è ancora stato usato. */
+function isBallSaveActive() {
+  return launchedAt !== null && !ballSaveUsed && performance.now() - launchedAt < RULES.ballSaveMs;
+}
+
+/** Pallina salvata: torna sul lanciatore, stesso giocatore, nessuna pallina persa. */
+function saveBall() {
+  ballSaveUsed = true;
+  launchedAt = null;
+  physics.spawnBall();
+  hud.showMessage('Pallina salvata! Rilanciala');
 }
 
 /** Pallina persa: bonus di fine pallina, poi tocca al prossimo (o fine partita). */

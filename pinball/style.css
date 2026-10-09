@@ -715,3 +715,334 @@ canvas {
     transition: none;
   }
 }
+
+/* =====================================================================
+   VERSIONI DELLA SALA (vedi ../assets/tema.js)
+   La pagina sopra è scritta con variabili (--panel, --text, --glow…):
+   ogni versione le ridefinisce e aggiunge pochi ritocchi.
+   ===================================================================== */
+
+/* ---------- Versione classica: Super Mario, stile 8-bit della sala ---------- */
+
+:root[data-theme='classica'] {
+  --abyss: #5c94fc;
+  --abyss-2: #5c94fc;
+  --panel: #000000;
+  --panel-edge: #ffffff;
+  --text: #ffffff;
+  --muted: #c8d4ff;
+  --glow: #f8b800;
+  --glow-2: #ffffff;
+  --gold: #f8b800;
+  --pink: #e4202a;
+  --radius: 0;
+
+  --player-0: #e4202a;
+  --player-1: #12a838;
+  --player-2: #8a3ffc;
+  --player-3: #ff7a00;
+}
+
+[data-theme='classica'] body {
+  background: #5c94fc;
+}
+
+[data-theme='classica'] .back-link,
+[data-theme='classica'] .tagline {
+  color: #0b1238;
+  font-weight: 600;
+}
+
+[data-theme='classica'] .topbar-name {
+  color: #ffffff;
+  text-shadow: 2px 2px 0 #000000;
+}
+
+[data-theme='classica'] .title {
+  color: #ffffff;
+  text-shadow:
+    3px 0 0 #000,
+    -3px 0 0 #000,
+    0 3px 0 #000,
+    0 -3px 0 #000,
+    6px 6px 0 #c84c0c;
+}
+
+[data-theme='classica'] .field-label {
+  color: #ffffff;
+  text-shadow: 2px 2px 0 #000000;
+}
+
+[data-theme='classica'] .field-hint {
+  color: #0b1238;
+  text-shadow: none;
+}
+
+[data-theme='classica'] .choice span {
+  border: 3px solid #000000;
+  border-radius: 0;
+  background: #c84c0c;
+  color: #ffffff;
+  text-shadow: 2px 2px 0 #000000;
+}
+
+[data-theme='classica'] .choice input:checked + span {
+  border-color: #000000;
+  background: #f8b800;
+  color: #ffffff;
+  text-shadow: 2px 2px 0 #b05800;
+  box-shadow: inset 4px 4px 0 #ffe08a, inset -4px -4px 0 #b05800;
+}
+
+[data-theme='classica'] .name-field {
+  border: 3px solid #ffffff;
+  background: #000000;
+}
+
+[data-theme='classica'] .player-dot {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+[data-theme='classica'] .button {
+  border: 3px solid #000000;
+  border-radius: 0;
+  font-family: var(--pixel);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+[data-theme='classica'] .button--primary {
+  background: #e4202a;
+  color: #ffffff;
+  box-shadow: inset 3px 3px 0 rgb(255 255 255 / 0.45), inset -3px -3px 0 rgb(0 0 0 / 0.35);
+}
+
+[data-theme='classica'] .button--primary:hover {
+  background: #c8141e;
+}
+
+[data-theme='classica'] .button--ghost {
+  background: #000000;
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+[data-theme='classica'] .controls-help {
+  border: 3px solid #ffffff;
+  background: #000000;
+}
+
+[data-theme='classica'] canvas {
+  border-radius: 0;
+  box-shadow: 0 0 0 3px #000000, 0 12px 30px rgb(0 0 0 / 0.3);
+}
+
+[data-theme='classica'] .launch-button {
+  border: 3px solid #000000;
+  border-radius: 0;
+  background: #f8b800;
+  color: #ffffff;
+  text-shadow: 2px 2px 0 #b05800;
+  box-shadow: inset 3px 3px 0 #ffe08a, inset -3px -3px 0 #b05800;
+}
+
+[data-theme='classica'] .launch-button:active {
+  background: #ffe08a;
+}
+
+[data-theme='classica'] .hud,
+[data-theme='classica'] .overlay-card,
+[data-theme='classica'] .ranking-item {
+  border: 3px solid #ffffff;
+  border-radius: 0;
+}
+
+[data-theme='classica'] .hud-score,
+[data-theme='classica'] .message {
+  border-radius: 0;
+}
+
+[data-theme='classica'] .hud-score.is-current {
+  background: var(--player);
+  border-color: #ffffff;
+}
+
+[data-theme='classica'] .hud-player {
+  color: #ffffff;
+  text-shadow: 2px 2px 0 var(--player);
+}
+
+[data-theme='classica'] .hud-multiplier strong {
+  color: #f8b800;
+  text-shadow: 2px 2px 0 #000000;
+}
+
+[data-theme='classica'] .message {
+  color: #ffffff;
+}
+
+[data-theme='classica'] .overlay {
+  background: rgb(0 0 0 / 0.55);
+}
+
+[data-theme='classica'] .overlay-title {
+  color: #ffffff;
+  text-shadow: 3px 3px 0 var(--player, #e4202a);
+}
+
+[data-theme='classica'] .results-title {
+  color: #ffffff;
+  text-shadow: 3px 3px 0 #000000, 6px 6px 0 #c84c0c;
+}
+
+[data-theme='classica'] .results-summary {
+  color: #0b1238;
+  font-weight: 600;
+}
+
+[data-theme='classica'] .ranking-item.is-winner {
+  background: #f8b800;
+  border-color: #000000;
+  color: #000000;
+}
+
+/* ---------- Versione anime: arena dei grimori ---------- */
+
+:root[data-theme='anime'] {
+  --abyss: var(--g-bg);
+  --abyss-2: var(--g-bg);
+  --panel: var(--g-surface);
+  --panel-edge: var(--g-surface-highest);
+  --text: var(--g-text);
+  --muted: var(--g-text-soft);
+  --glow: var(--g-gold);
+  --glow-2: var(--g-gold);
+  --gold: var(--g-gold);
+  --pink: var(--g-crimson);
+  --pixel: var(--g-display); /* i titoli "da display" usano Syne */
+  --radius: 16px;
+}
+
+[data-theme='anime'] .title,
+[data-theme='anime'] .overlay-title,
+[data-theme='anime'] .results-title,
+[data-theme='anime'] .topbar-name,
+[data-theme='anime'] .field-label,
+[data-theme='anime'] .hud-score-points,
+[data-theme='anime'] .ranking-score,
+[data-theme='anime'] .ranking-rank,
+[data-theme='anime'] .choice span,
+[data-theme='anime'] .launch-button {
+  font-weight: 800;
+  text-shadow: none;
+}
+
+[data-theme='anime'] .title {
+  font-size: clamp(2.25rem, 10vw, 3.75rem);
+  line-height: 1;
+}
+
+[data-theme='anime'] .field-label {
+  font-size: 1.125rem;
+  text-transform: none;
+}
+
+[data-theme='anime'] .choice span {
+  border: 0;
+  border-radius: 12px;
+  background: var(--g-surface-high);
+  font-size: 1.25rem;
+}
+
+[data-theme='anime'] .choice input:checked + span {
+  background: var(--g-crimson);
+  color: #ffffff;
+  box-shadow: 0 8px 22px rgb(179 18 46 / 0.4);
+}
+
+[data-theme='anime'] .name-field {
+  border: 1px solid var(--g-line);
+  border-radius: 12px;
+  background: var(--g-surface-lowest);
+}
+
+[data-theme='anime'] .player-dot {
+  box-shadow: none;
+}
+
+[data-theme='anime'] canvas {
+  border-radius: 16px;
+  box-shadow: 0 0 0 1px var(--g-line), 0 18px 50px rgb(0 0 0 / 0.6);
+}
+
+[data-theme='anime'] .launch-button {
+  border: 0;
+  border-radius: 12px;
+  background: var(--g-gold);
+  color: #241a00;
+  font-size: 0.875rem;
+}
+
+[data-theme='anime'] .launch-button:active {
+  background: #ffd45e;
+}
+
+[data-theme='anime'] .hud {
+  border: 0;
+}
+
+[data-theme='anime'] .hud-score.is-current {
+  border-color: var(--g-gold);
+  background: var(--g-surface-highest);
+}
+
+[data-theme='anime'] .hud-player {
+  font-family: var(--g-display);
+  font-weight: 800;
+}
+
+[data-theme='anime'] .hud-multiplier strong {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 8px;
+  background: var(--g-gold);
+  color: #241a00;
+  font-weight: 800;
+  text-shadow: none;
+}
+
+[data-theme='anime'] .message {
+  background: var(--g-surface-lowest);
+  color: var(--g-emerald);
+}
+
+[data-theme='anime'] .overlay {
+  background: rgb(15 13 18 / 0.78);
+}
+
+[data-theme='anime'] .overlay-card {
+  border: 0;
+  background: linear-gradient(100deg, #3a0711, var(--g-surface) 65%);
+}
+
+[data-theme='anime'] .overlay-title {
+  font-size: clamp(1.5rem, 7vw, 2.25rem);
+  color: var(--g-gold);
+}
+
+[data-theme='anime'] .ranking-item {
+  border: 2px solid transparent;
+}
+
+[data-theme='anime'] .ranking-item.is-winner {
+  border-color: var(--g-gold);
+  background: var(--g-surface-highest);
+}
+
+/* Su telefono la barra in alto non ha spazio per il nome del tavolo (c'è già nel titolo) */
+@media (max-width: 480px) {
+  .topbar-name {
+    display: none;
+  }
+}

@@ -11,7 +11,10 @@
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍄</text></svg>"
     />
     <link rel="preload" href="../assets/fonts/PressStart2P-Regular.ttf" as="font" type="font/ttf" crossorigin />
+    <!-- La versione (classica o anime) va applicata prima di tutto il resto -->
+    <script src="../assets/tema.js"></script>
     <link rel="stylesheet" href="../assets/sala-giochi.css" />
+    <link rel="stylesheet" href="../assets/temi.css" />
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="js/main.js"></script>
   </head>
@@ -25,15 +28,24 @@
       </a>
 
       <!-- Audio: spento all'avvio. aria-pressed dice agli screen reader se è acceso -->
+      <div class="topbar-actions">
+      <!-- Cambia versione della sala: classica (platform 8-bit) o anime -->
+      <button type="button" class="theme-toggle" data-theme-toggle="short">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path fill="currentColor" d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9zM19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" />
+        </svg>
+        <span data-theme-label>Anime</span>
+      </button>
       <button type="button" id="sound-toggle" class="sound-toggle" aria-pressed="false">
         <svg class="pixel-icon" viewBox="0 0 12 10" width="24" height="20" aria-hidden="true">
           <path fill="currentColor" d="M0 3h2V3h1V2h1V1h1V0h1v10H5V9H4V8H3V7H0z" />
           <path class="sound-waves" fill="currentColor" d="M8 3h1v4H8zM10 1h1v8h-1z" />
           <path class="sound-mute" fill="currentColor" d="M8 3h1v1H8zM10 3h1v1h-1zM9 4h1v2H9zM8 6h1v1H8zM10 6h1v1h-1z" />
         </svg>
-        <span>Audio</span>
+        <span class="sound-word">Audio</span>
         <span class="sound-state" aria-hidden="true"></span>
       </button>
+      </div>
     </header>
 
     <main class="page">

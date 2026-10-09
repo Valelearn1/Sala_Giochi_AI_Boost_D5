@@ -46,6 +46,12 @@
   padding: 14px 16px 0;
 }
 
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 /* Pulsante audio: altoparlante pixel con onde (acceso) o con una X (spento) */
 .sound-toggle {
   display: inline-flex;
@@ -573,13 +579,57 @@
 /* Fronte: già ruotato di 180°, così appare quando la carta si gira */
 .card-front {
   transform: rotateY(180deg);
+  grid-template-rows: minmax(0, 1fr) auto;
+  overflow: hidden;
   background: #fff1cc;
   box-shadow:
     inset 4px 4px 0 var(--white),
     inset -4px -4px 0 #e2bf7c;
-  font-size: clamp(1.2rem, 6vw, 2.6rem); /* per browser senza "cqi" */
-  font-size: 54cqi;
   line-height: 1;
+}
+
+/* Il personaggio: immagine (se c'è) oppure emoji */
+.card-picture {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  font-size: clamp(1.1rem, 5vw, 2.2rem); /* per browser senza "cqi" */
+  font-size: 44cqi;
+}
+
+.card-portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Il nome del personaggio, su una fascia in basso */
+.card-name {
+  width: 100%;
+  padding: 4% 4% 5%;
+  overflow: hidden;
+  background: var(--black);
+  color: var(--white);
+  font-size: 12cqi;
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Carte piccole (es. 6×6 su telefono): solo il disegno, il nome non sarebbe leggibile */
+@container (max-width: 64px) {
+  .card-name {
+    display: none;
+  }
+
+  .card-picture {
+    font-size: 58cqi;
+  }
 }
 
 @media (hover: hover) {
@@ -596,15 +646,23 @@
     inset -4px -4px 0 #6e2a00;
 }
 
-.card.is-matched .card-front::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 14%;
+/* La fascia del nome prende il colore di chi ha trovato la coppia */
+.card.is-matched .card-name {
   background: var(--player);
-  border-top: var(--border) solid var(--black);
+}
+
+/* Su carte piccole, senza nome, resta una barra del colore del giocatore */
+@container (max-width: 64px) {
+  .card.is-matched .card-front::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 14%;
+    background: var(--player);
+    border-top: var(--border) solid var(--black);
+  }
 }
 
 .card[aria-disabled='true'] {
@@ -661,6 +719,10 @@
   overflow-wrap: anywhere;
   text-wrap: balance;
   text-shadow: 4px 4px 0 var(--player);
+}
+
+.turn-banner-name strong {
+  font-weight: inherit;
 }
 
 .turn-banner.is-visible {
@@ -761,6 +823,35 @@
 /* ---------- 8. Telefono e movimento ridotto ---------- */
 
 @media (max-width: 480px) {
+  /* Barra in alto compatta: si vedono icone e stato, il nome completo resta per gli screen reader */
+  .topbar {
+    gap: 8px;
+  }
+
+  .back-link {
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  .topbar-actions {
+    gap: 6px;
+  }
+
+  .sound-word {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .sound-toggle,
+  .theme-toggle {
+    padding: 6px 8px;
+    font-size: 0.6875rem;
+  }
+
   :root {
     --ground-height: 32px;
     --board-offset: 315px;
@@ -906,4 +997,373 @@
     0%, 100% { opacity: 0; }
     10%, 82% { opacity: 1; }
   }
+}
+
+/* =====================================================================
+   VERSIONE ANIME (segue le schermate di Stitch "Grimoire Memory")
+   Stessa pagina e stessi elementi: cambiano solo colori, forme e font.
+   I colori --g-* e il trifoglio --g-clover sono in ../assets/temi.css.
+   ===================================================================== */
+
+/* ---------- Barra in alto ---------- */
+
+[data-theme='anime'] .sound-toggle {
+  border: 0;
+  border-radius: 12px;
+  background: var(--g-surface-high);
+  color: var(--g-text);
+  font-family: var(--g-display);
+  font-weight: 800;
+}
+
+[data-theme='anime'] .sound-toggle[aria-pressed='true'] {
+  color: var(--g-emerald);
+}
+
+[data-theme='anime'] .sound-toggle[aria-pressed='true'] .sound-state::before {
+  color: var(--g-emerald);
+}
+
+/* ---------- Impostazioni ---------- */
+
+[data-theme='anime'] .game-title {
+  margin-top: 12px;
+  font-size: clamp(2.5rem, 12vw, 4.5rem);
+  text-transform: uppercase;
+}
+
+[data-theme='anime'] .game-tagline {
+  color: var(--g-text-soft);
+  font-weight: 500;
+}
+
+[data-theme='anime'] .field-label {
+  font-family: var(--g-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-transform: none;
+}
+
+[data-theme='anime'] .field-hint {
+  font-family: var(--g-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--g-muted);
+}
+
+[data-theme='anime'] .choice--count .choice-body {
+  width: 72px;
+  height: 64px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--g-surface-high);
+  color: var(--g-text);
+  font-family: var(--g-display);
+  font-weight: 800;
+  text-shadow: none;
+  box-shadow: none;
+  translate: none;
+}
+
+[data-theme='anime'] .choice--count input:checked + .choice-body {
+  background: var(--g-crimson);
+  color: #ffffff;
+  text-shadow: none;
+  box-shadow: 0 8px 22px rgb(179 18 46 / 0.4);
+}
+
+[data-theme='anime'] .name-field {
+  border: 1px solid var(--g-line);
+  border-radius: 12px;
+  background: var(--g-surface-lowest);
+}
+
+[data-theme='anime'] .name-field:focus-within {
+  border-color: var(--player);
+  outline: none;
+}
+
+[data-theme='anime'] .player-cap {
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+[data-theme='anime'] .name-field input::placeholder {
+  color: var(--g-muted);
+}
+
+/* I tubi diventano "tomi": tre schede, quella scelta bordata d'oro */
+[data-theme='anime'] .pipe-choices {
+  gap: 10px;
+  padding-bottom: 0;
+}
+
+[data-theme='anime'] .pipe-choices::after,
+[data-theme='anime'] .pipe,
+[data-theme='anime'] .pipe-marker {
+  display: none;
+}
+
+[data-theme='anime'] .choice--pipe .choice-body {
+  gap: 10px;
+  height: 100%;
+  padding: 14px 10px;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  background: var(--g-surface-high);
+}
+
+/* Icona del tomo: il trifoglio dei grimori */
+[data-theme='anime'] .choice--pipe .choice-body::before {
+  content: '';
+  width: 34px;
+  aspect-ratio: 1;
+  background: var(--g-clover) center / contain no-repeat;
+  opacity: 0.55;
+}
+
+[data-theme='anime'] .choice--pipe input:checked + .choice-body {
+  border-color: var(--g-gold);
+  background: var(--g-surface-highest);
+}
+
+[data-theme='anime'] .choice--pipe input:checked + .choice-body::before {
+  opacity: 1;
+}
+
+[data-theme='anime'] .pipe-size {
+  font-family: var(--g-display);
+  font-weight: 800;
+  color: var(--g-text);
+  text-shadow: none;
+}
+
+[data-theme='anime'] .choice--pipe input:checked + .choice-body .pipe-size {
+  color: var(--g-gold);
+}
+
+[data-theme='anime'] .pipe-sub {
+  color: var(--g-text-soft);
+}
+
+[data-theme='anime'] .start-button {
+  min-height: 64px;
+  background: var(--g-crimson);
+  color: #ffffff;
+  font-size: 1.125rem;
+}
+
+[data-theme='anime'] .start-button:hover {
+  background: #cf1a3a;
+}
+
+/* ---------- Partita: pannello ---------- */
+
+[data-theme='anime'] .score {
+  border: 2px solid transparent;
+  border-radius: 14px;
+  background: var(--g-surface-high);
+  translate: none;
+}
+
+[data-theme='anime'] .score.is-current {
+  border-color: var(--g-gold);
+  background: var(--g-surface-highest);
+  box-shadow: 0 0 0 4px rgb(236 194 70 / 0.12);
+  text-shadow: none;
+}
+
+[data-theme='anime'] .score.is-current .player-cap {
+  background: var(--player);
+}
+
+[data-theme='anime'] .score-name {
+  font-family: var(--g-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+/* Niente monete nella versione anime: "Punti" e il numero in oro */
+[data-theme='anime'] .score .coin-icon,
+[data-theme='anime'] .score-times {
+  display: none;
+}
+
+[data-theme='anime'] .score-coins::before {
+  content: 'Punti';
+  font-family: var(--g-body);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--g-muted);
+}
+
+[data-theme='anime'] .score-points {
+  margin-left: auto;
+  font-family: var(--g-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--g-gold);
+}
+
+[data-theme='anime'] .score-turn {
+  order: -1;
+  margin: 0 6px 0 0;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--g-crimson);
+  color: #ffffff;
+  font-family: var(--g-display);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+[data-theme='anime'] .score-turn:empty {
+  display: none;
+}
+
+[data-theme='anime'] .moves {
+  font-family: var(--g-display);
+  font-weight: 800;
+  color: var(--g-text-soft);
+  text-shadow: none;
+}
+
+[data-theme='anime'] .moves span {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--g-surface-high);
+  color: var(--g-emerald);
+}
+
+[data-theme='anime'] .status {
+  border: 0;
+  border-radius: 14px;
+  background: var(--g-surface);
+  color: var(--g-text);
+}
+
+/* ---------- Carte: grimori con il trifoglio d'oro ---------- */
+
+[data-theme='anime'] .card-face {
+  border: 2px solid var(--g-surface-highest);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+[data-theme='anime'] .card-back {
+  background:
+    var(--g-clover) center / 50% no-repeat,
+    linear-gradient(160deg, #2c292f, #1a171d);
+  border-color: #3b3236;
+}
+
+[data-theme='anime'] .card-back::after {
+  content: none; /* niente "?" del tema 8-bit */
+}
+
+[data-theme='anime'] .card-front {
+  background: radial-gradient(circle at 50% 35%, #3b383e, #211f24);
+  border-color: var(--g-gold);
+}
+
+[data-theme='anime'] .card-name {
+  background: rgb(15 13 18 / 0.85);
+  color: var(--g-text);
+  font-family: var(--g-display);
+  letter-spacing: 0.04em;
+}
+
+[data-theme='anime'] .card.is-matched .card-front {
+  background: radial-gradient(circle at 50% 35%, #3b383e, #211f24);
+  border: 3px solid var(--player);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--player) 35%, transparent);
+}
+
+[data-theme='anime'] .card.is-matched .card-name {
+  background: var(--player);
+  color: #151218;
+}
+
+@media (hover: hover) {
+  [data-theme='anime'] .card:not(.is-flipped):hover .card-back {
+    border-color: var(--g-gold);
+  }
+}
+
+/* La moneta che salta fuori diventa un trifoglio d'oro */
+[data-theme='anime'] .coin-pop {
+  width: 30%;
+  aspect-ratio: 1;
+  background: var(--g-clover) center / contain no-repeat;
+}
+
+/* ---------- Banda "Tocca a …" ---------- */
+
+[data-theme='anime'] .turn-banner {
+  background: linear-gradient(100deg, #3a0711, #1d1b20 60%);
+  border-block: 0;
+  box-shadow: 0 20px 50px rgb(0 0 0 / 0.6);
+}
+
+[data-theme='anime'] .turn-banner-name {
+  font-family: var(--g-display);
+  font-size: clamp(1.75rem, 8vw, 3rem);
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: none;
+}
+
+[data-theme='anime'] .turn-banner-name strong {
+  color: var(--g-gold);
+  text-decoration: underline;
+  text-decoration-color: var(--g-crimson);
+  text-decoration-thickness: 5px;
+  text-underline-offset: 6px;
+}
+
+/* ---------- Classifica ---------- */
+
+[data-theme='anime'] .results-title {
+  font-size: clamp(2rem, 9vw, 3.25rem);
+  text-transform: uppercase;
+}
+
+[data-theme='anime'] .results-summary {
+  color: var(--g-text-soft);
+}
+
+[data-theme='anime'] .ranking-item {
+  border: 2px solid transparent;
+  border-radius: 14px;
+  background: var(--g-surface-high);
+  color: var(--g-text);
+}
+
+[data-theme='anime'] .ranking-item.is-winner {
+  border-color: var(--g-gold);
+  background: var(--g-surface-highest);
+  box-shadow: none;
+  color: var(--g-text);
+}
+
+[data-theme='anime'] .ranking-rank,
+[data-theme='anime'] .ranking-score {
+  font-family: var(--g-display);
+  font-weight: 800;
+}
+
+[data-theme='anime'] .ranking-item.is-winner .ranking-rank,
+[data-theme='anime'] .ranking-item.is-winner .ranking-score {
+  color: var(--g-gold);
+}
+
+[data-theme='anime'] .ranking-score .coin-icon,
+[data-theme='anime'] .ranking-score [aria-hidden='true'] {
+  display: none;
+}
+
+[data-theme='anime'] .ranking-score::after {
+  content: ' pt';
 }

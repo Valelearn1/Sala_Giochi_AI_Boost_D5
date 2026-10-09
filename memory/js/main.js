@@ -8,6 +8,7 @@
  */
 
 import { getPairCount } from './cards.js';
+import { getCharacters } from './characters.js';
 import { createGame, flipCard, endTurn, getCurrentPlayer, OUTCOME } from './game.js';
 import * as ui from './ui.js';
 import * as sound from './sound.js';
@@ -28,6 +29,8 @@ function startGame(newSettings) {
   game = createGame({
     playerNames: settings.playerNames,
     pairCount: getPairCount(settings.difficulty),
+    // I personaggi della versione scelta (classica o anime), vedi assets/tema.js
+    symbols: getCharacters(window.SalaTema?.get()),
   });
 
   ui.createBoard(game, settings.difficulty);
@@ -102,7 +105,12 @@ function goToSetup() {
 /** Accende o spegne l'audio; la musica suona solo durante la partita. */
 function toggleSound() {
   sound.setSoundOn(!sound.isSoundOn());
-  ui.renderSoundToggle(sound.isSoundOn());
+  // Cambio di versione durante una partita: le carte restano quelle, i nuovi personaggi arrivano dalla prossima
+window.addEventListener('sala-tema', () => {
+  if (isPlaying) ui.showStatus('I personaggi della nuova versione arrivano con la prossima partita');
+});
+
+ui.renderSoundToggle(sound.isSoundOn());
 
   if (sound.isSoundOn()) {
     sound.playToggleOn();

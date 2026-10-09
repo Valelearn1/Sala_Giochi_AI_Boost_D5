@@ -10,6 +10,7 @@ import assert from 'node:assert/strict';
 
 import { shuffle } from '../js/shuffle.js';
 import { createDeck, getPairCount, SYMBOLS } from '../js/cards.js';
+import { CHARACTERS, getCharacters } from '../js/characters.js';
 import {
   createGame,
   flipCard,
@@ -77,6 +78,22 @@ test('il mazzo contiene esattamente due carte per simbolo, con id unici', () => 
     const copies = deck.filter((other) => other.emoji === card.emoji);
     assert.equal(copies.length, 2);
   }
+});
+
+test('ogni versione ha almeno 18 personaggi, con nomi ed emoji tutti diversi', () => {
+  for (const [version, characters] of Object.entries(CHARACTERS)) {
+    assert.ok(characters.length >= 18, version);
+    assert.equal(new Set(characters.map((c) => c.name)).size, characters.length, `${version}: nomi doppi`);
+    assert.equal(new Set(characters.map((c) => c.emoji)).size, characters.length, `${version}: emoji doppie`);
+  }
+});
+
+test('la partita usa il mazzo della versione scelta', () => {
+  const animeNames = new Set(getCharacters('anime').map((c) => c.name));
+  const game = createGame({ playerNames: ['A', 'B'], pairCount: 8, symbols: getCharacters('anime') });
+  assert.ok(game.cards.every((card) => animeNames.has(card.name)));
+  // Versione sconosciuta: si torna al mazzo classico
+  assert.equal(getCharacters('inesistente'), CHARACTERS.classica);
 });
 
 // --- turni e regole --------------------------------------------------------

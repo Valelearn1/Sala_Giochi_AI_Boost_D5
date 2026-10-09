@@ -10,28 +10,48 @@
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍄</text></svg>"
     />
+    <!-- Il tema va applicato prima di tutto il resto, per non vedere il tema sbagliato per un attimo -->
+    <script src="assets/tema.js"></script>
     <link rel="preload" href="assets/fonts/PressStart2P-Regular.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="stylesheet" href="assets/sala-giochi.css" />
+    <link rel="stylesheet" href="assets/temi.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <main class="page">
       <header class="intro">
-        <h1 class="title pixel-text">Sala<br />giochi</h1>
-        <p class="lead">Minigiochi da fare con gli amici, nel browser. Scegli un livello per iniziare.</p>
+        <h1 class="title pixel-text">Sala<br /><span class="title-accent">giochi</span></h1>
+        <p class="lead">
+          <span class="only-classica">Minigiochi da fare con gli amici, nel browser. Scegli un livello per iniziare.</span>
+          <span class="only-anime">Minigiochi da fare con gli amici, nel browser. Scegli un grimorio e apri la partita.</span>
+        </p>
       </header>
+
+      <h2 class="levels-heading only-anime">Grimori della sala</h2>
 
       <!-- Per aggiungere un gioco: copia un <li>, cambia link, numero del livello e testi -->
       <ul class="levels">
         <li>
-          <a class="level" href="memory/">
-            <span class="level-block level-block--gold" aria-hidden="true"></span>
+          <a class="level level--memory" href="memory/">
+            <!-- Copertina disegnata in CSS, visibile solo nel tema Grimorio -->
+            <span class="grimoire-cover grimoire-cover--crimson only-anime" aria-hidden="true">
+              <span class="grimoire-book"><span class="g-clover"></span></span>
+            </span>
+            <span class="level-block level-block--gold only-classica" aria-hidden="true"></span>
             <span class="level-text">
-              <span class="level-title"><span class="level-world">1-1</span> Memory</span>
-              <span class="level-desc">Trova le coppie a turno. Da 2 a 4 giocatori sullo stesso dispositivo.</span>
+              <span class="level-tags only-anime">
+                <span class="level-tag level-tag--accent">Tattica e memoria</span>
+                <span class="level-tag">2–4 giocatori</span>
+              </span>
+              <span class="level-title"><span class="level-world only-classica">1-1</span> Memory</span>
+              <span class="level-desc">
+                <span class="only-classica">Trova le coppie a turno. Da 2 a 4 giocatori sullo stesso dispositivo.</span>
+                <span class="only-anime">Svela le rune gemelle a turno, passandovi lo stesso schermo. Tre spessori di grimorio: 8, 10 o 18 coppie.</span>
+              </span>
             </span>
             <span class="level-cta" aria-hidden="true">
-              Gioca
+              <span class="only-classica">Gioca</span>
+              <span class="only-anime">Apri il grimorio</span>
               <svg class="pixel-icon" viewBox="0 0 6 8" width="9" height="12">
                 <path fill="currentColor" d="M1 0h1v1h1v1h1v1h1v2h-1v1h-1v1h-1v1H1z" />
               </svg>
@@ -40,19 +60,36 @@
         </li>
 
         <li>
-          <a class="level" href="pinball/">
-            <span class="level-block level-block--abyss" aria-hidden="true">
-              <svg class="pixel-icon" viewBox="0 0 10 9" width="40" height="36">
-                <path fill="#ff5fa2" d="M3 0h4v1h1v1h1v3H1V2h1V1h1z" />
-                <path fill="#ffd1e6" d="M3 1h2v1H3zM2 5h1v2H2zM4 5h1v4H4zM6 5h1v3H6zM8 5h1v2H8z" />
+          <a class="level level--pinball" href="pinball/">
+            <span class="grimoire-cover grimoire-cover--emerald only-anime" aria-hidden="true">
+              <span class="grimoire-book"><span class="g-clover"></span><span class="grimoire-orb"></span></span>
+            </span>
+            <span class="level-block level-block--mushroom only-classica" aria-hidden="true">
+              <!-- Super Fungo in pixel: cappello rosso a pois, gambo color crema -->
+              <svg class="pixel-icon" viewBox="0 0 10 8" width="40" height="32">
+                <path fill="#e4202a" d="M3 0h4v1h2v1h1v3H0V2h1V1h2z" />
+                <path fill="#ffffff" d="M4 1h2v2H4zM1 3h2v2H1zM7 3h2v2H7z" />
+                <path fill="#ffd8a8" d="M2 5h6v3H2z" />
+                <path fill="#000000" d="M4 5h1v2H4zM6 5h1v2H6z" />
               </svg>
             </span>
             <span class="level-text">
-              <span class="level-title"><span class="level-world">1-2</span> Profondità Zero</span>
-              <span class="level-desc">Flipper degli abissi a turni: tre palline a testa, da 1 a 4 giocatori.</span>
+              <span class="level-tags only-anime">
+                <span class="level-tag level-tag--emerald">Flipper</span>
+                <span class="level-tag">1–4 giocatori</span>
+              </span>
+              <span class="level-title">
+                <span class="only-classica"><span class="level-world">1-2</span> Regno dei Funghi</span>
+                <span class="only-anime">Sfera Anti-Magia</span>
+              </span>
+              <span class="level-desc">
+                <span class="only-classica">Flipper a turni tra Super Funghi e monete: tre palline a testa, da 1 a 4 giocatori.</span>
+                <span class="only-anime">Flipper arcano a turni: fai rimbalzare la sfera sui sigilli e accendi le tre rune. Tre sfere a testa.</span>
+              </span>
             </span>
             <span class="level-cta" aria-hidden="true">
-              Gioca
+              <span class="only-classica">Gioca</span>
+              <span class="only-anime">Lancia la sfera</span>
               <svg class="pixel-icon" viewBox="0 0 6 8" width="9" height="12">
                 <path fill="currentColor" d="M1 0h1v1h1v1h1v1h1v2h-1v1h-1v1h-1v1H1z" />
               </svg>
@@ -60,7 +97,16 @@
           </a>
         </li>
       </ul>
+
     </main>
+
+    <!-- Pulsante fisso per passare dalla versione classica a quella anime (e ritorno) -->
+    <button type="button" class="version-fab" data-theme-toggle>
+      <svg class="version-fab-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+        <path fill="currentColor" d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9zM19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" />
+      </svg>
+      <span data-theme-label>Prova la versione anime</span>
+    </button>
 
     <div class="ground" aria-hidden="true"></div>
   </body>

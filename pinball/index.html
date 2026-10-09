@@ -3,14 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="description" content="Profondità Zero: flipper a turni da 1 a 4 giocatori sullo stesso dispositivo." />
+    <meta name="description" content="Flipper a turni da 1 a 4 giocatori sullo stesso dispositivo." />
     <meta name="theme-color" content="#04163a" />
-    <title>Profondità Zero · Sala giochi</title>
+    <title>Flipper · Sala giochi</title>
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪼</text></svg>"
     />
     <link rel="preload" href="../assets/fonts/PressStart2P-Regular.ttf" as="font" type="font/ttf" crossorigin />
+    <!-- La versione (classica o anime) va applicata prima di tutto il resto -->
+    <script src="../assets/tema.js"></script>
+    <link rel="stylesheet" href="../assets/temi.css" />
     <link rel="stylesheet" href="style.css" />
     <!-- Matter.js (fisica) in locale: script classico, deve venire prima del modulo -->
     <script src="lib/matter.min.js"></script>
@@ -19,14 +22,30 @@
   <body>
     <header class="topbar">
       <a class="back-link" href="../">‹ Tutti i giochi</a>
-      <span class="topbar-name">Profondità Zero</span>
+      <span class="topbar-name">
+        <span class="only-classica">Regno dei Funghi</span>
+        <span class="only-anime">Sfera Anti-Magia</span>
+      </span>
+      <!-- Cambia versione della sala: classica (Super Mario) o anime -->
+      <button type="button" class="theme-toggle" data-theme-toggle="short">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path fill="currentColor" d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9zM19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" />
+        </svg>
+        <span data-theme-label>Anime</span>
+      </button>
     </header>
 
     <main class="page">
       <!-- SCHERMATA 1: impostazioni -->
       <section id="setup-screen" class="screen screen--setup" aria-labelledby="setup-title">
-        <h1 id="setup-title" class="title">Profondità<br />Zero</h1>
-        <p class="tagline">Flipper degli abissi: tre palline a testa, il punteggio più alto vince.</p>
+        <h1 id="setup-title" class="title">
+          <span class="only-classica">Regno dei<br />Funghi</span>
+          <span class="only-anime">Sfera<br />Anti-Magia</span>
+        </h1>
+        <p class="tagline">
+          <span class="only-classica">Flipper tra Super Funghi e monete: tre palline a testa, il punteggio più alto vince.</span>
+          <span class="only-anime">Flipper arcano tra sigilli e rune: tre sfere a testa, il punteggio più alto vince.</span>
+        </p>
 
         <form id="setup-form" class="setup-form">
           <fieldset class="field">
@@ -81,7 +100,7 @@
           <div id="table-wrap" class="table-wrap">
             <!-- La cornice ha la stessa misura del canvas: il pulsante Lancia resta sempre sul tavolo -->
             <div class="table-frame">
-              <canvas id="table" role="img" aria-label="Tavolo del flipper Profondità Zero"></canvas>
+              <canvas id="table" role="img" aria-label="Tavolo del flipper"></canvas>
               <button type="button" id="launch-button" class="launch-button">Lancia</button>
             </div>
           </div>

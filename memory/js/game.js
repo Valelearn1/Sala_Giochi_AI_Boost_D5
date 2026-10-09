@@ -40,14 +40,15 @@ export const OUTCOME = {
  * @param {string[]} options.playerNames - da 2 a 4 nomi
  * @param {number} options.pairCount - quante coppie mettere sul tavolo
  * @param {() => number} [options.random] - generatore casuale (utile nei test)
+ * @param {object[]} [options.symbols] - il mazzo da cui pescare (es. i personaggi della versione anime)
  */
-export function createGame({ playerNames, pairCount, random = Math.random }) {
+export function createGame({ playerNames, pairCount, random = Math.random, symbols }) {
   if (playerNames.length < MIN_PLAYERS || playerNames.length > MAX_PLAYERS) {
     throw new Error(`Servono da ${MIN_PLAYERS} a ${MAX_PLAYERS} giocatori`);
   }
 
   return {
-    cards: createDeck(pairCount, random),
+    cards: createDeck(pairCount, random, symbols),
     players: playerNames.map((name) => ({ name, score: 0 })),
     currentPlayerIndex: 0,
     flippedIds: [], // carte girate nel turno corrente (al massimo 2)
@@ -99,7 +100,7 @@ function checkFlippedPair(game) {
 
   const [first, second] = game.flippedIds.map((id) => getCard(game, id));
 
-  if (first.emoji !== second.emoji) {
+  if (first.name !== second.name) {
     game.phase = PHASE.CHECKING;
     return { outcome: OUTCOME.MISMATCH };
   }

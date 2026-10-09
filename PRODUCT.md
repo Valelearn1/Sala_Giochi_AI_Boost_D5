@@ -33,9 +33,9 @@ Partite brevi dal vivo, spesso da telefono tenuto in mano e passato tra persone;
 
 ## Brand Commitments
 
-- Tema visivo scelto dall'utente: mondo platform a 8 bit ispirato a Super Mario, per la pagina iniziale e il Memory.
-- Eccezione dichiarata: il flipper "Profondità Zero" ha un tema proprio, abissi marini blu/turchese con accenti luminosi, sostituibile da `pinball/js/config/theme.js`. Lo lega alla sala il font pixel Press Start 2P.
-- Il sito è pubblico: solo ispirazione. Niente personaggi, loghi, nome "Super Mario", sprite o musiche Nintendo.
+- Un solo sito con due versioni grafiche, scelte dall'utente: **classica** (predefinita, platform 8-bit a tema Super Mario per pagina iniziale, Memory e flipper "Regno dei Funghi") e **anime** (a tema Black Clover, dalle schermate Google Stitch: fondo scuro, cremisi, oro, smeraldo, grimori con trifoglio; flipper "Sfera Anti-Magia"). Si cambia con il pulsante fisso in basso a destra nella pagina iniziale o con il pulsante nella barra in alto dei giochi.
+- Uso scolastico senza scopo di lucro: l'utente ha scelto di usare i nomi dei personaggi reali (Super Mario, Black Clover). Le immagini ufficiali non sono nella repo; si possono aggiungere in locale (`assets/personaggi/`). Le musiche originali non si usano: audio generato e originale.
+- Il tema "abissi marini" del flipper resta disponibile in `pinball/js/config/theme.js` ma non è usato.
 - Interfaccia in italiano.
 
 ## Evidence on Hand

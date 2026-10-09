@@ -92,8 +92,24 @@ function createCardButton(card) {
   button.innerHTML = `
     <span class="card-inner" aria-hidden="true">
       <span class="card-face card-back"></span>
-      <span class="card-face card-front">${card.emoji}</span>
+      <span class="card-face card-front">
+        <span class="card-picture"></span>
+        <span class="card-name"></span>
+      </span>
     </span>`;
+
+  // Immagine del personaggio se c'è, altrimenti l'emoji
+  const picture = button.querySelector('.card-picture');
+  if (card.image) {
+    const image = document.createElement('img');
+    image.src = card.image;
+    image.alt = '';
+    image.className = 'card-portrait';
+    picture.append(image);
+  } else {
+    picture.textContent = card.emoji;
+  }
+  button.querySelector('.card-name').textContent = card.name;
   return button;
 }
 
@@ -190,8 +206,9 @@ export function showStatus(text) {
 /** Banda grande al centro, ad esempio "Tocca a Giulia", che sparisce da sola. */
 export function showTurnBanner(game) {
   const banner = elements.turnBanner;
-  banner.innerHTML = '<span class="turn-banner-name"></span>';
-  banner.querySelector('.turn-banner-name').textContent = `Tocca a ${game.players[game.currentPlayerIndex].name}`;
+  // Il nome è in un <strong> a parte: nella versione anime è dorato e sottolineato
+  banner.innerHTML = '<span class="turn-banner-name">Tocca a <strong></strong></span>';
+  banner.querySelector('strong').textContent = game.players[game.currentPlayerIndex].name;
   banner.dataset.player = game.currentPlayerIndex;
 
   // Per far ripartire l'animazione CSS: togliamo la classe, forziamo il
