@@ -89,6 +89,25 @@ a.level:hover .level-block--gold {
   text-shadow: 3px 3px 0 var(--gold-dark);
 }
 
+.level-block--pipe {
+  background: #5c94fc;
+  box-shadow:
+    inset 4px 4px 0 #8fb4ff,
+    inset -4px -4px 0 #2f5fc8;
+}
+
+/* Da quale repository arriva un gioco importato */
+.level-source {
+  color: var(--gold);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+[data-theme='anime'] .level-source {
+  color: var(--g-gold);
+}
+
 .level-block--mushroom {
   background: #5c94fc;
   box-shadow:
