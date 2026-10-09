@@ -34,6 +34,7 @@ export const FILE_AUDIO = {
   anime: {
     // bumper: '../assets/suoni/anime/bumper.mp3',
   },
+  simpson: {},
 };
 
 let context = null;
@@ -96,7 +97,8 @@ export function setSoundOn(value) {
 
 /** La versione attiva della sala (vedi assets/tema.js). */
 function currentVersion() {
-  return window.SalaTema?.get() === 'anime' ? 'anime' : 'classica';
+  const version = window.SalaTema?.get();
+  return version === 'anime' || version === 'simpson' ? version : 'classica';
 }
 
 // --- Strumenti di base -----------------------------------------------------
@@ -278,7 +280,41 @@ const ANIME = {
   ballSave: (t) => bells(['D6', 'F#6', 'A6'], 0.07, t, 0.7), // scudo
 };
 
-const RECIPES = { classica: CLASSICA, anime: ANIME };
+// --- Ricette dei suoni: versione Simpson (cartone animato) -----------------
+// Xilofono, fischietti a scorrimento e "boing": i classici effetti dei cartoni.
+// Tutti originali: nessuna sigla né voce della serie.
+
+/** Nota di xilofono: breve, tonda, che si spegne subito. */
+function xylophone(list, gap, start) {
+  notes(list, gap, start, { wave: 'sine' });
+}
+
+const SIMPSON = {
+  // Memory
+  flip: (t) => tone({ frequency: 500, slideTo: 950, start: t, duration: 0.09, wave: 'sine' }), // fischietto
+  match: (t) => xylophone(['C6', 'E6', 'G6', 'C7'], 0.06, t),
+  mismatch: (t) => notes(['G4', 'F#4', 'F4'], 0.16, t, { wave: 'triangle' }), // "uà-uà-uà"
+  turn: (t) => xylophone(['G5', 'C6'], 0.1, t),
+  fanfare: (t) => notes(['C5', 'E5', 'G5', 'C6', 'A5', 'C6', 'E6'], 0.12, t, { wave: 'triangle' }),
+  toggleOn: (t) => xylophone(['E6', 'G6'], 0.07, t),
+  // Flipper
+  flipper: (t) => tone({ frequency: 240, slideTo: 140, start: t, duration: 0.04, wave: 'triangle', volume: 0.09 }),
+  bumper: (t) => tone({ frequency: 250, slideTo: 760, start: t, duration: 0.14, wave: 'sine', volume: 0.16 }), // boing!
+  slingshot: (t) => tone({ frequency: 820, slideTo: 420, start: t, duration: 0.06, wave: 'triangle' }),
+  target: (t) => xylophone(['A6', 'E7'], 0.05, t),
+  targetBank: (t) => xylophone(['C6', 'D6', 'E6', 'G6', 'A6', 'C7'], 0.05, t),
+  lane: (t) => tone({ frequency: noteToFrequency('D6'), start: t, duration: 0.07, wave: 'sine' }),
+  multiplier: (t) => notes(['C6', 'E6', 'G6', 'C7', 'G6', 'C7'], 0.07, t, { wave: 'triangle' }),
+  outlane: (t) => tone({ frequency: 900, slideTo: 250, start: t, duration: 0.35, wave: 'sine' }), // fischio che scende
+  launch: (t) => tone({ frequency: 300, slideTo: 1400, start: t, duration: 0.3, wave: 'sine', volume: 0.12 }), // fischio che sale
+  drain: (t) => {
+    tone({ frequency: 330, slideTo: 110, start: t, duration: 0.45, wave: 'triangle', volume: 0.16 });
+    tone({ frequency: noteToFrequency('C3'), start: t + 0.45, duration: 0.2, wave: 'triangle', volume: 0.14 });
+  },
+  ballSave: (t) => xylophone(['C6', 'E6', 'G6', 'E7'], 0.07, t),
+};
+
+const RECIPES = { classica: CLASSICA, anime: ANIME, simpson: SIMPSON };
 
 /**
  * Suona un effetto per nome (es. 'bumper'), con la grafica sonora della versione attiva.
@@ -361,6 +397,28 @@ const MUSIC = {
       'Bb2', 'F3', 'A2', 'E3', 'D3', 'A2', 'D3', null,
     ],
   },
+};
+
+// Versione Simpson: motivetto saltellante originale in Fa maggiore (non è la sigla della serie)
+MUSIC.simpson = {
+  eighth: 0.17,
+  lead: 'triangle',
+  melody: [
+    'F5', null, 'A5', 'C6', null, 'A5', 'Bb5', 'A5',
+    'G5', null, 'E5', 'G5', null, 'C6', 'A5', null,
+    'F5', null, 'A5', 'C6', null, 'D6', 'C6', 'Bb5',
+    'A5', 'G5', 'F5', null, 'C5', null, null, null,
+    'D5', null, 'F5', 'A5', null, 'F5', 'G5', 'A5',
+    'Bb5', null, 'G5', 'Bb5', null, 'D6', 'C6', null,
+    'A5', 'C6', 'Bb5', 'G5', 'A5', 'F5', 'E5', 'G5',
+    'F5', null, null, null, null, null, null, null,
+  ],
+  bass: [
+    'F2', 'C3', 'F2', 'C3', 'Bb2', 'F3', 'Bb2', 'F3',
+    'C3', 'G3', 'C3', 'G3', 'F2', 'C3', 'A2', 'C3',
+    'D3', 'A3', 'D3', 'A3', 'G2', 'D3', 'C3', 'G3',
+    'F2', 'C3', 'Bb2', 'C3', 'F2', 'C3', 'F2', null,
+  ],
 };
 
 let musicVersion = null;
