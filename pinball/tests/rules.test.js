@@ -31,6 +31,7 @@ test('accendere le 3 corsie aumenta il moltiplicatore e spegne le luci', () => {
   const result = applyHit(state, lane(2), RULES);
   assert.equal(state.multiplier, 2);
   assert.equal(result.message, 'Moltiplicatore ×2!');
+  assert.equal(result.multiplierUp, true);
   assert.deepEqual(state.lanesLit, [false, false, false]);
 });
 

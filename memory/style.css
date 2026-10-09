@@ -52,45 +52,6 @@
   gap: 8px;
 }
 
-/* Pulsante audio: altoparlante pixel con onde (acceso) o con una X (spento) */
-.sound-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 40px;
-  padding: 6px 12px;
-  background: var(--black);
-  border: var(--border) solid var(--white);
-  color: var(--white);
-  font-family: var(--pixel);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.sound-toggle:hover {
-  background: #1b1b1b;
-}
-
-.sound-state::before {
-  content: 'off';
-  color: var(--panel-muted);
-}
-
-.sound-toggle[aria-pressed='true'] {
-  border-color: var(--gold);
-}
-
-.sound-toggle[aria-pressed='true'] .sound-state::before {
-  content: 'on';
-  color: var(--gold);
-}
-
-.sound-toggle[aria-pressed='true'] .sound-mute,
-.sound-toggle[aria-pressed='false'] .sound-waves {
-  display: none;
-}
-
 .back-link {
   display: inline-flex;
   align-items: center;
@@ -837,21 +798,6 @@
     gap: 6px;
   }
 
-  .sound-word {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  .sound-toggle,
-  .theme-toggle {
-    padding: 6px 8px;
-    font-size: 0.6875rem;
-  }
-
   :root {
     --ground-height: 32px;
     --board-offset: 315px;
@@ -1101,23 +1047,6 @@
    ===================================================================== */
 
 /* ---------- Barra in alto ---------- */
-
-[data-theme='anime'] .sound-toggle {
-  border: 0;
-  border-radius: 12px;
-  background: var(--g-surface-high);
-  color: var(--g-text);
-  font-family: var(--g-display);
-  font-weight: 800;
-}
-
-[data-theme='anime'] .sound-toggle[aria-pressed='true'] {
-  color: var(--g-emerald);
-}
-
-[data-theme='anime'] .sound-toggle[aria-pressed='true'] .sound-state::before {
-  color: var(--g-emerald);
-}
 
 /* ---------- Impostazioni ---------- */
 

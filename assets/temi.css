@@ -2,7 +2,7 @@
    TEMI DELLA SALA GIOCHI — parti comuni a tutte le pagine
    Il tema attivo è scritto su <html data-theme="8bit|grimorio"> da assets/tema.js.
    Qui ci sono: il pulsante per cambiare tema, i testi che cambiano col tema,
-   e font, colori e componenti di base del tema "Grimorio".
+   il pulsante audio, e font, colori e componenti di base della versione anime.
    (Il tema 8-bit è in sala-giochi.css; il flipper ha il suo tema "abissi".)
    ===================================================================== */
 
@@ -50,7 +50,66 @@
   flex: none;
 }
 
-/* ---------- Tema Grimorio: colori e base ---------- */
+/* ---------- Pulsante audio (Memory e flipper) ---------- */
+
+/* Altoparlante pixel con onde (acceso) o con una X (spento) */
+.sound-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 6px 12px;
+  border: 3px solid #ffffff;
+  background: #000000;
+  color: #ffffff;
+  font-family: 'Press Start 2P', ui-monospace, monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.sound-toggle:hover {
+  background: #1b1b1b;
+}
+
+.sound-state::before {
+  content: 'off';
+  color: #c8d4ff;
+}
+
+.sound-toggle[aria-pressed='true'] {
+  border-color: #f8b800;
+}
+
+.sound-toggle[aria-pressed='true'] .sound-state::before {
+  content: 'on';
+  color: #f8b800;
+}
+
+.sound-toggle[aria-pressed='true'] .sound-mute,
+.sound-toggle[aria-pressed='false'] .sound-waves {
+  display: none;
+}
+
+/* Su telefono: solo icona e stato, la parola "Audio" resta per gli screen reader */
+@media (max-width: 480px) {
+  .sound-word {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .sound-toggle,
+  .theme-toggle {
+    padding: 6px 8px;
+    font-size: 0.6875rem;
+  }
+}
+
+/* ---------- Versione anime: colori e base ---------- */
 
 :root[data-theme='anime'] {
   --g-bg: #151218;
@@ -181,6 +240,20 @@
 
 [data-theme='anime'] .theme-toggle:hover {
   background: var(--g-surface-highest);
+}
+
+[data-theme='anime'] .sound-toggle {
+  border: 0;
+  border-radius: 12px;
+  background: var(--g-surface-high);
+  color: var(--g-text);
+  font-family: var(--g-display);
+  font-weight: 800;
+}
+
+[data-theme='anime'] .sound-toggle[aria-pressed='true'],
+[data-theme='anime'] .sound-toggle[aria-pressed='true'] .sound-state::before {
+  color: var(--g-emerald);
 }
 
 /* Sigillo riutilizzabile */

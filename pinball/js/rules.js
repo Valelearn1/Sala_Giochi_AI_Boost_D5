@@ -29,10 +29,10 @@ export function createBallState({ laneCount, targetCount }) {
  * @param {object} state - creato da createBallState (viene aggiornato)
  * @param {{ type: string, id: number|string, points: number }} hit - l'elemento colpito e i suoi punti base
  * @param {object} rules - RULES da config/rules-config.js
- * @returns {{ points: number, message: string|null, resetTargets: boolean }}
+ * @returns {{ points: number, message: string|null, resetTargets: boolean, multiplierUp: boolean }}
  */
 export function applyHit(state, hit, rules) {
-  const result = { points: 0, message: null, resetTargets: false };
+  const result = { points: 0, message: null, resetTargets: false, multiplierUp: false };
 
   if (hit.type === 'target' && state.targetsDown[hit.id]) {
     return result; // bersaglio già abbattuto: non conta
@@ -58,6 +58,7 @@ function lightLane(state, laneId, rules, result) {
     state.lanesLit.fill(false);
     if (state.multiplier < rules.multiplierMax) {
       state.multiplier += 1;
+      result.multiplierUp = true;
       result.message = `Moltiplicatore ×${state.multiplier}!`;
     } else {
       result.message = `Moltiplicatore al massimo ×${state.multiplier}`;

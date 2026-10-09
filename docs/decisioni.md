@@ -30,8 +30,8 @@ Una voce per ogni scelta importante: cosa si è deciso e perché. Tutte le decis
 
 ## 6. Audio originale con la Web Audio API
 
-**Decisione:** effetti e musichetta generati dal browser (`memory/js/sound.js`), con l'audio spento all'avvio.
-**Motivo:** la musica originale di Super Mario è protetta. In più così non servono file audio.
+**Decisione:** effetti e musichetta generati dal browser con l'audio spento all'avvio, prima solo nel Memory e poi in un modulo comune (`assets/suoni.js`) usato anche dal flipper. La versione anime ha suoni propri, originali e "in tema": pagine di grimorio, fendenti, rintocchi, campanelle e un tema epico in minore.
+**Motivo:** musiche, sigle e voci originali di Super Mario e Black Clover sono protette. Così, in più, non servono file audio. Chi ha file propri può usarli tramite `FILE_AUDIO` (vedi `assets/suoni/LEGGIMI.md`).
 
 ## 7. Matter.js in locale per il flipper
 

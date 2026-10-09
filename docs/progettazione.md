@@ -22,7 +22,9 @@ Una raccolta di minigiochi da browser per un progetto di corso, da giocare in 1�
 ├── assets/
 │   ├── tema.js               versione della sala: classica / anime
 │   ├── sala-giochi.css       stile 8-bit comune (cielo, mattoni, pulsanti, font pixel)
-│   ├── temi.css              stile comune della versione anime + pulsante di cambio versione
+│   ├── temi.css              stile comune della versione anime, pulsanti di versione e audio
+│   ├── suoni.js              effetti e musica generati (Web Audio API), diversi per versione
+│   ├── suoni/                file audio facoltativi (non inclusi)
 │   ├── fonts/                Press Start 2P, Syne, Plus Jakarta Sans (licenza OFL)
 │   └── personaggi/           immagini facoltative dei personaggi (non incluse)
 ├── memory/                   il Memory
@@ -40,8 +42,7 @@ Ogni gioco è autonomo nella sua cartella. Usa `assets/` solo per stile, font e 
 | `js/cards.js`, `js/shuffle.js` | Livelli (4×4, 4×5, 6×6), creazione del mazzo e mescolamento Fisher-Yates. |
 | `js/characters.js` | I 18 personaggi di ogni versione: nome, emoji di riserva, immagine facoltativa. |
 | `js/ui.js` | Tutto ciò che legge o modifica la pagina. |
-| `js/sound.js` | Effetti e musichetta originali con la Web Audio API. |
-| `js/main.js` | Collega logica, interfaccia e suoni. È l'unico file con timer. |
+| `js/main.js` | Collega logica, interfaccia e suoni (`assets/suoni.js`). È l'unico file con timer. |
 
 La partita è una piccola macchina a stati:
 
@@ -88,6 +89,10 @@ Un solo sito con due "vesti":
 3. Al cambio di versione lancia l'evento `sala-tema`. Il flipper lo usa per ridisegnare il tavolo, il Memory per avvisare che i nuovi personaggi arrivano con la partita successiva.
 
 Il CSS di ogni pagina ha una sezione `[data-theme='anime']`. Il flipper ridefinisce anche le proprie variabili (`--panel`, `--text`, `--pixel`…) per ciascuna versione.
+
+## Suoni
+
+`assets/suoni.js` è un modulo comune: `play('bumper')` sceglie la "ricetta" della versione attiva (`CLASSICA` 8-bit o `ANIME` magica) e la genera con oscillatori, rumore filtrato e un'eco condivisa. In `FILE_AUDIO` si può indicare un file al posto di un suono generato. La preferenza audio è salvata con la chiave `sala-audio`; al cambio di versione la musica passa da sola all'altro tema.
 
 ## Come si testa
 

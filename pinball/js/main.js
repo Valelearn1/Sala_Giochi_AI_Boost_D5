@@ -22,6 +22,7 @@ import { createMatch, getCurrentPlayer, addPoints, endBall } from './turns.js';
 import { createRenderer } from './render.js';
 import { createInput } from './input.js';
 import * as hud from './hud.js';
+import * as sound from '../../assets/suoni.js';
 
 /** Pausa dopo la pallina persa, prima della schermata "Tocca a…". */
 const BETWEEN_BALLS_MS = 1400;
@@ -31,6 +32,7 @@ const elements = {
   tableWrap: document.querySelector('#table-wrap'),
   launchButton: document.querySelector('#launch-button'),
   pauseButton: document.querySelector('#pause-button'),
+  soundToggle: document.querySelector('#sound-toggle'),
 };
 
 let phase = 'setup';
@@ -56,6 +58,7 @@ const input = createInput({
   onLaunchRelease: () => {
     if (phase === 'playing' && physics.launch(currentCharge())) {
       launchedAt = performance.now();
+      sound.play('launch');
       if (!ballSaveUsed) hud.showMessage(`Pallina salvata per ${RULES.ballSaveMs / 1000} secondi`);
     }
     chargeStartedAt = null;
@@ -87,6 +90,7 @@ function beginTurn(lastBall) {
   hud.renderHud(match, ballState.multiplier);
   hud.showMessage('', { sticky: true });
   hud.showTurnOverlay({ match, lastBall });
+  sound.play('turn');
 }
 
 /** Il giocatore ha premuto "Premi per lanciare": la pallina appare sul pistone. */
@@ -97,6 +101,7 @@ function startBall() {
   phase = 'playing';
   input.setEnabled(true);
   hud.showMessage('Tieni premuto Spazio (o Lancia) per caricare');
+  sound.startMusic();
 }
 
 function handlePhysicsEvent(event) {
@@ -114,11 +119,19 @@ function handlePhysicsEvent(event) {
   const result = applyHit(ballState, event, RULES);
   addPoints(match, result.points);
   renderer.flash(event.type, event.id);
+  playHitSound(event, result);
   if (result.resetTargets) {
     setTimeout(() => physics.resetTargets(), RULES.targetResetMs);
   }
   if (result.message) hud.showMessage(result.message);
   hud.renderHud(match, ballState.multiplier);
+}
+
+/** Il suono giusto per ogni urto: le missioni completate hanno un suono speciale. */
+function playHitSound(event, result) {
+  if (result.resetTargets) sound.play('targetBank');
+  else if (result.multiplierUp) sound.play('multiplier');
+  else if (result.points > 0) sound.play(event.type); // 'bumper', 'slingshot', 'target', 'lane', 'outlane'
 }
 
 /** Vero se la pallina è caduta da poco dopo il lancio e il salvataggio non è ancora stato usato. */
@@ -132,6 +145,7 @@ function saveBall() {
   launchedAt = null;
   physics.spawnBall();
   hud.showMessage('Pallina salvata! Rilanciala');
+  sound.play('ballSave');
 }
 
 /** Pallina persa: bonus di fine pallina, poi tocca al prossimo (o fine partita). */
@@ -145,6 +159,7 @@ function loseBall() {
   const lastBall = { name: player.name, bonus };
   hud.renderHud(match, 1); // il moltiplicatore si azzera con la pallina persa
   hud.showMessage(`Pallina persa · bonus +${hud.formatScore(bonus)}`, { sticky: true });
+  sound.play('drain');
 
   const { finished } = endBall(match);
   betweenTimer = setTimeout(() => (finished ? showResults() : beginTurn(lastBall)), BETWEEN_BALLS_MS);
@@ -154,6 +169,8 @@ function showResults() {
   phase = 'results';
   hud.showScreen('results');
   hud.renderResults(match);
+  sound.stopMusic();
+  sound.play('fanfare');
 }
 
 function goToSetup() {
@@ -164,6 +181,7 @@ function goToSetup() {
   hud.hidePauseOverlay();
   hud.hideTurnOverlay();
   hud.showScreen('setup');
+  sound.stopMusic();
 }
 
 function togglePause() {
@@ -171,10 +189,12 @@ function togglePause() {
     phase = 'paused';
     input.setEnabled(false);
     hud.showPauseOverlay();
+    sound.stopMusic();
   } else if (phase === 'paused') {
     hud.hidePauseOverlay();
     phase = 'playing';
     input.setEnabled(true);
+    sound.startMusic();
   }
 }
 
@@ -188,12 +208,20 @@ function currentCharge() {
 
 let lastTime = performance.now();
 let accumulator = 0;
+const flippersBefore = { left: false, right: false }; // per sentire il "clic" solo quando un'aletta parte
 
 function frame(now) {
   const elapsed = Math.min(now - lastTime, PHYSICS.maxFrameMs);
   lastTime = now;
 
   // La fisica avanza solo in partita (e subito dopo la pallina persa)
+  if (phase === 'playing') {
+    for (const side of ['left', 'right']) {
+      if (input.controls[side] && !flippersBefore[side]) sound.play('flipper');
+      flippersBefore[side] = input.controls[side];
+    }
+  }
+
   if (phase === 'playing' || phase === 'between') {
     accumulator += elapsed;
     while (accumulator >= PHYSICS.stepMs) {
@@ -226,6 +254,23 @@ new ResizeObserver(fitTable).observe(elements.tableWrap);
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && phase === 'playing') togglePause();
 });
+
+// --- Audio -----------------------------------------------------------------------
+
+/** Mostra sul pulsante se l'audio è acceso. */
+function renderSoundToggle() {
+  elements.soundToggle.setAttribute('aria-pressed', String(sound.isSoundOn()));
+}
+
+elements.soundToggle.addEventListener('click', () => {
+  sound.setSoundOn(!sound.isSoundOn());
+  renderSoundToggle();
+  if (sound.isSoundOn()) {
+    sound.play('toggleOn');
+    if (phase === 'playing') sound.startMusic();
+  }
+});
+renderSoundToggle();
 
 // --- Collegamento dei pulsanti ---------------------------------------------------
 

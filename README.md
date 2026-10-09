@@ -44,7 +44,7 @@ Il contatore **Mosse** conta quante volte sono state girate due carte, sommando 
 - **Versione classica**: un livello di un videogioco a piattaforme a 8 bit. Ci sono il cielo con le nuvole, il terreno di mattoni, le carte come blocchi "?", una moneta che salta fuori a ogni coppia e un tubo verde per ogni livello di difficoltà. Con il tema scuro del sistema si passa al "livello sotterraneo".
 - **Versione anime**: fondo scuro, cremisi, oro e smeraldo. Le carte sono grimori con un trifoglio d'oro e i livelli sono "tomi".
 - **Personaggi**: sulle carte ci sono i personaggi della versione scelta (18 per versione, in `memory/js/characters.js`), con nome ed emoji. Le immagini dei personaggi non sono incluse: per aggiungerle vedi `assets/personaggi/LEGGIMI.md`. I personaggi appartengono a Nintendo e a Yuki Tabata / Shueisha e sono usati solo per un progetto scolastico.
-- **Audio**: gli effetti e la musichetta sono originali, generati dal browser con la Web Audio API (`memory/js/sound.js`), senza file audio. L'audio parte spento: si accende con il pulsante **AUDIO** in alto e il browser si ricorda la scelta.
+- **Audio**: effetti e musichetta sono originali, generati dal browser con la Web Audio API (`assets/suoni.js`, comune a Memory e flipper), senza file audio. Nella versione classica sono suoni 8-bit. Nella versione anime sono suoni "magici": pagine di grimorio, fendenti, rintocchi, campanelle con eco e un tema epico in Re minore. L'audio parte spento: si accende con il pulsante **AUDIO** in alto e il browser si ricorda la scelta. Per usare file audio tuoi vedi `assets/suoni/LEGGIMI.md`.
 
 ### Accessibilità
 
@@ -84,7 +84,7 @@ Flipper in tempo reale, multiplayer a turni: da 1 a 4 giocatori sullo stesso dis
 | Lancio | tieni premuto **Spazio**: più a lungo = più forte | tieni premuto **Lancia** |
 | Pausa | **P** | pulsante **Pausa** |
 
-Il gioco va in pausa da solo se cambi scheda o blocchi il telefono.
+Il gioco va in pausa da solo se cambi scheda o blocchi il telefono. Su telefono in orizzontale il pannello si sposta di lato, ma il tavolo è più grande in verticale. Il pulsante **AUDIO** in alto accende effetti e musica (le alette suonano come un colpo, i bumper rimbalzano, le missioni completate hanno una fanfara).
 
 ### Com'è organizzato il codice
 
@@ -119,6 +119,8 @@ Scelte di fisica, per chi vuole capirle:
 │   ├── tema.js         versione della sala (classica / anime) e pulsanti per cambiarla
 │   ├── sala-giochi.css stile comune 8-bit: colori, font, cielo, terreno, pulsanti
 │   ├── temi.css        stile comune della versione anime e del pulsante di cambio versione
+│   ├── suoni.js        effetti e musica per Memory e flipper, diversi per versione
+│   ├── suoni/          (facoltativo) file audio propri, vedi LEGGIMI.md
 │   ├── personaggi/     (facoltativo) immagini dei personaggi, vedi LEGGIMI.md
 │   └── fonts/          Press Start 2P, Syne, Plus Jakarta Sans e le loro licenze OFL
 ├── pinball/            il flipper (vedi la sezione sopra)
@@ -135,7 +137,6 @@ Scelte di fisica, per chi vuole capirle:
     │   ├── characters.js personaggi delle due versioni (nome, emoji, immagine facoltativa)
     │   ├── game.js     LOGICA: stato della partita, regole, turni, classifica
     │   ├── ui.js       INTERFACCIA: tutto ciò che legge o modifica la pagina
-    │   ├── sound.js    effetti e musica 8 bit con la Web Audio API
     │   └── main.js     collega interfaccia, logica e suoni (ed è l'unico file con timer)
     └── tests/
         └── game.test.js  test della logica

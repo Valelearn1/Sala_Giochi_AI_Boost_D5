@@ -11,7 +11,7 @@ import { getPairCount } from './cards.js';
 import { getCharacters } from './characters.js';
 import { createGame, flipCard, endTurn, getCurrentPlayer, OUTCOME } from './game.js';
 import * as ui from './ui.js';
-import * as sound from './sound.js';
+import * as sound from '../../assets/suoni.js';
 
 /** Per quanto restano visibili due carte diverse prima di rigirarsi. */
 const MISMATCH_DELAY_MS = 1000;
@@ -42,7 +42,7 @@ function startGame(newSettings) {
 
   isPlaying = true;
   sound.startMusic();
-  sound.playTurn();
+  sound.play('turn');
 }
 
 function handleCardClick(cardId) {
@@ -52,19 +52,19 @@ function handleCardClick(cardId) {
   }
 
   ui.renderGame(game);
-  sound.playFlip();
+  sound.play('flip');
   const playerName = getCurrentPlayer(game).name;
 
   if (outcome === OUTCOME.MATCH || outcome === OUTCOME.GAME_OVER) {
     ui.celebrateMatch(cardId);
-    sound.playCoin({ delay: 0.35 }); // quando la moneta salta fuori, a carta girata
+    sound.play('match', { delay: 0.35 }); // quando la moneta salta fuori, a carta girata
   }
 
   if (outcome === OUTCOME.MATCH) {
     ui.showStatus(`Coppia trovata! ${playerName} gioca ancora`);
   } else if (outcome === OUTCOME.MISMATCH) {
     ui.showStatus('Non sono uguali…');
-    sound.playMismatch({ delay: 0.35 });
+    sound.play('mismatch', { delay: 0.35 });
     pendingTimer = setTimeout(passTurn, MISMATCH_DELAY_MS);
   } else if (outcome === OUTCOME.GAME_OVER) {
     ui.showStatus('Ultima coppia trovata!');
@@ -79,7 +79,7 @@ function passTurn() {
   ui.renderGame(game);
   ui.showStatus(`Tocca a ${getCurrentPlayer(game).name}`);
   ui.showTurnBanner(game);
-  sound.playTurn();
+  sound.play('turn');
 }
 
 function showResults() {
@@ -90,7 +90,7 @@ function showResults() {
 
   isPlaying = false;
   sound.stopMusic();
-  sound.playFanfare();
+  sound.play('fanfare');
 }
 
 function goToSetup() {
@@ -113,7 +113,7 @@ window.addEventListener('sala-tema', () => {
 ui.renderSoundToggle(sound.isSoundOn());
 
   if (sound.isSoundOn()) {
-    sound.playToggleOn();
+    sound.play('toggleOn');
     if (isPlaying) sound.startMusic();
   }
 }
